@@ -1,0 +1,146 @@
+[
+  {
+    "source": "多罗碧加乐园",
+    "target": "Tropical Land",
+    "note": "Công viên giải trí. Giữ nguyên tên tiếng Anh như bản tiếng Việt vẫn dùng.",
+    "category": "term"
+  },
+  {
+    "source": "毛利兰",
+    "target": "Mori Ran",
+    "note": "Giữ thứ tự họ trước tên theo kiểu Nhật.",
+    "category": "term"
+  },
+  {
+    "source": "工藤新一",
+    "target": "Kudo Shinichi",
+    "note": "Thám tử học sinh, nhân vật chính.",
+    "category": "term"
+  },
+  {
+    "source": "目暮警部",
+    "target": "thanh tra Megure",
+    "note": "Chức danh viết thường, tên riêng viết hoa.",
+    "category": "term"
+  },
+  {
+    "source": "帝丹高中",
+    "target": "trường cấp ba Teitan",
+    "note": "Trường của Ran và Shinichi.",
+    "category": "term"
+  },
+  {
+    "source": "空手道社",
+    "target": "CLB karate",
+    "note": "Ran là đội trưởng.",
+    "category": "term"
+  },
+  {
+    "source": "高中二年级",
+    "target": "lớp 11",
+    "note": "Năm hai cấp ba ở Nhật tương đương lớp 11.",
+    "category": "term"
+  },
+  {
+    "source": "歇洛克·福尔摩斯",
+    "target": "Sherlock Holmes",
+    "note": "Giữ nguyên tên quốc tế.",
+    "category": "term"
+  },
+  {
+    "source": "柯南·道尔",
+    "target": "Conan Doyle",
+    "note": "Nhà văn.",
+    "category": "term"
+  },
+  {
+    "source": "华生",
+    "target": "Watson",
+    "note": "Trợ thủ của Holmes.",
+    "category": "term"
+  },
+  {
+    "source": "平成",
+    "target": "Heisei",
+    "note": "Niên hiệu Nhật; giữ nguyên.",
+    "category": "term"
+  },
+  {
+    "source": "名侦探",
+    "target": "thám tử lừng danh",
+    "note": "Cụm quen thuộc của bộ truyện.",
+    "category": "term"
+  },
+  {
+    "source": "岸田",
+    "target": "Kishida",
+    "note": "Nạn nhân trong vụ án ở công viên.",
+    "category": "term"
+  },
+  {
+    "source": "阿富汗",
+    "target": "Afghanistan",
+    "note": "Nhắc tới trong điển tích Holmes.",
+    "category": "term"
+  },
+  {
+    "source": "体操社",
+    "target": "CLB thể dục dụng cụ",
+    "note": "Khác với CLB karate của Ran.",
+    "category": "term"
+  },
+  {
+    "source": "爱子",
+    "target": "Aiko",
+    "note": "Bạn gái nạn nhân, bị vu oan.",
+    "category": "term"
+  },
+  {
+    "source": "云霄飞车",
+    "target": "tàu lượn siêu tốc",
+    "note": "Trò chơi nơi xảy ra án mạng.",
+    "category": "term"
+  },
+  {
+    "source": "钢琴线",
+    "target": "dây đàn piano",
+    "note": "Hung khí.",
+    "category": "term"
+  },
+  {
+    "source": "安全护栏",
+    "target": "thanh chắn an toàn",
+    "note": "Trên tàu lượn.",
+    "category": "term"
+  },
+  {
+    "source": "仁美",
+    "target": "Hitomi",
+    "note": "Hung thủ thật sự; bạn gái cũ của Kishida.",
+    "category": "term"
+  },
+  {
+    "source": "社长",
+    "target": "giám đốc",
+    "note": "Cách gọi trong vụ giao dịch mờ ám.",
+    "category": "term"
+  },
+  {
+    "source": "完全犯罪",
+    "target": "án hoàn hảo",
+    "note": "Vụ án không để lại sơ hở.",
+    "category": "term"
+  },
+  {
+    "source": "组织",
+    "target": "tổ chức",
+    "note": "Nhóm áo đen bí ẩn; giữ mơ hồ như nguyên tác.",
+    "category": "term"
+  },
+  {
+    "source": "底片",
+    "target": "cuộn phim",
+    "note": "Bằng chứng buôn lậu súng.",
+    "category": "term"
+  }
+]

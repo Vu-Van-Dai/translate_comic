@@ -1,0 +1,25 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+.pytest_cache/
+
+# Large / regenerable artifacts
+models/
+assets/fonts/*.ttf
+assets/fonts/*.otf
+workspace/
+library/
+# Browser user-data directories. These hold the operator's live session
+# cookies for logged-in sources, so committing one leaks their account.
+# Both are here deliberately: `comic login` writes _browser, `comic chrome`
+# writes _chrome, and only the first was covered until a `git add -A` staged
+# 3277 files of the second.
+profiles/_browser/
+profiles/_chrome/
+
+# Keep directory structure
+!**/.gitkeep
+
+# Manually-saved pages awaiting ingest
+raw/

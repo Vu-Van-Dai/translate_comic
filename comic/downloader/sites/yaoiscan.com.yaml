@@ -1,0 +1,28 @@
+# WordPress-style reader (Madara/Themesia lineage). Also 403s a plain fetch.
+#
+# page_kind is UNVERIFIED -- the host has only ever been probed at acquisition,
+# where it returned 403, so nobody has seen its images. Madara serves both
+# shapes, but this is a Korean host and those are overwhelmingly long-strip,
+# and the two errors are not symmetric:
+#
+#   declared longstrip, actually paged  -> needs_slicing measures the joins,
+#                                          finds them already flat, no-op
+#   declared paged, actually longstrip  -> a 60000px "page" reaches the
+#                                          detector and fails silently
+#
+# So it errs towards longstrip. Correct it once a chapter has been seen.
+match: yaoiscan.com
+name: yaoiscan
+page_kind: longstrip
+reading_direction: ttb
+source_language: ko
+container_selector: "#readerarea, .reading-content, .entry-content"
+min_image_width: 600
+url_blocklist:
+  - /logo
+  - /avatar
+  - /banner
+  - wp-content/uploads/20
+chapter_number_regex: 'chapter-(\d+(?:\.\d+)?)'
+series_slug_regex: '/read/([^/]+)'
+settle_ms: 800

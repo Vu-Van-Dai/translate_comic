@@ -1,0 +1,16 @@
+# Japanese manga, discrete pages, right-to-left spreads. The hardest pilot:
+# RTL reading order plus vertical Japanese OCR plus screentone-safe cleaning.
+match: comix.to
+name: comix
+page_kind: paged
+reading_direction: rtl
+source_language: ja
+container_selector: "#readerarea, .reader-area, main"
+min_image_width: 600
+url_blocklist:
+  - /logo
+  - /avatar
+  - /cover
+chapter_number_regex: 'chapter-(\d+(?:\.\d+)?)'
+series_slug_regex: '/title/([^/]+)'
+settle_ms: 700

@@ -1,0 +1,67 @@
+{
+  "Mori Ran": {
+    "name": "Mori Ran",
+    "aliases": [],
+    "role": null,
+    "personality": "Đội trưởng CLB karate, thẳng tính, dễ nổi nóng nhưng nguôi nhanh.",
+    "speech_style": "Xưng tớ – cậu với Shinichi. Nói ngắn, đốp chát khi giận; hay dùng 'mà', 'đấy', 'nhé'.",
+    "addresses": {
+      "Kudo Shinichi": {
+        "self_term": "tớ",
+        "other_term": "cậu",
+        "formality": "casual",
+        "note": "Bạn từ nhỏ, cùng tuổi, cùng lớp."
+      }
+    },
+    "notes": [
+      "Được giới thiệu bằng bảng tên: Teitan, lớp 11.",
+      "Hay cằn nhằn Shinichi vì mê trinh thám và để ý con gái.",
+      "Linh cảm chẳng lành khi Shinichi chạy theo hai gã áo đen — mở đầu cho biến cố."
+    ]
+  },
+  "Kudo Shinichi": {
+    "name": "Kudo Shinichi",
+    "aliases": [],
+    "role": null,
+    "personality": "Thám tử học sinh, tự tin, hay trêu Ran và không biết lúc nào nên dừng.",
+    "speech_style": "Xưng tớ – cậu với Ran; xưng tôi – ông với hung thủ và người lớn. Khi phá án thì nói dứt khoát, chắc nịch.",
+    "addresses": {
+      "Mori Ran": {
+        "self_term": "tớ",
+        "other_term": "cậu",
+        "formality": "casual",
+        "note": "Đối xứng với cách Ran gọi Shinichi."
+      },
+      "Thanh tra Megure": {
+        "self_term": "cháu",
+        "other_term": "chú",
+        "formality": "polite",
+        "note": "Học sinh nói với cảnh sát lớn tuổi quen biết."
+      }
+    },
+    "notes": [
+      "Nhận diện qua bối cảnh, tên không xuất hiện trong thoại của các trang này.",
+      "Mê Sherlock Holmes; đá bóng để rèn phản xạ cho nghề thám tử. Thích được chú ý.",
+      "Bị tổ chức áo đen ép uống thuốc độc thử nghiệm; tỉnh lại và vẫn còn sống."
+    ]
+  },
+  "Thanh tra Megure": {
+    "name": "Thanh tra Megure",
+    "aliases": [],
+    "role": null,
+    "personality": "Thanh tra cảnh sát phụ trách hiện trường.",
+    "speech_style": null,
+    "addresses": {
+      "Kudo Shinichi": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "polite",
+        "note": "Người lớn nói với học sinh mà mình nể tài; nguyên tác gọi 工藤同学."
+      }
+    },
+    "notes": [
+      "Shinichi gọi để xác nhận chứng cứ.",
+      "Quen biết Shinichi từ trước, gọi cậu là 'cậu Kudo' và nể tài suy luận."
+    ]
+  }
+}

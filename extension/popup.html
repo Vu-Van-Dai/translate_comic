@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Comic Chapter Capture</title>
+<style>
+  :root {
+    --bg: #14161a; --panel: #1d2026; --line: #2c313a;
+    --ink: #e8eaed; --dim: #9aa3ad; --accent: #5aa9e6;
+    --ok: #57c98a; --warn: #e6b45a; --bad: #e66a5a;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; width: 360px; font: 13px/1.45 system-ui, "Segoe UI", sans-serif;
+    background: var(--bg); color: var(--ink);
+  }
+  header { padding: 12px 14px 8px; border-bottom: 1px solid var(--line); }
+  h1 { margin: 0; font-size: 14px; font-weight: 600; }
+  .sub { color: var(--dim); font-size: 11px; margin-top: 2px; }
+  section { padding: 12px 14px; border-bottom: 1px solid var(--line); }
+  label { display: block; font-size: 11px; color: var(--dim); margin-bottom: 4px; }
+  input {
+    width: 100%; padding: 6px 8px; border-radius: 6px; font: inherit;
+    background: var(--panel); color: var(--ink); border: 1px solid var(--line);
+  }
+  input:focus { outline: none; border-color: var(--accent); }
+  .row { display: flex; gap: 8px; }
+  .row > div { flex: 1; }
+  button {
+    width: 100%; padding: 8px 10px; margin-top: 10px; border-radius: 6px;
+    font: inherit; font-weight: 600; cursor: pointer;
+    background: var(--accent); color: #0d1117; border: 0;
+  }
+  button.secondary { background: var(--panel); color: var(--ink); border: 1px solid var(--line); }
+  button:disabled { opacity: .5; cursor: not-allowed; }
+  #info { font-size: 12px; }
+  #info .k { color: var(--dim); }
+  .pill {
+    display: inline-block; padding: 1px 7px; border-radius: 999px;
+    font-size: 11px; font-weight: 600; background: var(--panel);
+    border: 1px solid var(--line);
+  }
+  .pill.urls { color: var(--ok); border-color: #2f5f45; }
+  .pill.capture { color: var(--warn); border-color: #6b5426; }
+  .pill.resources { color: var(--accent); border-color: #2c5878; }
+  #log {
+    margin-top: 8px; max-height: 110px; overflow: auto; font-size: 11px;
+    color: var(--dim); white-space: pre-wrap; font-family: ui-monospace, Consolas, monospace;
+  }
+  .bar { height: 4px; background: var(--panel); border-radius: 999px; overflow: hidden; margin-top: 8px; }
+  .bar > i { display: block; height: 100%; width: 0; background: var(--accent); transition: width .2s; }
+  code { background: var(--panel); padding: 1px 5px; border-radius: 4px; font-size: 11px; }
+  .hint { color: var(--dim); font-size: 11px; margin-top: 8px; }
+</style>
+</head>
+<body>
+  <header>
+    <h1>Comic Chapter Capture</h1>
+    <div class="sub">Saves pages into a folder the pipeline can ingest.</div>
+  </header>
+
+  <section>
+    <div class="row">
+      <div>
+        <label for="series">Series</label>
+        <input id="series" placeholder="Paws &amp; Claws">
+      </div>
+      <div>
+        <label for="chapter">Chapter</label>
+        <input id="chapter" placeholder="69">
+      </div>
+    </div>
+    <button id="scan" class="secondary">Scan this page</button>
+    <div class="hint" id="scanHint">Scroll the chapter once first so everything loads.</div>
+  </section>
+
+  <section id="found" hidden>
+    <div id="info"></div>
+    <div class="row" style="margin-top:10px">
+      <div>
+        <label for="spreads" title="How many times to press next">Views to walk</label>
+        <input id="spreads" type="number" min="1" value="1">
+      </div>
+      <div>
+        <label for="startAt" title="First page number to write">Start numbering at</label>
+        <input id="startAt" type="number" min="1" value="1">
+      </div>
+    </div>
+    <div class="row" style="margin-top:8px">
+      <div>
+        <label for="zoom" title="Zoom the reader in before capturing, for detail">Zoom steps</label>
+        <input id="zoom" type="number" min="0" max="12" value="4">
+      </div>
+      <div></div>
+    </div>
+    <div class="hint" id="walkHint"></div>
+    <button id="start">Capture chapter</button>
+    <button id="startOne" class="secondary">Capture this view only</button>
+    <div class="hint">Use "this view only" to step through by hand: navigate
+      yourself, capture, repeat. Numbering continues automatically.</div>
+    <button id="cancel" class="secondary" hidden>Cancel</button>
+    <div class="bar"><i id="bar"></i></div>
+    <div id="log"></div>
+  </section>
+
+  <section id="next" hidden>
+    <div class="k" style="font-size:11px;color:var(--dim)">Then run:</div>
+    <div style="margin-top:6px"><code id="cmd"></code></div>
+  </section>
+
+  <script src="popup.js"></script>
+</body>
+</html>

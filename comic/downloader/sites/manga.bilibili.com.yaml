@@ -1,0 +1,24 @@
+# Official Chinese publisher. Uses the operator's own logged-in session via the
+# persistent browser profile; locked/unpurchased chapters are refused, never
+# worked around. The URL carries an episode id, not a chapter number, so the
+# chapter must be given explicitly or read from the page title.
+match: manga.bilibili.com
+name: bilibili
+page_kind: longstrip
+reading_direction: ttb
+source_language: zh
+min_image_width: 600
+url_blocklist:
+  - /logo
+  - /avatar
+  - static/
+chapter_number_regex: null
+series_slug_regex: '/(mc\d+)'
+requires_login: true
+login_url: https://manga.bilibili.com
+locked_selector: ".manga-pay, .pay-container, .unlock-btn, [class*='buy-']"
+settle_ms: 1200
+notes: >
+  locked_selector is a best guess until a locked chapter is seen; the importer
+  also treats a page count of zero on a login-required site as "locked or not
+  signed in" rather than a generic failure.

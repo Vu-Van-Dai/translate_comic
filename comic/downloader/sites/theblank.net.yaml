@@ -1,0 +1,18 @@
+# Korean-style long-strip webtoon reader. Returned HTTP 403 to a plain fetch,
+# so it is browser-only. Pages arrive as tall slices and are re-cut by the
+# slice stage at safe seams.
+match: theblank.net
+name: theblank
+page_kind: longstrip
+reading_direction: ttb
+source_language: ko
+container_selector: "#chapter-content, .reading-content, .chapter-content"
+min_image_width: 600
+url_blocklist:
+  - /logo
+  - /avatar
+  - /banner
+  - /ads
+chapter_number_regex: 'chapter-(\d+(?:\.\d+)?)'
+series_slug_regex: '/serie/([^/]+)'
+settle_ms: 900
