@@ -1,0 +1,4 @@
+Length: 26.71s
+Cuts at (s): 2.12, 4.32, 6.46, 8.59, 10.73, 12.89, 15.03, 17.16, 19.3, 21.43, 24.13
+Music in video.mp4: Summertime Sadness -- Lana Del Rey, from 0.2s (112.3 BPM)
+For video_silent.mp4: add a TikTok sound in the app; the cuts above follow the beat of the track above.

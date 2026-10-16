@@ -1,0 +1,259 @@
+{
+ "gate": "video_plan",
+ "style": "story",
+ "background": "white",
+ "story": "Arc 5 (Ch.41-50): Yoonjae confesses he likes Haeyong, Haeyong gives in, Jiun's confession 'Em thích anh', Kanghyun says yes, the flower wreath, the date in Jiun's old neighbourhood, the hug, and San Park waiting in the dark.",
+ "music": {
+  "track": "tt_summertime_sadness_9714",
+  "start": 0.23,
+  "beat_sync": true
+ },
+ "caption": "Mi Imitador chap 41–50: hai lời tỏ tình, hai cặp chính thức thành đôi, buổi hẹn đầu tiên ngọt xỉu… nhưng bóng tối đang chờ ở cuối ngõ 😶‍🌫️ (Vietsub)",
+ "hashtags": [
+  "MiImitador",
+  "FromPakuriToAssistant",
+  "manhwabl",
+  "BL",
+  "truyentranh",
+  "webtoon",
+  "fyp"
+ ],
+ "shots": [
+  {
+   "panel": "p013_k0",
+   "motion": "static",
+   "strength": 0.12,
+   "transition": "cut",
+   "transition_seconds": 0.2,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 0,
+    "y1": 700,
+    "x2": 700,
+    "y2": 2160
+   },
+   "seconds": 2.671
+  },
+  {
+   "panel": "p014_k0",
+   "motion": "punch",
+   "strength": 0.2,
+   "transition": "cut",
+   "transition_seconds": 0.2,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 6,
+    "y1": 43,
+    "x2": 690,
+    "y2": 888
+   },
+   "seconds": 2.137
+  },
+  {
+   "panel": "p019_k0",
+   "chapter": "43",
+   "motion": "zoom_in",
+   "strength": 0.12,
+   "transition": "cut",
+   "transition_seconds": 0.2,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 0,
+    "y1": 150,
+    "x2": 700,
+    "y2": 1267
+   },
+   "seconds": 2.671
+  },
+  {
+   "panel": "p026_k0",
+   "chapter": "43",
+   "motion": "static",
+   "strength": 0.12,
+   "transition": "fade",
+   "transition_seconds": 0.35,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 7,
+    "y1": 151,
+    "x2": 695,
+    "y2": 1165
+   },
+   "seconds": 2.671
+  },
+  {
+   "panel": "p017_k0",
+   "chapter": "45",
+   "motion": "punch",
+   "strength": 0.2,
+   "transition": "cut",
+   "transition_seconds": 0.2,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 0,
+    "y1": 52,
+    "x2": 700,
+    "y2": 1691
+   },
+   "seconds": 2.137
+  },
+  {
+   "panel": "p028_k0",
+   "chapter": "45",
+   "motion": "zoom_in",
+   "strength": 0.12,
+   "transition": "fade",
+   "transition_seconds": 0.35,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 0,
+    "y1": 950,
+    "x2": 700,
+    "y2": 2330
+   },
+   "seconds": 2.671
+  },
+  {
+   "panel": "p029_k0",
+   "chapter": "45",
+   "motion": "zoom_in",
+   "strength": 0.12,
+   "transition": "cut",
+   "transition_seconds": 0.2,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 3,
+    "y1": 99,
+    "x2": 700,
+    "y2": 1714
+   },
+   "seconds": 2.671
+  },
+  {
+   "panel": "p016_k0",
+   "chapter": "46",
+   "motion": "zoom_in",
+   "strength": 0.12,
+   "transition": "dip_white",
+   "transition_seconds": 0.4,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 0,
+    "y1": 1380,
+    "x2": 700,
+    "y2": 2435
+   },
+   "seconds": 2.671
+  },
+  {
+   "panel": "p008_k0",
+   "chapter": "48",
+   "motion": "punch",
+   "strength": 0.2,
+   "transition": "whip",
+   "transition_seconds": 0.25,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 0,
+    "y1": 480,
+    "x2": 700,
+    "y2": 1807
+   },
+   "seconds": 2.671
+  },
+  {
+   "panel": "p019_k0",
+   "chapter": "49",
+   "motion": "zoom_in",
+   "strength": 0.12,
+   "transition": "cut",
+   "transition_seconds": 0.2,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 0,
+    "y1": 19,
+    "x2": 700,
+    "y2": 1409
+   },
+   "seconds": 2.671
+  },
+  {
+   "panel": "p027_k0",
+   "chapter": "49",
+   "motion": "static",
+   "strength": 0.12,
+   "transition": "cut",
+   "transition_seconds": 0.2,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 0,
+    "y1": 312,
+    "x2": 700,
+    "y2": 1570
+   },
+   "seconds": 2.671
+  },
+  {
+   "panel": "p023_k0",
+   "chapter": "50",
+   "motion": "zoom_in",
+   "strength": 0.12,
+   "transition": "fade",
+   "transition_seconds": 0.35,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 0,
+    "y1": 63,
+    "x2": 700,
+    "y2": 1259
+   },
+   "seconds": 2.671
+  },
+  {
+   "panel": "p026_k0",
+   "chapter": "50",
+   "motion": "static",
+   "strength": 0.12,
+   "transition": "cut",
+   "transition_seconds": 0.2,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 11,
+    "y1": 14,
+    "x2": 686,
+    "y2": 924
+   },
+   "seconds": 2.137
+  },
+  {
+   "panel": "p031_k0",
+   "chapter": "50",
+   "motion": "zoom_in",
+   "strength": 0.12,
+   "transition": "dip_black",
+   "transition_seconds": 0.4,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 0,
+    "y1": 0,
+    "x2": 700,
+    "y2": 1250
+   },
+   "seconds": 3.206
+  }
+ ]
+}

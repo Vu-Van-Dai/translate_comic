@@ -1,0 +1,113 @@
+# Editing styles for `comic video`. The agent names one at the video_plan
+# gate; its values are the defaults every shot starts from, and the agent may
+# override any of them per shot (motion, transition, effects, text).
+#
+# Measured on 10 reference edits (2026-10-14, workspace/_references/tiktok):
+#   jaeha_bl  -- even 2.5-3.1 s shots, hard cuts, the art filling the frame,
+#                no on-screen text; ~10 shots in 25 s.
+#   baoboidz  -- 2-3 panels re-cut 0.6-1 s on a 120-150 BPM beat, mirror
+#                flips, shake, glitch/wave switches, often black and white;
+#                the hook lives in the post caption, not on screen.
+# Durations are seconds; `music` lists library moods, best first.
+
+story:
+  about: "Chapter recap like jaeha_bl / alsvcra: whole panels on white, a hard cut every 4 beats, barely moving, no text."
+  shot_seconds: [2.3, 2.6]
+  motions: [zoom_in, static]
+  strength: 0.12
+  transition: cut
+  transition_seconds: 0.2
+  effects: []
+  text: {hook_font: BeVietnamPro-ExtraBold.ttf, caption_font: BeVietnamPro-Bold.ttf, anim: fade}
+  music: [emotional, upbeat, melancholic]
+
+beat:
+  about: "Hype edit like baoboidz: few panels re-cut fast on the beat, flips, shakes, glitches."
+  shot_seconds: [0.5, 1.2]
+  motions: [punch, shake, zoom_in, drift]
+  strength: 0.7
+  transition: glitch
+  transition_seconds: 0.15
+  # No mirror_beat: original pages carry lettering, and a flip shows it
+  # backwards. No flash_beat over fast cuts: the transitions carry the hits.
+  effects: []
+  text: {hook_font: BeVietnamPro-ExtraBold.ttf, caption_font: BeVietnamPro-ExtraBold.ttf, anim: pop}
+  music: [energetic, tense]
+
+melancholic:
+  about: "Slow and grey: long holds, slow pulls back, fades through black, film grain."
+  shot_seconds: [3.5, 5.0]
+  motions: [zoom_out, pan_down, drift, zoom_in]
+  strength: 0.3
+  transition: dip_black
+  transition_seconds: 0.9
+  effects: [desaturate, cool, vignette, grain]
+  text: {hook_font: Lora-Variable.ttf, caption_font: Lora-Variable.ttf, anim: fade}
+  music: [melancholic, emotional]
+
+emotional:
+  about: "Tender and warm: gentle pushes in, soft crossfades, a light glow."
+  shot_seconds: [3.0, 4.5]
+  motions: [zoom_in, drift, pan_up, zoom_in]
+  strength: 0.35
+  transition: fade
+  transition_seconds: 0.7
+  effects: [warm, glow]
+  text: {hook_font: Baloo2-Variable.ttf, caption_font: Baloo2-Variable.ttf, anim: slide_up}
+  music: [emotional, melancholic]
+
+drama:
+  about: "Weighty beats: firm push-ins, dips to black on the turns, a dark vignette."
+  shot_seconds: [2.5, 3.6]
+  motions: [zoom_in, punch, zoom_in, pan_left]
+  strength: 0.45
+  transition: dip_black
+  transition_seconds: 0.5
+  effects: [vignette]
+  text: {hook_font: BeVietnamPro-ExtraBold.ttf, caption_font: BeVietnamPro-Bold.ttf, anim: fade}
+  music: [tense, emotional]
+
+comedy:
+  about: "Quick and bouncy: punch zooms, shakes, whip pans, pop-up captions."
+  shot_seconds: [1.2, 2.4]
+  motions: [punch, shake, zoom_in, static]
+  strength: 0.6
+  transition: whip
+  transition_seconds: 0.25
+  effects: []
+  text: {hook_font: Baloo2-Variable.ttf, caption_font: Baloo2-Variable.ttf, anim: pop}
+  music: [comedy, upbeat]
+
+tense:
+  about: "Suspense: slow creeping zooms, white flashes on hits, heavy vignette."
+  shot_seconds: [2.0, 3.5]
+  motions: [zoom_in, shake, zoom_in, drift]
+  strength: 0.5
+  transition: flash
+  transition_seconds: 0.3
+  effects: [vignette, cool, rgb_split]
+  text: {hook_font: BeVietnamPro-ExtraBold.ttf, caption_font: BeVietnamPro-Bold.ttf, anim: typewriter}
+  music: [tense, energetic]
+
+teaser:
+  about: "Build-up that ends on a question: quickening cuts, a cut to black, the cliffhanger last."
+  shot_seconds: [1.8, 3.2]
+  motions: [zoom_in, pan_down, punch, zoom_in]
+  strength: 0.45
+  transition: zoom_blur
+  transition_seconds: 0.35
+  effects: [vignette]
+  text: {hook_font: BeVietnamPro-ExtraBold.ttf, caption_font: BeVietnamPro-Bold.ttf, anim: slide_up}
+  music: [tense, emotional, upbeat]
+
+romantic:
+  about: "Soft and dreamy for a couple: glow, warm light, slow fades. Adults only (see video.yaml)."
+  adults_only: true
+  shot_seconds: [3.0, 4.5]
+  motions: [zoom_in, drift, zoom_out, pan_up]
+  strength: 0.3
+  transition: fade
+  transition_seconds: 0.8
+  effects: [glow, warm]
+  text: {hook_font: Baloo2-Variable.ttf, caption_font: Baloo2-Variable.ttf, anim: fade}
+  music: [romantic, emotional]

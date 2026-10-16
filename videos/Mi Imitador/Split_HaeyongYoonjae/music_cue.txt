@@ -1,0 +1,4 @@
+Length: 26.05s
+Cuts at (s): 6.16, 12.54, 19.34
+Music in video.mp4: âm thanh gốc - Basic Shop Thủ Đức -- Basic Shop Thủ Đức, from 0.2s (152.0 BPM)
+For video_silent.mp4: add a TikTok sound in the app; the cuts above follow the beat of the track above.

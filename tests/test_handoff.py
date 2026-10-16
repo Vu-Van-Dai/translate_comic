@@ -49,10 +49,14 @@ def test_nudge_requires_a_coordinate_pair():
             fix(FixAction.NUDGE, bad)
 
 
-def test_restyle_must_name_a_real_text_kind():
+def test_restyle_names_a_text_kind_or_a_voice():
     assert fix(FixAction.RESTYLE, TextKind.THOUGHT.value)
+    # A voice name; whether the series defines it is checked at resume.
+    assert fix(FixAction.RESTYLE, "stammer")
     with pytest.raises(ValidationError, match="restyle"):
-        fix(FixAction.RESTYLE, "whisper")
+        fix(FixAction.RESTYLE, "Bigger Font!")
+    with pytest.raises(ValidationError, match="restyle"):
+        fix(FixAction.RESTYLE, None)
 
 
 def test_force_wrap_needs_text():

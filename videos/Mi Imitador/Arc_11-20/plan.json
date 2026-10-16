@@ -1,0 +1,260 @@
+{
+ "gate": "video_plan",
+ "style": "story",
+ "background": "white",
+ "story": "Arc 2 (Ch.11-20): Jiun cries, gets his idol Kanghan's book, the puppy/head-pat walk, the wrap party, 'stay with me', the morning-after lie, the confession, and the 'fake boyfriend' offer.",
+ "music": {
+  "track": "tt_how_you_get_the_girl_taylor_s_version_1874",
+  "start": 1.81,
+  "beat_sync": true
+ },
+ "caption": "Mi Imitador chap 11–20: được thần tượng tặng sách, được xoa đầu như cún, say rượu ôm nhau… rồi anh ấy xin em 'giả làm người yêu' 🫣💛 (Vietsub)",
+ "hashtags": [
+  "MiImitador",
+  "FromPakuriToAssistant",
+  "manhwabl",
+  "BL",
+  "truyentranh",
+  "webtoon",
+  "fyp"
+ ],
+ "shots": [
+  {
+   "panel": "p039_k0",
+   "motion": "static",
+   "strength": 0.12,
+   "transition": "cut",
+   "transition_seconds": 0.2,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 0,
+    "y1": 204,
+    "x2": 700,
+    "y2": 1582
+   },
+   "seconds": 2.553
+  },
+  {
+   "panel": "p015_k0",
+   "chapter": "12",
+   "motion": "zoom_in",
+   "strength": 0.12,
+   "transition": "cut",
+   "transition_seconds": 0.2,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 25,
+    "y1": 126,
+    "x2": 699,
+    "y2": 1098
+   },
+   "seconds": 2.553
+  },
+  {
+   "panel": "p023_k0",
+   "chapter": "12",
+   "motion": "punch",
+   "strength": 0.2,
+   "transition": "whip",
+   "transition_seconds": 0.25,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 8,
+    "y1": 168,
+    "x2": 693,
+    "y2": 1148
+   },
+   "seconds": 2.043
+  },
+  {
+   "panel": "p022_k0",
+   "chapter": "13",
+   "motion": "zoom_in",
+   "strength": 0.12,
+   "transition": "cut",
+   "transition_seconds": 0.2,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 0,
+    "y1": 17,
+    "x2": 700,
+    "y2": 2055
+   },
+   "seconds": 2.553
+  },
+  {
+   "panel": "p031_k0",
+   "chapter": "13",
+   "motion": "static",
+   "strength": 0.12,
+   "transition": "cut",
+   "transition_seconds": 0.2,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 9,
+    "y1": 64,
+    "x2": 645,
+    "y2": 1058
+   },
+   "seconds": 2.553
+  },
+  {
+   "panel": "p007_k0",
+   "chapter": "15",
+   "motion": "punch",
+   "strength": 0.2,
+   "transition": "whip",
+   "transition_seconds": 0.25,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 1,
+    "y1": 1,
+    "x2": 698,
+    "y2": 1137
+   },
+   "seconds": 2.553
+  },
+  {
+   "panel": "p046_k0",
+   "chapter": "16",
+   "motion": "zoom_in",
+   "strength": 0.12,
+   "transition": "cut",
+   "transition_seconds": 0.2,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 0,
+    "y1": 97,
+    "x2": 700,
+    "y2": 1445
+   },
+   "seconds": 2.553
+  },
+  {
+   "panel": "p009_k0",
+   "chapter": "17",
+   "motion": "static",
+   "strength": 0.12,
+   "transition": "cut",
+   "transition_seconds": 0.2,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 0,
+    "y1": 203,
+    "x2": 700,
+    "y2": 1309
+   },
+   "seconds": 2.043
+  },
+  {
+   "panel": "p040_k0",
+   "chapter": "17",
+   "motion": "zoom_in",
+   "strength": 0.12,
+   "transition": "fade",
+   "transition_seconds": 0.4,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 0,
+    "y1": 79,
+    "x2": 700,
+    "y2": 1452
+   },
+   "seconds": 3.064
+  },
+  {
+   "panel": "p008_k0",
+   "chapter": "19",
+   "motion": "static",
+   "strength": 0.12,
+   "transition": "cut",
+   "transition_seconds": 0.2,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 4,
+    "y1": 183,
+    "x2": 698,
+    "y2": 1303
+   },
+   "seconds": 2.553
+  },
+  {
+   "panel": "p044_k0",
+   "chapter": "19",
+   "motion": "zoom_in",
+   "strength": 0.12,
+   "transition": "cut",
+   "transition_seconds": 0.2,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 0,
+    "y1": 0,
+    "x2": 700,
+    "y2": 1572
+   },
+   "seconds": 3.064
+  },
+  {
+   "panel": "p004_k0",
+   "chapter": "20",
+   "motion": "punch",
+   "strength": 0.2,
+   "transition": "cut",
+   "transition_seconds": 0.2,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 0,
+    "y1": 20,
+    "x2": 700,
+    "y2": 1279
+   },
+   "seconds": 2.043
+  },
+  {
+   "panel": "p009_k0",
+   "chapter": "20",
+   "motion": "static",
+   "strength": 0.12,
+   "transition": "cut",
+   "transition_seconds": 0.2,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 0,
+    "y1": 140,
+    "x2": 621,
+    "y2": 891
+   },
+   "seconds": 2.553
+  },
+  {
+   "panel": "p018_k0",
+   "chapter": "20",
+   "motion": "zoom_in",
+   "strength": 0.12,
+   "transition": "dip_white",
+   "transition_seconds": 0.4,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 0,
+    "y1": 463,
+    "x2": 700,
+    "y2": 1929
+   },
+   "seconds": 3.064
+  }
+ ]
+}

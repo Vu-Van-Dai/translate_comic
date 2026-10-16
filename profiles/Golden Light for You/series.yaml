@@ -1,0 +1,15 @@
+name: Golden Light for You
+source_language: ja
+target_language: vi
+reading_direction: rtl
+style_mode: published_comic
+synopsis: null
+rules: []
+fonts:
+  dialogue: BeVietnamPro-Regular.ttf
+  dialogue_bold: BeVietnamPro-Bold.ttf
+  thought: BeVietnamPro-Italic.ttf
+  narration: Lora-Variable.ttf
+  shout: Anton-Regular.ttf
+  caption: Nunito-Variable.ttf
+translate_sfx: false

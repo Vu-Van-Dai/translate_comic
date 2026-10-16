@@ -127,6 +127,25 @@ class ChapterPaths:
             return self.pages
         return self.original
 
+    def page_file(self, page: int) -> Path:
+        """The actual file holding one page, whatever it is stored as.
+
+        ``original/`` keeps the bytes the source served, so a JPEG host leaves
+        ``001.jpg`` there while a re-cut strip writes ``001.png``. Building the
+        name as ``f"{page:03d}.png"`` therefore works on one kind of chapter
+        and raises FileNotFoundError on the other -- which is exactly how it
+        failed: detection and OCR both finished, and the run died writing the
+        review crops, after all the expensive work.
+
+        Resolve by stem instead. Falls back to the ``.png`` spelling when
+        nothing matches, so a genuinely missing page still reports the name a
+        reader expects.
+        """
+        for candidate in sorted(self.source_pages.glob(f"{page:03d}.*")):
+            if candidate.is_file():
+                return candidate
+        return self.source_pages / page_filename(page)
+
     @property
     def analysis(self) -> Path:
         return self.workspace / "analysis"

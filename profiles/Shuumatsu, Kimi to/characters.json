@@ -1,0 +1,152 @@
+{
+  "Shuuhei": {
+    "name": "Shuuhei",
+    "aliases": [],
+    "role": null,
+    "personality": "Dạy thêm ở trung tâm luyện thi (học sinh gọi 'thầy').",
+    "speech_style": "Với học sinh: thầy/em.",
+    "addresses": {
+      "Tomoya": {
+        "self_term": "tớ",
+        "other_term": "cậu",
+        "formality": "casual",
+        "note": "bạn thuở nhỏ"
+      },
+      "Mẹ Shuuhei": {
+        "self_term": "con",
+        "other_term": "mẹ",
+        "formality": "polite",
+        "note": null
+      },
+      "Hata": {
+        "self_term": "tớ",
+        "other_term": "cậu",
+        "formality": "casual",
+        "note": "gọi 'Hata-san'"
+      },
+      "Matsuo": {
+        "self_term": "tớ",
+        "other_term": "cậu",
+        "formality": "casual",
+        "note": "gọi 'Akira'"
+      }
+    },
+    "notes": []
+  },
+  "Tomoya": {
+    "name": "Tomoya",
+    "aliases": [],
+    "role": null,
+    "personality": "Bị thây ma cắn khi đi cùng đồng nghiệp về; xin đồng nghiệp đừng báo ai, cố về nhà vì đã hứa với Shuu-chan.",
+    "speech_style": "Với đồng nghiệp: tôi/cậu.",
+    "addresses": {
+      "Shuuhei": {
+        "self_term": "tớ",
+        "other_term": "cậu",
+        "formality": "casual",
+        "note": "gọi 'Shuu-chan'"
+      },
+      "Matsuo": {
+        "self_term": "tớ",
+        "other_term": "cậu",
+        "formality": "casual",
+        "note": "gọi 'Matsuo-san'"
+      },
+      "Đồng nghiệp": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "casual",
+        "note": null
+      }
+    },
+    "notes": []
+  },
+  "Mẹ Shuuhei": {
+    "name": "Mẹ Shuuhei",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Shuuhei": {
+        "self_term": "mẹ",
+        "other_term": "con",
+        "formality": "warm",
+        "note": null
+      }
+    },
+    "notes": []
+  },
+  "Hata": {
+    "name": "Hata",
+    "aliases": [],
+    "role": null,
+    "personality": "Bạn học đại học của Shuuhei, nữ, từng có quan hệ với cậu; kể chuyện con mèo bị bỏ rơi đã mất và việc cô không ăn nó; nhận ra trong lòng Shuuhei có người khác.",
+    "speech_style": "Với Shuuhei: tớ/cậu, gọi 'Kouno-kun' rồi 'Shuuhei-kun'.",
+    "addresses": {
+      "Shuuhei": {
+        "self_term": "tớ",
+        "other_term": "cậu",
+        "formality": "casual",
+        "note": "gọi 'Kouno-kun', về sau 'Shuuhei-kun'"
+      }
+    },
+    "notes": []
+  },
+  "Matsuo": {
+    "name": "Matsuo",
+    "aliases": [],
+    "role": null,
+    "personality": "Bạn gái thời cấp ba của Shuuhei (tên Akira); chia tay vì Shuuhei không ăn cơm cô làm, chỉ ăn đồ Tomoya nấu.",
+    "speech_style": "Với Tomoya và Shuuhei: tớ/cậu.",
+    "addresses": {
+      "Tomoya": {
+        "self_term": "tớ",
+        "other_term": "cậu",
+        "formality": "casual",
+        "note": "gọi 'Kamishiro-kun'"
+      },
+      "Shuuhei": {
+        "self_term": "tớ",
+        "other_term": "cậu",
+        "formality": "casual",
+        "note": "gọi 'Shuuhei-kun'"
+      }
+    },
+    "notes": []
+  },
+  "Đồng nghiệp": {
+    "name": "Đồng nghiệp",
+    "aliases": [],
+    "role": null,
+    "personality": "Đồng nghiệp tóc nâu ở nhà hàng của Tomoya, thẳng tính, hay pha trò, nghe Tomoya tâm sự.",
+    "speech_style": "Với Tomoya: tôi/cậu.",
+    "addresses": {
+      "Tomoya": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "casual",
+        "note": null
+      }
+    },
+    "notes": []
+  },
+  "Chiharu": {
+    "name": "Chiharu",
+    "aliases": [],
+    "role": null,
+    "personality": "Nhân vật phụ chương 8: cô gái làm ca dài, sống với bạn trai Ryou-chan thất nghiệp, bạo lực; khi anh thành thây ma và cắn cô, cô cắt chân anh nấu bắp cải cuộn rồi ăn — 'bữa ăn cuối cùng'.",
+    "speech_style": "Với Ryou: em/anh; với đồng nghiệp: tôi/cậu (lịch sự nhẹ).",
+    "addresses": {},
+    "notes": []
+  },
+  "Ryou": {
+    "name": "Ryou",
+    "aliases": [],
+    "role": null,
+    "personality": "Bạn trai của Chiharu, mất việc, thô lỗ; biến thành thây ma.",
+    "speech_style": "Với Chiharu: tao/mày (thô lỗ).",
+    "addresses": {},
+    "notes": []
+  }
+}

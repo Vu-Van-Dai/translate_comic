@@ -1,0 +1,4 @@
+Length: 31.67s
+Cuts at (s): 2.72, 5.15, 7.59, 10.38, 12.82, 15.26, 18.07, 20.5, 22.94, 25.38, 27.82
+Music in video.mp4: Moments Like This -- The Afters, from 0.1s (172.3 BPM)
+For video_silent.mp4: add a TikTok sound in the app; the cuts above follow the beat of the track above.

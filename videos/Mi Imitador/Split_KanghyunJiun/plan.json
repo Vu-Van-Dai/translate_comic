@@ -1,0 +1,161 @@
+{
+ "gate": "video_plan",
+ "style": "story",
+ "background": "white",
+ "story": "CapCut split-screen edit (@muoivungvietnam style): Kanghyun x Jiun, fake-dating proposal -> real confession -> 'me too' -> ending.",
+ "music": {
+  "track": "tt_am_thanh_goc_kho_kh_ai_0818",
+  "start": 0.09,
+  "beat_sync": true
+ },
+ "caption": "từ người yêu giả thành người yêu thật 🥹 #MiImitador",
+ "hashtags": [
+  "MiImitador",
+  "FromPakuriToAssistant",
+  "manhwabl",
+  "BL",
+  "blrecommendations",
+  "capcut",
+  "fyp"
+ ],
+ "shots": [
+  {
+   "panel": "p009_k0",
+   "motion": "zoom_in",
+   "strength": 0.15,
+   "transition": "cut",
+   "transition_seconds": 0.5,
+   "fit": "cover",
+   "effects": [
+    "glow"
+   ],
+   "crop": {
+    "x1": 60,
+    "y1": 80,
+    "x2": 620,
+    "y2": 578
+   },
+   "text": {
+    "text": "Kanghyun muốn Jiun làm người yêu của mình, nhưng lỡ nói thành: “Anh mong em giả làm người yêu của anh.”",
+    "role": "note",
+    "position": "center",
+    "anim": "fade",
+    "start": 0.3
+   },
+   "panel2": "p004_k0",
+   "motion2": "zoom_in",
+   "crop2": {
+    "x1": 0,
+    "y1": 250,
+    "x2": 700,
+    "y2": 872
+   },
+   "seconds": 6.501
+  },
+  {
+   "panel": "p029_k0",
+   "chapter": "45",
+   "motion": "zoom_in",
+   "strength": 0.15,
+   "transition": "dip_white",
+   "transition_seconds": 0.5,
+   "fit": "cover",
+   "effects": [
+    "glow"
+   ],
+   "crop": {
+    "x1": 0,
+    "y1": 60,
+    "x2": 700,
+    "y2": 682
+   },
+   "text": {
+    "text": "Một thời gian sau, Jiun đến tỏ tình: “Em không muốn làm người yêu giả của anh nữa. Em muốn hẹn hò với anh thật.”",
+    "role": "note",
+    "position": "center",
+    "anim": "fade",
+    "start": 0.3
+   },
+   "panel2": "p029_k0",
+   "chapter2": "45",
+   "motion2": "zoom_in",
+   "crop2": {
+    "x1": 0,
+    "y1": 1090,
+    "x2": 700,
+    "y2": 1712
+   },
+   "seconds": 6.501
+  },
+  {
+   "panel": "p016_k0",
+   "chapter": "46",
+   "motion": "zoom_in",
+   "strength": 0.15,
+   "transition": "dip_white",
+   "transition_seconds": 0.5,
+   "fit": "cover",
+   "effects": [
+    "glow"
+   ],
+   "crop": {
+    "x1": 0,
+    "y1": 1620,
+    "x2": 700,
+    "y2": 2242
+   },
+   "text": {
+    "text": "“Anh cũng thích em.”",
+    "role": "note",
+    "position": "center",
+    "anim": "fade",
+    "start": 0.3
+   },
+   "panel2": "p025_k0",
+   "chapter2": "53",
+   "motion2": "zoom_in",
+   "crop2": {
+    "x1": 30,
+    "y1": 130,
+    "x2": 640,
+    "y2": 672
+   },
+   "seconds": 6.501
+  },
+  {
+   "panel": "p033_k0",
+   "chapter": "59",
+   "motion": "zoom_in",
+   "strength": 0.15,
+   "transition": "dip_white",
+   "transition_seconds": 0.5,
+   "fit": "cover",
+   "effects": [
+    "glow"
+   ],
+   "crop": {
+    "x1": 40,
+    "y1": 460,
+    "x2": 680,
+    "y2": 1029
+   },
+   "text": {
+    "text": "Chương cuối: “Lần này mình đi với tư cách người yêu thật nhé?”",
+    "role": "note",
+    "position": "center",
+    "anim": "fade",
+    "start": 0.3
+   },
+   "panel2": "p030_k0",
+   "chapter2": "60",
+   "motion2": "zoom_in",
+   "crop2": {
+    "x1": 0,
+    "y1": 330,
+    "x2": 700,
+    "y2": 952
+   },
+   "seconds": 6.501
+  }
+ ]
+}

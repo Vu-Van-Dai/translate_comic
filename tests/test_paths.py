@@ -109,3 +109,46 @@ def test_ensure_creates_workspace_but_not_library(chapter: ChapterPaths):
                  chapter.cleaned, chapter.translated, chapter.handoff, chapter.logs):
         assert path.is_dir()
     assert not chapter.library.exists()
+
+
+def test_page_file_finds_a_jpeg_page(tmp_path):
+    """A JPEG host leaves `001.jpg` in the archive, not `001.png`.
+
+    Found on a live chapter: `original/` keeps the bytes the source served, so
+    building the name as f"{page:03d}.png" raised FileNotFoundError *after*
+    detection and OCR had both finished -- the run died writing review crops,
+    having already paid for all the expensive work.
+    """
+    from comic.paths import ChapterPaths
+
+    paths = ChapterPaths("jpeg-series", "1", root=tmp_path)
+    paths.ensure()
+    (paths.original / "001.jpg").write_bytes(b"x")
+    (paths.original / "002.jpeg").write_bytes(b"x")
+
+    assert paths.page_file(1).name == "001.jpg"
+    assert paths.page_file(2).name == "002.jpeg"
+
+
+def test_page_file_prefers_recut_pages(tmp_path):
+    """After a re-cut, `pages/` is the truth and `original/` is the archive."""
+    from comic.paths import ChapterPaths
+
+    paths = ChapterPaths("strip-series", "1", root=tmp_path)
+    paths.ensure()
+    (paths.original / "001.jpg").write_bytes(b"x")
+    paths.pages.mkdir(parents=True, exist_ok=True)
+    (paths.pages / "001.png").write_bytes(b"x")
+
+    assert paths.page_file(1) == paths.pages / "001.png"
+
+
+def test_a_missing_page_reports_the_expected_name(tmp_path):
+    """Falling back to the .png spelling keeps the error readable."""
+    from comic.paths import ChapterPaths
+
+    paths = ChapterPaths("empty-series", "1", root=tmp_path)
+    paths.ensure()
+
+    assert paths.page_file(7).name == "007.png"
+    assert not paths.page_file(7).exists()

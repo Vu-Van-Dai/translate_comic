@@ -1,0 +1,215 @@
+{
+ "gate": "video_plan",
+ "style": "story",
+ "background": "white",
+ "story": "Ch.59: the surprise trip, Haeyong's $680 villa, Yoonjae scolding him, the beach walk at night, Kanghyun's 'Jiun...', the night hug, and the startled morning.",
+ "music": {
+  "track": "tt_sonido_original_6424",
+  "start": 0.37,
+  "beat_sync": true
+ },
+ "caption": "Cả studio đi biển, Haeyong bao luôn villa 680 đô 😭 còn Kanghyun & Jiun thì… 🌊💛 Mi Imitador chap 59",
+ "hashtags": [
+  "MiImitador",
+  "FromPakuriToAssistant",
+  "manhwabl",
+  "BL",
+  "truyentranh",
+  "webtoon",
+  "fyp"
+ ],
+ "shots": [
+  {
+   "panel": "p001_k0",
+   "motion": "pan_down",
+   "strength": 0.3,
+   "transition": "cut",
+   "transition_seconds": 0.2,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 0,
+    "y1": 0,
+    "x2": 700,
+    "y2": 2362
+   },
+   "seconds": 1.951
+  },
+  {
+   "panel": "p006_k0",
+   "motion": "static",
+   "strength": 0.12,
+   "transition": "cut",
+   "transition_seconds": 0.2,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 0,
+    "y1": 40,
+    "x2": 700,
+    "y2": 830
+   },
+   "seconds": 1.951
+  },
+  {
+   "panel": "p009_k0",
+   "motion": "zoom_in",
+   "strength": 0.12,
+   "transition": "cut",
+   "transition_seconds": 0.2,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 0,
+    "y1": 1000,
+    "x2": 700,
+    "y2": 1720
+   },
+   "seconds": 1.951
+  },
+  {
+   "panel": "p010_k0",
+   "motion": "static",
+   "strength": 0.12,
+   "transition": "cut",
+   "transition_seconds": 0.2,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 60,
+    "y1": 390,
+    "x2": 700,
+    "y2": 1119
+   },
+   "seconds": 1.951
+  },
+  {
+   "panel": "p016_k0",
+   "motion": "punch",
+   "strength": 0.2,
+   "transition": "cut",
+   "transition_seconds": 0.2,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 73,
+    "y1": 141,
+    "x2": 570,
+    "y2": 859
+   },
+   "seconds": 1.951
+  },
+  {
+   "panel": "p017_k0",
+   "motion": "zoom_in",
+   "strength": 0.12,
+   "transition": "cut",
+   "transition_seconds": 0.2,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 222,
+    "y1": 389,
+    "x2": 644,
+    "y2": 956
+   },
+   "seconds": 1.951
+  },
+  {
+   "panel": "p020_k0",
+   "motion": "static",
+   "strength": 0.12,
+   "transition": "cut",
+   "transition_seconds": 0.2,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 7,
+    "y1": 650,
+    "x2": 697,
+    "y2": 1271
+   },
+   "seconds": 1.951
+  },
+  {
+   "panel": "p024_k0",
+   "motion": "zoom_in",
+   "strength": 0.12,
+   "transition": "fade",
+   "transition_seconds": 0.3,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 0,
+    "y1": 0,
+    "x2": 700,
+    "y2": 1519
+   },
+   "seconds": 2.439
+  },
+  {
+   "panel": "p031_k0",
+   "motion": "zoom_in",
+   "strength": 0.12,
+   "transition": "cut",
+   "transition_seconds": 0.2,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 8,
+    "y1": 260,
+    "x2": 693,
+    "y2": 799
+   },
+   "seconds": 1.951
+  },
+  {
+   "panel": "p033_k0",
+   "motion": "static",
+   "strength": 0.12,
+   "transition": "cut",
+   "transition_seconds": 0.2,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 0,
+    "y1": 60,
+    "x2": 700,
+    "y2": 1340
+   },
+   "seconds": 2.439
+  },
+  {
+   "panel": "p034_k0",
+   "motion": "zoom_in",
+   "strength": 0.12,
+   "transition": "fade",
+   "transition_seconds": 0.35,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 0,
+    "y1": 0,
+    "x2": 700,
+    "y2": 1318
+   },
+   "seconds": 2.927
+  },
+  {
+   "panel": "p038_k0",
+   "motion": "punch",
+   "strength": 0.2,
+   "transition": "cut",
+   "transition_seconds": 0.2,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 0,
+    "y1": 78,
+    "x2": 700,
+    "y2": 1356
+   },
+   "seconds": 2.927
+  }
+ ]
+}

@@ -23,3 +23,13 @@ profiles/_chrome/
 
 # Manually-saved pages awaiting ingest
 raw/
+
+# Dedicated Edge debugging profile (holds real browsing state).
+profiles/_edge/
+
+# Large local assets
+/Essential Guide to Comic Book Lettering.pdf
+/assets/music/trending/
+
+/Essential Guide to Comic Book Lettering.pdf
+/assets/music/trending/

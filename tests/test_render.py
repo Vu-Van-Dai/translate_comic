@@ -7,6 +7,8 @@ must come back bit-identical.
 
 from __future__ import annotations
 
+from pathlib import Path
+
 import numpy as np
 import pytest
 
@@ -77,6 +79,89 @@ def test_bubble_interior_covers_its_own_lettering():
     box = BBox(x1=60, y1=70, x2=140, y2=118)
     found = bubble_interior(image, mask, box)
     assert found[box.y1 : box.y2, box.x1 : box.x2].mean() > 0.5
+
+
+def test_a_short_line_in_a_big_bubble_gets_the_whole_bubble():
+    """The bubble is far bigger than the search window around one short line.
+
+    It used to fill that window edge to edge, trip the leak guard, and fall back
+    to the text box -- so the translation was set at a fraction of the source's
+    size. The wider retry must find the bubble instead.
+    """
+    image = np.zeros((500, 700, 3), dtype=np.uint8)
+    image[::2, ::3] = 90                    # textured panel
+    image[60:440, 60:640] = 250             # a big bubble
+    mask = np.zeros((500, 700), dtype=np.uint8)
+    mask[240:260, 290:410] = 255            # one short line in the middle
+    image[240:260, 290:410] = 10
+    box = BBox(x1=290, y1=240, x2=410, y2=260)
+    found = bubble_interior(image, mask, box)
+    assert found is not None
+    assert found.sum() > 10 * (box.x2 - box.x1) * (box.y2 - box.y1)
+    assert found[10, 10] == 0               # still not the panel
+
+
+def test_text_on_an_open_panel_still_falls_back():
+    """A flat area with no outline keeps running into every window's border.
+
+    The wider retry must not mistake that for a bubble, or a caption on page
+    white would be allowed to spread across the whole gutter.
+    """
+    image = np.full((500, 700, 3), 250, dtype=np.uint8)   # no outline anywhere
+    mask = np.zeros((500, 700), dtype=np.uint8)
+    mask[240:260, 290:410] = 255
+    image[240:260, 290:410] = 10
+    assert bubble_interior(image, mask, BBox(x1=290, y1=240, x2=410, y2=260)) is None
+
+
+def test_a_white_bubble_ignores_a_tone_search_that_leaked(monkeypatch):
+    """The tone search escapes a white bubble whose outline touches artwork.
+
+    It used to win whenever it was larger, which on Super Lovers ch.1 was
+    4x-14x the bubble: a line set above an empty bubble, two bubbles merged.
+    """
+    import comic.image_processing.mask as mask_mod
+
+    image, mask = bubble_page()
+    leaked = np.ones(image.shape[:2], dtype=np.uint8)      # the whole page
+    monkeypatch.setattr(mask_mod, "toned_interior", lambda *a: leaked)
+    areas = fit_areas(image, mask, [region("a", (60, 70, 140, 118))])
+    assert areas["a"][10, 10] == 0          # not the panel
+    assert areas["a"][100, 100] == 1        # still the bubble
+
+
+def test_lettering_on_dot_tone_still_takes_the_tone_search(monkeypatch):
+    import comic.image_processing.mask as mask_mod
+
+    image, mask = bubble_page()
+    image[40:160, 40:160] = 250
+    image[40:160:3, 40:160:3] = 60           # dot tone behind the letters
+    for row in (70, 90, 110):
+        image[row : row + 8, 60:140] = 10
+    toned = np.zeros(image.shape[:2], dtype=np.uint8)
+    toned[30:170, 30:170] = 1
+    monkeypatch.setattr(mask_mod, "toned_interior", lambda *a: toned)
+    areas = fit_areas(image, mask, [region("a", (60, 70, 140, 118))])
+    assert areas["a"][35, 35] == 1
+
+
+def test_inpainting_a_grey_page_adds_no_colour(monkeypatch):
+    """LaMa paints in colour; a black-and-white page must stay grey."""
+    import comic.image_processing.clean as clean_mod
+
+    class Colourful:
+        def repair(self, patch, hole):
+            out = patch.copy()
+            out[hole > 0] = (0, 200, 0)           # a green speck
+            return out
+
+    monkeypatch.setattr(clean_mod, "_lama", lambda model: Colourful())
+    patch = np.full((40, 40, 3), 120, dtype=np.uint8)
+    hole = np.zeros((40, 40), dtype=np.uint8)
+    hole[15:25, 15:25] = 1
+    out = clean_mod._inpaint(patch, hole, None)
+    spread = out.max(axis=-1).astype(int) - out.min(axis=-1)
+    assert spread.max() == 0
 
 
 def test_fit_areas_never_overlap():
@@ -320,9 +405,11 @@ def test_nudge_needs_two_numbers():
         QaFix(region_id="r", action=FixAction.NUDGE, value="12")
 
 
-def test_restyle_needs_a_real_kind():
+def test_restyle_needs_a_kind_or_a_voice_name():
+    # "enormous" is shaped like a voice name; resume checks it against fonts.yaml.
+    assert QaFix(region_id="r", action=FixAction.RESTYLE, value="enormous")
     with pytest.raises(ValueError):
-        QaFix(region_id="r", action=FixAction.RESTYLE, value="enormous")
+        QaFix(region_id="r", action=FixAction.RESTYLE, value="ENORMOUS TEXT")
 
 
 def test_layout_line_height_tracks_font_size():
@@ -485,6 +572,56 @@ def test_a_page_with_nothing_to_translate_is_still_published(home):
     ]
 
 
+def test_an_excluded_page_is_not_published(home):
+    """An uploader's insert is not a page of the comic.
+
+    Distinct from the test above. A cover has nothing to translate and is
+    still the work, so it is published untranslated. A scanlation group's
+    credits card is somebody else's banner, and falling back to the original
+    for it would put that banner in the library as though it were story.
+    """
+    from comic.qa.visual import publish
+
+    paths, state = _chapter_with_pages("insert-test", 3)
+    state.pages[0].excluded = True
+
+    count, problems = publish(paths, state)
+    assert count == 2
+    assert problems == []
+    assert sorted(p.name for p in paths.library.iterdir()) == ["002.png", "003.png"]
+
+
+def test_an_excluded_page_stays_in_the_archive(home):
+    """`original/` is the verbatim record of what the source served.
+
+    Excluding decides what reaches `library/`, and nothing else -- otherwise
+    re-running the chapter could not put the page back.
+    """
+    from comic.qa.visual import publish
+
+    paths, state = _chapter_with_pages("archive-test", 2)
+    state.pages[0].excluded = True
+    publish(paths, state)
+
+    assert (paths.source_pages / "001.png").exists()
+
+
+def test_an_excluded_page_is_skipped_by_every_stage(home):
+    """It must not reach a gate: the agent would be asked to transcribe a banner."""
+    from comic.schemas import Stage
+    from comic.stages import _pages_to_process
+
+    _paths, state = _chapter_with_pages("stage-test", 3)
+    state.pages[1].excluded = True
+
+    todo = _pages_to_process(state, Stage.OCR, only=None, force=False)
+    assert [record.page for record in todo] == [1, 3]
+
+    # --force replays finished work; it does not resurrect a dropped page.
+    todo = _pages_to_process(state, Stage.OCR, only=None, force=True)
+    assert [record.page for record in todo] == [1, 3]
+
+
 def test_a_page_that_should_have_rendered_is_still_a_problem(home):
     """Falling back to the original must not hide a genuine render failure."""
     from comic.schemas import ChapterTranslation, TranslationEntry
@@ -632,21 +769,44 @@ def test_a_later_pass_can_revise_an_earlier_line(home):
 # ------------------------------------------------------ inverted panels
 
 
-def test_light_type_on_a_dark_panel():
-    """White-on-black lettering is ordinary in manga.
+def test_one_ink_colour_by_default():
+    """A chapter is lettered in a single colour, with no shading.
 
-    The flat fill correctly restores such a bubble to black; drawing the usual
-    dark type onto it makes the line vanish. Measured on this chapter: three
-    lines disappeared completely.
+    Type that changes colour panel by panel reads as inconsistent even when
+    every panel is legible on its own, so the flip is opt-in per series.
     """
-    from comic.typesetting.render import contrasting, style_for
+    from dataclasses import replace
+
     from comic.schemas import TextKind
+    from comic.typesetting.render import contrasting, style_for
 
     dark = np.zeros((40, 40, 3), dtype=np.uint8)
     area = np.ones((40, 40), dtype=np.uint8)
-    style = contrasting(style_for(TextKind.DIALOGUE), dark, area)
-    assert min(style.colour) > 180
-    assert max(style.stroke_colour) < 60
+    base = style_for(TextKind.DIALOGUE)
+    assert contrasting(base, dark, area).colour == base.colour
+
+
+def test_light_type_on_a_dark_panel_when_the_profile_asks():
+    """White-on-black lettering is ordinary in manga.
+
+    The flat fill correctly restores such a bubble to black; drawing the usual
+    dark type onto it makes the line vanish -- measured on a real chapter,
+    three lines disappeared completely. That is why the behaviour survives as
+    ``auto_contrast``, which a paged-manga profile turns on. Webtoons leave it
+    off: their text sits in bubbles the cleaner fills pale, and anything over
+    dark artwork is drawn-in lettering nobody should be translating.
+    """
+    from dataclasses import replace
+
+    from comic.schemas import TextKind
+    from comic.typesetting.render import contrasting, style_for
+
+    dark = np.zeros((40, 40, 3), dtype=np.uint8)
+    area = np.ones((40, 40), dtype=np.uint8)
+    style = replace(style_for(TextKind.DIALOGUE), auto_contrast=True)
+    got = contrasting(style, dark, area)
+    assert min(got.colour) > 180
+    assert max(got.stroke_colour) < 60
 
 
 def test_dark_type_survives_on_a_light_panel():
@@ -675,3 +835,580 @@ def test_ink_follows_the_panel():
     page[0:2] = 255  # the "lettering"
     assert _ink(page, inverted=True).sum() == 20
     assert _ink(page, inverted=False).sum() == 80
+
+
+# ------------------------------------------------- ink against the background
+
+
+def test_ink_is_chosen_by_which_separates_further():
+    """A fixed cutoff works on manga and fails in the middle.
+
+    Manga pages are bimodal -- white bubbles or black panels -- so a threshold
+    of 110 was never tested between. Webtoons live there: measured on a real
+    chapter, six regions sat on backgrounds of luma 111-160 and were given
+    dark type, and the two on a night panel at luma 126 and 130 were barely
+    legible.
+    """
+    import numpy as np
+
+    from comic.schemas import TextKind
+    from comic.typesetting.render import LIGHT_INK, contrasting, style_for
+
+    from dataclasses import replace
+
+    style = replace(style_for(TextKind.DIALOGUE), auto_contrast=True)
+    area = np.ones((8, 8), np.uint8)
+
+    def ink_for(luma: int):
+        page = np.full((8, 8, 3), luma, np.uint8)
+        return contrasting(style, page, area).colour
+
+    assert ink_for(0) == LIGHT_INK
+    assert ink_for(110) == LIGHT_INK
+    assert ink_for(126) == LIGHT_INK      # was dark type, and unreadable
+    assert ink_for(200) == style.colour
+    assert ink_for(255) == style.colour
+
+
+def test_the_crossover_sits_where_contrast_equalises():
+    """Not at an arbitrary constant, so it follows the style's own colours."""
+    import numpy as np
+
+    from comic.schemas import TextKind
+    from comic.typesetting.render import LIGHT_INK, contrasting, style_for
+
+    from dataclasses import replace
+
+    style = replace(style_for(TextKind.DIALOGUE), auto_contrast=True)
+    area = np.ones((8, 8), np.uint8)
+    midpoint = (sum(style.colour) / 3 + sum(LIGHT_INK) / 3) / 2
+
+    below = np.full((8, 8, 3), int(midpoint) - 6, np.uint8)
+    above = np.full((8, 8, 3), int(midpoint) + 6, np.uint8)
+    assert contrasting(style, below, area).colour == LIGHT_INK
+    assert contrasting(style, above, area).colour == style.colour
+
+
+def _boxed_area(width=396, height=200, notches=()):
+    """A rectangular caption interior, optionally with stray narrow rows."""
+    import numpy as np
+
+    area = np.zeros((height + 80, width + 80), np.uint8)
+    area[40:40 + height, 40:40 + width] = 1
+    for row, keep in notches:
+        area[40 + row, 40 + keep:40 + width] = 0
+    return area
+
+
+def test_a_stray_narrow_row_does_not_collapse_the_font():
+    """Mask pinholes must not starve the fitter.
+
+    A line may only sit where its whole line-height band is solid, which keeps
+    type off a bubble's corners. Measured on a real caption box: the interior
+    was 396px wide on nearly every row, but three rows came back at 200, 206
+    and 330 and every candidate block position straddled one of them. The
+    fitter fell to 15px inside a box with room for 23px, while the *larger*
+    box below it on the same page set at 29px -- type visibly uneven across
+    one page.
+    """
+    from comic.typesetting.fit import fit_text
+
+    fonts = Path(__file__).resolve().parents[1] / "assets" / "fonts"
+    face = fonts / "Mali-Regular.ttf"
+    if not face.exists():
+        pytest.skip("fonts not fetched (scripts/fetch_fonts.py)")
+
+    text = " ".join(["mot hai ba bon nam sau bay tam"] * 6)
+    clean = fit_text(text, _boxed_area(), face)
+    pitted = fit_text(text, _boxed_area(notches=((30, 206), (110, 330))), face)
+
+    assert clean.font_size > 0
+    assert pitted.font_size == clean.font_size, (
+        f"pinholes cost {clean.font_size - pitted.font_size}px of type"
+    )
+
+
+def test_closing_never_shrinks_the_type():
+    """The fix is only safe if it cannot make any region worse."""
+    from comic.typesetting.fit import fit_text
+
+    fonts = Path(__file__).resolve().parents[1] / "assets" / "fonts"
+    face = fonts / "Mali-Regular.ttf"
+    if not face.exists():
+        pytest.skip("fonts not fetched (scripts/fetch_fonts.py)")
+
+    text = "mot hai ba bon nam sau bay tam chin muoi"
+    for notches in ((), ((30, 206),), ((30, 206), (110, 330))):
+        assert fit_text(text, _boxed_area(notches=notches), face).font_size >= 11
+
+
+def test_translation_is_capped_near_the_source_lettering_size():
+    """A short line in a big bubble must not be shouted just because there is room.
+
+    Before the bubble was found properly, the text box capped the size by
+    accident; with the whole bubble available the fitter went to ~2x the source.
+    """
+    from comic.typesetting.render import SOURCE_BAND_EM, SOURCE_SIZE_HEADROOM, source_size_cap
+
+    mask = np.zeros((500, 700), dtype=np.uint8)
+    mask[240:267, 290:410] = 255                       # one 27px line of lettering
+    cap = source_size_cap(mask, region("a", (290, 240, 410, 267)))
+    assert cap == round(27 / SOURCE_BAND_EM * SOURCE_SIZE_HEADROOM)
+
+    area = np.zeros((500, 700), dtype=np.uint8)
+    area[60:440, 60:640] = 1                           # a big bubble
+    layout = fit_text("Em thích anh.", area, FONT, max_size=cap)
+    assert layout.fits and layout.font_size <= cap
+
+
+def test_no_mask_means_no_source_cap():
+    from comic.typesetting.fit import MAX_FONT_PX
+    from comic.typesetting.render import source_size_cap
+
+    assert source_size_cap(None, region("a", (0, 0, 10, 10))) == MAX_FONT_PX
+
+
+def test_a_capped_line_does_not_strand_one_word_on_its_last_line():
+    # A wide, roomy area and a size cap: the widest wrap that fits leaves "nay."
+    # alone, and a narrower one fits at the same size without doing so.
+    area = np.zeros((400, 380), dtype=np.uint8)
+    area[40:360, 40:340] = 1
+    text = "Lee Jiun sẽ là trợ lý mới của tôi từ hôm nay."
+    layout = fit_text(text, area, FONT, max_size=30)
+    assert layout.font_size == 30
+    assert len(layout.lines) >= 2 and len(layout.lines[-1].split()) > 1
+
+
+def test_avoiding_a_widow_never_costs_type_size():
+    from comic.typesetting.fit import _widowed
+
+    assert _widowed(["Cậu dễ thương", "ghê."])
+    assert not _widowed(["Cậu dễ", "thương ghê."])
+    assert not _widowed(["Và..."])
+    area = np.zeros((120, 300), dtype=np.uint8)
+    area[10:110, 10:290] = 1
+    text = "Cậu dễ thương ghê."
+    free = fit_text(text, area, FONT)
+    assert free.fits and free.font_size >= 12
+
+
+def test_spare_room_puts_the_translation_where_the_source_sat():
+    # A bubble (bottom) whose area leaked into a wide open page above it, as a
+    # dashed outline lets happen. The widest, slackest rows are in the leak;
+    # the source lettering was in the bubble.
+    area = np.zeros((500, 600), dtype=np.uint8)
+    area[0:250, 0:600] = 1          # leaked page
+    area[250:450, 150:450] = 1      # the bubble
+    source = (200, 300, 400, 400)
+    layout = fit_text("Chắc em cũng không đi đâu.", area, FONT, max_size=24, anchor=source)
+    centre_y = layout.y + layout.height / 2
+    assert source[1] <= centre_y <= source[3]
+    assert layout.font_size == 24
+
+
+def test_an_off_centre_source_still_gets_a_centred_translation():
+    # A round bubble whose English sat up and to the left (the operator,
+    # 2026-10-15: off-centre text is the thing readers notice).
+    import cv2
+
+    area = np.zeros((400, 400), dtype=np.uint8)
+    cv2.ellipse(area, (200, 200), (150, 120), 0, 0, 360, 1, -1)
+    area[310:380, 190:210] = 1                       # the tail
+    source = (90, 110, 230, 190)
+    layout = fit_text("Chắc chắn là cậu ấy.", area, FONT, max_size=24, anchor=source)
+    assert abs(layout.x + layout.width / 2 - 200) <= 6
+    assert abs(layout.y + layout.height / 2 - 200) <= 8
+
+
+def test_an_anchor_that_would_cost_type_size_is_ignored():
+    # Only a sliver of room around the source box; the free layout is much larger.
+    area = np.zeros((400, 600), dtype=np.uint8)
+    area[0:300, 0:600] = 1
+    area[300:330, 280:320] = 1
+    source = (285, 305, 315, 325)
+    free = fit_text("Chào cậu", area, FONT)
+    anchored = fit_text("Chào cậu", area, FONT, anchor=source)
+    assert anchored.font_size == free.font_size
+
+
+def test_stray_source_punctuation_inside_a_bubble_is_taken_into_the_interior():
+    import cv2
+
+    image = np.full((200, 300, 3), 120, dtype=np.uint8)
+    cv2.ellipse(image, (150, 100), (120, 70), 0, 0, 360, (255, 255, 255), -1)
+    cv2.ellipse(image, (150, 100), (120, 70), 0, 0, 360, (0, 0, 0), 2)
+    image[95:105, 110:150] = 0                 # the lettering, masked
+    image[98:102, 170:174] = 0                 # a stray period the mask missed
+    cv2.circle(image, (150, 60), 9, (0, 0, 0), -1)   # a drawing in the bubble
+    page_mask = np.zeros((200, 300), dtype=np.uint8)
+    page_mask[93:107, 108:152] = 255
+    interior = bubble_interior(image, page_mask, BBox(x1=108, y1=93, x2=152, y2=107))
+    assert interior is not None
+    assert interior[100, 172]                  # speck: erased with the bubble
+    assert not interior[60, 150]               # drawing: left alone
+
+
+def test_a_font_delta_keeps_hand_broken_lines():
+    area = np.zeros((300, 400), dtype=np.uint8)
+    area[20:280, 20:380] = 1
+    lines = ["Em cũng không", "biết phải nói", "với anh"]
+    plain = fit_text("x", area, FONT, forced_lines=lines)
+    smaller = fit_text("x", area, FONT, forced_lines=lines, font_delta=-3)
+    assert smaller.lines == tuple(lines)
+    assert smaller.font_size == plain.font_size - 3
+
+
+def test_a_separate_ellipsis_elsewhere_in_the_bubble_is_left_alone():
+    import cv2
+
+    image = np.full((300, 300, 3), 120, dtype=np.uint8)
+    cv2.ellipse(image, (150, 150), (130, 130), 0, 0, 360, (255, 255, 255), -1)
+    cv2.ellipse(image, (150, 150), (130, 130), 0, 0, 360, (0, 0, 0), 2)
+    image[195:205, 110:190] = 0                  # the region's lettering
+    for x in (140, 150, 160):                    # a lone "..." on a line above it
+        image[178:182, x:x + 4] = 0
+    page_mask = np.zeros((300, 300), dtype=np.uint8)
+    page_mask[193:207, 108:192] = 255
+    interior = bubble_interior(image, page_mask, BBox(x1=108, y1=193, x2=192, y2=207))
+    assert interior is not None
+    assert not interior[180, 152]
+
+
+def test_inset_keeps_type_off_every_edge_of_the_bubble():
+    # Reader feedback: a full bubble set its first and last lines against the
+    # outline, because PADDING_EM only narrows lines. `inset` margins all sides.
+    import cv2
+
+    area = np.zeros((300, 420), np.uint8)
+    cv2.ellipse(area, (210, 150), (166, 101), 0, 0, 360, 1, -1)
+    text = "Hai người đi dạo xa cỡ nào vậy?"
+    plain = fit_text(text, area, FONT, max_size=60)
+    inset = fit_text(text, area, FONT, max_size=60, inset=0.10)
+    margin = int(round(202 * 0.10))
+    assert inset.y >= 150 - 101 + margin
+    assert inset.y + inset.height <= 150 + 101 - margin
+    assert inset.font_size <= plain.font_size
+
+
+def test_inset_never_erases_a_small_area():
+    area = np.zeros((40, 40), np.uint8)
+    area[10:16, 5:35] = 1
+    assert fit_text("ừ", area, FONT, inset=0.9).lines
+
+
+def test_pad_em_keeps_a_margin_above_and_below_the_block():
+    # Piekos: the space inside a balloon is about one capital O. The built-in
+    # padding only narrowed lines, so a full box set text on its top edge.
+    area = np.zeros((120, 400), np.uint8)
+    area[10:110, 10:390] = 1
+    text = "một hai ba bốn năm sáu bảy tám chín mười một hai ba bốn năm sáu"
+    plain = fit_text(text, area, FONT, max_size=60)
+    padded = fit_text(text, area, FONT, max_size=60, pad_em=0.6)
+    pad = int(round(padded.font_size * 0.6))
+    assert padded.y >= 10 + pad - 1
+    assert padded.y + padded.height <= 110 - pad + 1
+    assert padded.x >= 10 + pad - 1
+    assert padded.font_size <= plain.font_size
+
+
+def test_missing_punctuation_is_substituted_not_tofu():
+    from comic.typesetting.coverage import check_font
+    from comic.typesetting.render import printable
+
+    ace = Path("assets/fonts/000AnimeAce3-TeddyBear.ttf")
+    if not ace.exists():
+        pytest.skip("AnimeAce3 not installed")
+    assert check_font(ace).ok
+    assert printable("Khoan — đã «nhé»", ace) == 'Khoan - đã "nhé"'
+    # A face that has the dash keeps it.
+    assert printable("Khoan — đã", Path(FONT)) == "Khoan — đã"
+
+
+def test_voices_load_from_the_profile_and_win_over_the_kind(tmp_path):
+    from comic.schemas import ChapterTranslation, RegionOverride, RenderPlan, TranslationEntry
+    from comic.typesetting.render import layout_region, load_styles, voice_uses
+
+    yaml_path = tmp_path / "fonts.yaml"
+    yaml_path.write_text(
+        "pad_em: 0.5\n"
+        "styles:\n  dialogue: {font: BeVietnamPro-Regular.ttf, uppercase: true}\n"
+        "voices:\n  stammer: {font: BeVietnamPro-Italic.ttf, use: \"hesitant, trailing off\"}\n",
+        encoding="utf-8",
+    )
+    styles = load_styles(yaml_path)
+    assert voice_uses(yaml_path) == {"stammer": "hesitant, trailing off"}
+    # A voice inherits the dialogue style (case) and the shared spacing.
+    assert styles["stammer"].font == "BeVietnamPro-Italic.ttf"
+    assert styles["stammer"].uppercase and styles["stammer"].pad_em == 0.5
+
+    region = TextRegion(id="p001_r01", page=1, bbox=BBox(x1=10, y1=10, x2=190, y2=90),
+                        kind=TextKind.DIALOGUE)
+    area = np.zeros((100, 200), np.uint8)
+    area[5:95, 5:195] = 1
+    _, plain = layout_region(region, "ừ thì", area, Path("assets/fonts"), None, styles)
+    _, voiced = layout_region(region, "ừ thì", area, Path("assets/fonts"),
+                              RegionOverride(voice="stammer"), styles)
+    assert plain.font.startswith("BeVietnamPro-Regular") and voiced.font == "BeVietnamPro-Italic.ttf"
+
+    # A translation-time voice is folded in for rendering; a QA restyle wins.
+    translation = ChapterTranslation(series="s", chapter="c", entries=[
+        TranslationEntry(region_id="p001_r01", source_text="", target_text="ừ", voice="stammer"),
+        TranslationEntry(region_id="p001_r02", source_text="", target_text="à", voice="stammer"),
+    ])
+    plan = RenderPlan(series="s", chapter="c")
+    plan.edit("p001_r02").voice = "other"
+    voiced_plan = plan.with_voices(translation)
+    assert voiced_plan.for_region("p001_r01").voice == "stammer"
+    assert voiced_plan.for_region("p001_r02").voice == "other"
+    assert plan.for_region("p001_r01").voice is None  # the saved plan is untouched
+
+
+def test_a_voice_may_not_shadow_a_text_kind(tmp_path):
+    from comic.typesetting.render import load_styles
+
+    yaml_path = tmp_path / "fonts.yaml"
+    yaml_path.write_text("voices:\n  shout: {font: Anton-Regular.ttf}\n", encoding="utf-8")
+    with pytest.raises(ValueError, match="shadows"):
+        load_styles(yaml_path)
+
+
+def test_a_no_break_space_keeps_a_word_on_one_line():
+    from comic.typesetting.fit import NBSP
+
+    font = load_font(FONT, 20)
+    width = font.getbbox("chúng ta đi")[2] + 2
+    free = wrap("chúng ta đi hôm nay", font, width)
+    bound = wrap(f"chúng ta đi hôm{NBSP}nay", font, width)
+    assert free == ["chúng ta đi", "hôm nay"] or "hôm" in free[-2]
+    assert any("hôm nay" in line for line in bound)
+    assert all(NBSP not in line for line in bound)
+
+
+def test_a_caption_box_gets_balanced_lines_not_a_long_line_and_a_stub():
+    # Piekos ch. 6: break caption text "in the most rectangular shape you can",
+    # minimising the gap after each line. Among wraps that fit at one size, the
+    # one whose emptiest line fills most of its row wins.
+    from comic.typesetting.fit import _try_size
+
+    area = np.zeros((200, 520), bool)
+    area[20:180, 20:500] = True
+    text = "ngày hôm ấy trời mưa rất to và tôi đã chờ anh ở đó"
+    font = load_font(FONT, 26)
+    layout = _try_size(area, text, FONT, 26)
+    assert layout is not None and len(layout.lines) >= 2
+    widths = [font.getbbox(line)[2] for line in layout.lines]
+    assert min(widths) >= 0.5 * max(widths)
+
+
+def test_a_voice_missing_a_letter_falls_back_for_that_line_only(tmp_path, monkeypatch):
+    import comic.typesetting.render as render
+    from comic.schemas import RegionOverride
+
+    italic = "BeVietnamPro-Italic.ttf"
+    real = render._charset
+
+    def lacking(path):  # pretend the voice face has no "ỉ"/"Ỉ"
+        chars = real(path)
+        return chars - {ord("ỉ"), ord("Ỉ")} if path.endswith(italic) else chars
+
+    monkeypatch.setattr(render, "_charset", lacking)
+    yaml_path = tmp_path / "fonts.yaml"
+    yaml_path.write_text("voices:\n  soft: {font: " + italic + "}\n", encoding="utf-8")
+    styles = render.load_styles(yaml_path)
+    region = TextRegion(id="p001_r01", page=1, bbox=BBox(x1=10, y1=10, x2=190, y2=90),
+                        kind=TextKind.DIALOGUE)
+    area = np.zeros((100, 200), np.uint8)
+    area[5:95, 5:195] = 1
+    fonts = Path("assets/fonts")
+    _, kept = render.layout_region(region, "đến rồi", area, fonts, RegionOverride(voice="soft"), styles)
+    _, fell = render.layout_region(region, "chỉ thế", area, fonts, RegionOverride(voice="soft"), styles)
+    assert kept.font == italic
+    assert fell.font != italic
+
+
+def test_a_voice_keeps_its_own_size_scale_over_the_shared_one(tmp_path):
+    from comic.typesetting.render import load_styles
+
+    yaml_path = tmp_path / "fonts.yaml"
+    yaml_path.write_text("size_scale: 0.9\nleading: auto\n"
+                         "voices:\n  whisper: {font: BeVietnamPro-Regular.ttf, size_scale: 0.68}\n",
+                         encoding="utf-8")
+    styles = load_styles(yaml_path)
+    assert styles["whisper"].size_scale == 0.68
+    assert styles[TextKind.DIALOGUE].size_scale == 0.9
+    assert styles["whisper"].auto_leading
+
+
+def test_auto_leading_clears_the_accents_of_a_tall_face():
+    from comic.typesetting.fit import LINE_HEIGHT_EM, leading_em
+
+    assert leading_em("assets/fonts/Bangers-Regular.ttf") > 1.5
+    area = np.zeros((300, 300), np.uint8)
+    area[10:290, 10:290] = 1
+    text = "ỖN ĐỘI ỄNH ỮNG ỘC ẬY ỖN ĐỘI"
+    fixed = fit_text(text, area, "assets/fonts/Bangers-Regular.ttf", max_size=30)
+    auto = fit_text(text, area, "assets/fonts/Bangers-Regular.ttf", max_size=30, auto_leading=True)
+    assert fixed.line_em == LINE_HEIGHT_EM
+    assert auto.line_height > fixed.line_height * 1.2 or auto.font_size < fixed.font_size
+
+
+def test_a_series_inherits_its_format_preset_and_the_mood_library(tmp_path):
+    from comic.typesetting.render import load_styles, read_profile, voice_uses
+
+    presets = tmp_path / "_presets"
+    presets.mkdir()
+    (presets / "voices.yaml").write_text(
+        "voices:\n  soft: {font: BeVietnamPro-Italic.ttf, use: gentle}\n"
+        "  angry: {font: Anton-Regular.ttf, use: yelling}\n", encoding="utf-8")
+    (presets / "manhwa.yaml").write_text(
+        "preset: voices\npad_em: 0.6\nstyles:\n  dialogue: {font: BeVietnamPro-Regular.ttf, uppercase: true}\n",
+        encoding="utf-8")
+    series = tmp_path / "Some Series"
+    series.mkdir()
+    (series / "fonts.yaml").write_text(
+        "preset: manhwa\nvoices:\n  angry: {font: Bangers-Regular.ttf, use: furious}\n", encoding="utf-8")
+
+    raw = read_profile(series / "fonts.yaml")
+    assert raw["pad_em"] == 0.6
+    assert voice_uses(series / "fonts.yaml") == {"soft": "gentle", "angry": "furious"}
+    styles = load_styles(series / "fonts.yaml")
+    assert styles["angry"].font == "Bangers-Regular.ttf"   # the series overrides one voice
+    assert styles["soft"].uppercase                         # voices inherit the preset's case
+
+
+def test_the_shipped_presets_load():
+    from comic.typesetting.render import load_styles, voice_uses
+
+    for name in ("manga", "manhwa", "manhua", "western"):
+        path = Path("profiles/_presets") / f"{name}.yaml"
+        styles = load_styles(path)
+        assert len(voice_uses(path)) >= 6
+        for style in styles.values():
+            assert (Path("assets/fonts") / style.font).exists(), (name, style.font)
+
+
+def test_a_restyle_to_a_kind_beats_the_translation_voice():
+    from comic.schemas import ChapterTranslation, RenderPlan, TextKind, TranslationEntry
+
+    translation = ChapterTranslation(series="s", chapter="c", entries=[
+        TranslationEntry(region_id="p001_r01", source_text="", target_text="ừ", voice="whisper")])
+    plan = RenderPlan(series="s", chapter="c")
+    plan.edit("p001_r01").style_kind = TextKind.DIALOGUE
+    assert plan.with_voices(translation).for_region("p001_r01").voice is None
+
+
+def test_an_aside_on_the_art_follows_its_source_case(tmp_path):
+    from comic.typesetting.render import layout_region, load_styles
+
+    yaml_path = tmp_path / "fonts.yaml"
+    yaml_path.write_text("sentence_font: Mali-Regular.ttf\n"
+                         "styles:\n  dialogue: {font: 000AnimeAce3-TeddyBear.ttf, uppercase: true}\n",
+                         encoding="utf-8")
+    styles = load_styles(yaml_path)
+    box = BBox(x1=10, y1=10, x2=110, y2=40)
+    own = np.zeros((100, 200), np.uint8)
+    own[10:40, 10:110] = 1                       # no bubble: the text's own box
+    bubble = np.zeros((100, 200), np.uint8)
+    bubble[2:98, 2:198] = 1
+    aside = TextRegion(id="p001_r01", page=1, bbox=box, kind=TextKind.DIALOGUE, source_text="Yeah yeah.")
+    spoken = TextRegion(id="p001_r02", page=1, bbox=box, kind=TextKind.DIALOGUE, source_text="YEAH YEAH.")
+    fonts = Path("assets/fonts")
+    layout, style = layout_region(aside, "rồi rồi", own, fonts, None, styles)
+    assert not style.uppercase and style.font == "Mali-Regular.ttf" and layout.lines[0] == "rồi rồi"
+    _, style = layout_region(spoken, "rồi rồi", own, fonts, None, styles)
+    assert style.uppercase                       # source was caps
+    _, style = layout_region(aside, "rồi rồi", bubble, fonts, None, styles)
+    assert style.uppercase                       # inside a bubble: caps
+
+
+def test_white_lettering_on_a_dark_box_gets_the_whole_box():
+    # bubble_interior grows from light pixels; on a black caption those are
+    # the letters, and the area came back letter-shaped (Super Lovers ch.0).
+    image = np.full((200, 300, 3), 30, np.uint8)
+    mask = np.zeros((200, 300), np.uint8)
+    for x in range(60, 240, 30):                 # white "letters"
+        image[80:120, x:x + 12] = 245
+        mask[80:120, x:x + 12] = 255
+    region = TextRegion(id="p001_r01", page=1, bbox=BBox(x1=50, y1=70, x2=250, y2=130),
+                        kind=TextKind.CAPTION, source_text="NO WAY.")
+    area = fit_areas(image, mask, [region])["p001_r01"]
+    assert area[70:130, 50:250].all()
+
+
+def test_cleaning_keeps_the_screentone_and_shading_of_a_bubble():
+    # Erase the letters only. Filling the whole bubble wiped dot tone and
+    # left "a white frame ... sometimes with polka dots" (Super Lovers ch.0).
+    image = np.full((200, 300, 3), 250, np.uint8)
+    yy, xx = np.mgrid[0:200, 0:300]
+    dots = ((yy % 8 < 2) & (xx % 8 < 2))
+    image[dots] = 120                                # screentone inside the bubble
+    mask = np.zeros((200, 300), np.uint8)
+    mask[90:110, 100:200] = 255
+    image[mask > 0] = 15                             # the lettering
+    region = TextRegion(id="r", page=1, bbox=BBox(x1=95, y1=85, x2=205, y2=115),
+                        kind=TextKind.DIALOGUE, source_text="HELLO")
+    area = np.zeros((200, 300), np.uint8)
+    area[40:160, 40:260] = 1                         # the whole bubble
+    cleaned, touched, _ = clean_page(image, mask, [region], {"r": area})
+    far = (area > 0) & (touched == 0)
+    assert far.any() and np.array_equal(cleaned[far], image[far])   # dots kept
+    assert touched.sum() < 0.3 * area.sum()                         # letters only
+
+
+def test_plain_white_letters_take_the_exact_colour_behind_them():
+    image = np.full((100, 200, 3), 253, np.uint8)
+    mask = np.zeros((100, 200), np.uint8)
+    mask[40:60, 50:150] = 255
+    image[mask > 0] = 10
+    region = TextRegion(id="r", page=1, bbox=BBox(x1=45, y1=35, x2=155, y2=65),
+                        kind=TextKind.DIALOGUE, source_text="HELLO")
+    area = np.zeros((100, 200), np.uint8)
+    area[10:90, 10:190] = 1
+    cleaned, _, report = clean_page(image, mask, [region], {"r": area})
+    assert report.tiers["r"] == "flat"
+    assert (cleaned[40:60, 50:150] == 253).all()
+
+
+def test_type_over_screentone_gets_a_halo_and_plain_bubbles_do_not():
+    from comic.typesetting.render import Style, haloed
+
+    area = np.zeros((100, 100), np.uint8)
+    area[10:90, 10:90] = 1
+    plain = np.full((100, 100, 3), 250, np.uint8)
+    dotted = plain.copy()
+    dotted[::4, ::4] = 60
+    style = Style("BeVietnamPro-Regular.ttf")
+    assert haloed(style, plain, area).stroke_em == 0
+    assert haloed(style, dotted, area).stroke_em > 0
+
+
+def test_a_screentoned_caption_box_is_found_whole():
+    # A dotted grey box gives the light-bubble search nothing to grow from.
+    image = np.full((300, 300, 3), 255, np.uint8)
+    yy, xx = np.mgrid[0:300, 0:300]
+    box = (yy >= 50) & (yy < 250) & (xx >= 50) & (xx < 250)
+    image[box & (yy % 4 < 2) & (xx % 4 < 2)] = 90      # dot tone inside the box
+    image[48:50, 48:252] = 0; image[250:252, 48:252] = 0   # drawn border
+    image[48:252, 48:50] = 0; image[48:252, 250:252] = 0
+    mask = np.zeros((300, 300), np.uint8)
+    mask[140:160, 120:180] = 255
+    image[mask > 0] = 10
+    region = TextRegion(id="r", page=1, bbox=BBox(x1=115, y1=135, x2=185, y2=165),
+                        kind=TextKind.CAPTION, source_text="ALL THE TIME.")
+    area = fit_areas(image, mask, [region])["r"]
+    assert area[60:240, 60:240].mean() > 0.9
+    assert not area[10:40, 10:290].any()
+
+
+def test_a_short_line_in_a_roomy_balloon_grows_but_keeps_its_margin():
+    from comic.typesetting.render import MAX_FILL, layout_region, load_styles
+    import cv2
+
+    area = np.zeros((300, 400), np.uint8)
+    cv2.ellipse(area, (200, 150), (180, 130), 0, 0, 360, 1, -1)
+    region = TextRegion(id="r", page=1, bbox=BBox(x1=170, y1=135, x2=230, y2=165),
+                        kind=TextKind.DIALOGUE, source_text="OK.")
+    styles = load_styles(Path("profiles/_presets/manhwa.yaml"))
+    small, _ = layout_region(region, "được rồi", area, Path("assets/fonts"), None, styles, max_size=20)
+    assert small.font_size > 20                                   # grew with the room
+    assert small.width * small.height <= MAX_FILL * area.sum()    # but not to the outline

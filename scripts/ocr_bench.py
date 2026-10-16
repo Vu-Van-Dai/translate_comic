@@ -24,7 +24,7 @@ from comic.ocr.registry import read_region
 from comic.paths import ChapterPaths
 from comic.stages import analysis_for
 from comic.state.store import ChapterStore
-from comic.vision.analyze import crop_region
+from comic.vision.analyze import crop_region, load_mask
 from comic.vision.detector import load_page
 
 #: Differences that are not mistakes: width variants, and punctuation the
@@ -64,17 +64,29 @@ def main() -> int:
         if analysis is None:
             continue
         image = None
+        mask = None
         for region in analysis.regions:
             if not region.translatable or not region.source_text.strip():
                 continue
             if args.verified_only and not region.ocr_reviewed:
                 continue
             if image is None:
-                image = load_page(paths.original / record.filename)
+                # source_pages, not original: for a webtoon, original/ holds
+                # the uncut 17000px slices, so region boxes -- which index the
+                # re-cut pages -- would crop entirely the wrong pixels.
+                image = load_page(paths.source_pages / record.filename)
+                mask_file = paths.mask_file(record.page)
+                mask = load_mask(mask_file) if mask_file.exists() else None
+            # Pass the mask, because the pipeline does. Without it Korean
+            # falls back to thresholding the crop, which reads the bubble
+            # outline as punctuation -- measured at 0.909 against 0.985 -- so
+            # the bench would understate the engine and stop matching what
+            # actually runs.
             outcome = read_region(
                 crop_region(image, region),
                 region.source_language or state.source_language,
                 vertical=region.is_vertical,
+                mask=crop_region(mask, region) if mask is not None else None,
             )
             truth = fold(region.source_text)
             got = fold(outcome.text)

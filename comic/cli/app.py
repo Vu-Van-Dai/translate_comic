@@ -23,6 +23,14 @@ app = typer.Typer(
     add_completion=False,
 )
 
+from comic.photoshop.cli import ps_app  # noqa: E402 - separate Photoshop route
+
+app.add_typer(ps_app, name="ps")
+
+from comic.video.cli import video_app  # noqa: E402 - separate video add-on
+
+app.add_typer(video_app, name="video")
+
 _STYLE = {Level.OK: "ok", Level.WARN: "warn", Level.FAIL: "fail"}
 _GLYPH = {Level.OK: "+", Level.WARN: "!", Level.FAIL: "x"}
 
@@ -142,13 +150,16 @@ def login(
 @app.command()
 def chrome(
     port: int = typer.Option(9222, "--port", help="Remote debugging port."),
+    edge: bool = typer.Option(False, "--edge", help="Use Microsoft Edge (own profile) instead of Chrome."),
 ) -> None:
-    """Start your own Chrome with remote debugging, for challenge-gated sites.
+    """Start your own Chrome (or Edge) with remote debugging, for challenge-gated sites.
 
     Some hosts serve an anti-bot interstitial to any browser that looks
     automated. This tool does not try to defeat that check. Instead, sign in and
     browse normally in the window this opens -- once the site has cleared it,
-    'comic download --chrome' can read pages through that same browser.
+    'comic download --chrome' can read pages through that same browser. Edge
+    speaks the same debugging protocol; give it its own --port if Chrome is
+    already running, and pass that port to 'comic download'.
 
     The profile is dedicated (Chrome refuses remote debugging on the default
     one), so sign in there once; it persists.
@@ -156,19 +167,21 @@ def chrome(
     setup_console()
     from comic.browser import chrome as ch
 
+    name = "Edge" if edge else "Chrome"
     existing = ch.debug_target(port)
     if existing:
-        console.print(f"[ok]+[/ok] Already running: {escape(existing.get('Browser', 'Chrome'))}")
+        console.print(f"[ok]+[/ok] Already running: {escape(existing.get('Browser', name))}")
         console.print(f"[path]  {ch.cdp_url(port)}[/path]")
         return
 
-    if ch.find_chrome() is None:
-        console.print("[fail]x[/fail] No Chrome or Edge binary found.")
-        console.print(f"    Start it yourself with:\n    {escape(ch.manual_command(port))}")
+    binary = ch.find_edge() if edge else ch.find_chrome()
+    if binary is None:
+        console.print(f"[fail]x[/fail] No {name} binary found.")
+        console.print(f"    Start it yourself with:\n    {escape(ch.manual_command(port, edge=edge))}")
         raise typer.Exit(1)
 
-    console.print(f"[gate]Launching[/gate] {escape(str(ch.find_chrome()))}")
-    ch.launch(port)
+    console.print(f"[gate]Launching[/gate] {escape(str(binary))}")
+    ch.launch(port, edge=edge)
 
     import time
     for _ in range(20):
@@ -177,15 +190,16 @@ def chrome(
             break
     target = ch.debug_target(port)
     if not target:
-        console.print("[fail]x[/fail] Chrome did not expose a debugging endpoint.")
-        console.print(f"    Try manually:\n    {escape(ch.manual_command(port))}")
+        console.print(f"[fail]x[/fail] {name} did not expose a debugging endpoint.")
+        console.print(f"    Try manually:\n    {escape(ch.manual_command(port, edge=edge))}")
         raise typer.Exit(1)
 
-    console.print(f"[ok]+[/ok] {escape(target.get('Browser', 'Chrome'))} on {ch.cdp_url(port)}")
-    console.print(f"[path]  profile: {ch.chrome_profile_dir()}[/path]\n")
+    profile = ch.edge_profile_dir() if edge else ch.chrome_profile_dir()
+    console.print(f"[ok]+[/ok] {escape(target.get('Browser', name))} on {ch.cdp_url(port)}")
+    console.print(f"[path]  profile: {profile}[/path]\n")
     console.print("Now, in that window: visit the site, sign in, and clear any")
     console.print("'checking your browser' prompt. Then run your download with")
-    console.print("[bold]--chrome[/bold]. Leave the window open while it runs.")
+    console.print(f"[bold]--chrome --port {port}[/bold]. Leave the window open while it runs.")
 
 
 @app.command()
@@ -624,8 +638,9 @@ def slice(
     console.print(
         f"[ok]+[/ok] {report.total_height}px strip -> {report.page_count} page(s)"
     )
-    if report.gutter is not None:
-        console.print(f"[path]  gutter colour measured at {report.gutter:.0f}[/path]")
+    if report.gutters:
+        shades = ", ".join(f"{g:.0f}" for g in report.gutters)
+        console.print(f"[path]  gutter colour(s) measured at {shades}[/path]")
     for index, (span, seam) in enumerate(zip(report.spans, report.seams), start=1):
         where = f"{seam.band}px flat band" if seam.safe else "[warn]FORCED[/warn]"
         console.print(
@@ -635,6 +650,79 @@ def slice(
     console.print(f"  {report.page_count:03d}.png  "
                   f"{report.spans[-1][1] - report.spans[-1][0]:>5}px   (end)")
     console.print(f"[path]  {escape(str(paths.pages))}[/path]")
+
+
+@app.command()
+def exclude(
+    series: str = typer.Option(..., "--series", help="Series name."),
+    chapter: str = typer.Option(..., "--chapter", "-c", help="Chapter number."),
+    page: list[int] = typer.Option(..., "--page", "-p", help="Page number(s) to drop."),
+    restore: bool = typer.Option(
+        False, "--restore", help="Put the page back into the chapter."
+    ),
+) -> None:
+    """Drop a page that is not part of the comic.
+
+    For an uploader's insert -- a scanlation group's credits card, a "read it
+    on <host>" notice, an ad. Those are not the work, and publishing one puts
+    somebody else's banner in the library as though it were a page of story.
+
+    This is *not* the same as a page with no lettering. A cover or a wordless
+    splash is the comic, and it is published untranslated so the page numbers
+    keep matching the source; answering "" for its regions at `ocr_review` is
+    how you handle that one.
+
+    The page stays in `original/` either way -- that remains the verbatim
+    archive of what the source served. This only decides what reaches
+    `library/`, and it also keeps the page out of the gates, the watermark
+    check and the declared-language check.
+    """
+    setup_console()
+
+    paths = ChapterPaths(series, chapter)
+    store = ChapterStore(paths)
+    try:
+        state = store.load()
+    except StateError as exc:
+        console.print(f"[fail]x[/fail] {escape(str(exc))}")
+        raise typer.Exit(1)
+
+    wanted = set(page)
+    known = {record.page for record in state.pages}
+    missing = sorted(wanted - known)
+    if missing:
+        console.print(
+            f"[fail]x[/fail] no such page(s): {', '.join(str(n) for n in missing)}"
+        )
+        console.print(f"    this chapter has pages 1-{max(known) if known else 0}")
+        raise typer.Exit(1)
+
+    console.rule(f"[stage]{escape(paths.series)} / {escape(paths.chapter)}[/stage]")
+    changed = 0
+    for record in state.pages:
+        if record.page not in wanted:
+            continue
+        if record.excluded == (not restore):
+            console.print(
+                f"[path]  page {record.page} ({escape(record.filename)}) "
+                f"already {'excluded' if record.excluded else 'included'}[/path]"
+            )
+            continue
+        record.excluded = not restore
+        changed += 1
+        verb = "restored" if restore else "excluded"
+        console.print(f"[ok]+[/ok] page {record.page} ({escape(record.filename)}) {verb}")
+
+    if changed:
+        store.save(state)
+    live = sum(1 for record in state.pages if not record.excluded)
+    console.print(
+        f"[path]  {live} of {len(state.pages)} page(s) are part of the comic[/path]"
+    )
+    if not restore and changed:
+        console.print(
+            "[path]  still in original/; it will not be published or sent to a gate[/path]"
+        )
 
 
 @app.command()
@@ -675,7 +763,13 @@ def analyze(
     # A webtoon arrives as tall slices whose boundaries fall wherever the
     # uploader's export step landed, so pages have to be re-cut before anything
     # is detected on them. A paged source returns immediately.
-    report = run_slice(paths, state, force=force)
+    #
+    # ``--force`` is deliberately *not* passed on. Here it means "redo the
+    # detection and OCR", and re-cutting is a different, destructive thing: it
+    # renumbers every page and resets every per-page stage. So `analyze -p 12
+    # --force`, meaning "redo page 12", would otherwise discard the other 54.
+    # Re-cutting has its own opt-in: `comic slice --force`.
+    report = run_slice(paths, state)
     if report is not None and report.spans:
         if pages:
             console.print("  [warn]![/warn] --page ignored: the strip was re-cut, "
@@ -929,6 +1023,26 @@ def _resume_visual_qa(paths, store, state, series, chapter) -> None:
             f"{escape(str(exc))}"
         )
         console.print("\n  Fix the response and run resume again.")
+        raise typer.Exit(1)
+
+    # A restyle to a voice is checked against this series' fonts.yaml here,
+    # since the schema cannot see the profile; a typo would fall back silently.
+    from comic.handoff.schemas import FixAction
+    from comic.paths import SeriesPaths
+    from comic.schemas import TextKind
+    from comic.typesetting.render import voice_uses
+
+    voices = voice_uses(SeriesPaths(state.series).fonts_file)
+    kinds = {k.value for k in TextKind}
+    bad = [
+        f"{f.region_id}: unknown voice {f.value!r}"
+        for f in answer.fixes
+        if f.action is FixAction.RESTYLE and f.value not in kinds and f.value not in voices
+    ]
+    if bad:
+        state.gate_error = "; ".join(bad) + f" (voices: {', '.join(sorted(voices)) or 'none'})"
+        store.save(state)
+        console.print(f"[fail]x[/fail] {escape(state.gate_error)}")
         raise typer.Exit(1)
 
     plan = load_plan(paths, state)
@@ -1187,6 +1301,9 @@ def main_callback(
 
 
 def main() -> None:
+    from comic.cpu import throttle
+
+    throttle()
     setup_console()
     app()
 

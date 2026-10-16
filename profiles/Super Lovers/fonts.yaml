@@ -1,0 +1,18 @@
+# Lettering for "Super Lovers" (Miyamoto Abe): Japanese manga, black and
+# white, paged, read from English scanlations (Sweet Puriinsu and others on
+# comix.to). Manga preset; confirm the faces on the first reviewed chapter.
+# See docs/lettering.md.
+preset: manga
+
+# clean: lama would send plain white bubbles to LaMa too. Measured on ch.1
+# p.13 (2026-10-12): LaMa left a faint grey ghost of the letters in white
+# bubbles, where the flat fill is exact white -- and took twice as long. Auto
+# already uses LaMa wherever there is texture behind the letters.
+clean: auto
+
+# Augie kept for this series (the preset moved to Felt on 2026-10-15) so
+# chapters 0-2, already published, and later ones read as one letterer.
+sentence_font: "000AugieVN-TB.ttf"
+styles:
+  caption:   {font: "000AugieVN-TB.ttf", uppercase: false}
+  narration: {font: "000AugieVN-TB.ttf", uppercase: false}

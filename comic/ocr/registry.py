@@ -58,6 +58,12 @@ class OcrProvider(Protocol):
     name: str
     languages: frozenset[str]
     supports_vertical: bool
+    #: Whether manga-ocr is an acceptable last resort when this engine reads
+    #: a vertical region as empty. It shares a script with Chinese, so a weak
+    #: candidate there beats a blank; it has no Hangul at all, so for Korean
+    #: its output cannot be a reading, only noise shaped like one.
+    accepts_vertical_fallback: bool
+
     #: Weight files this provider needs in ``models/``, beyond its package.
     #: An engine whose package imports but whose weights are absent is not
     #: available, and reporting it as available sends the operator looking in
@@ -164,6 +170,130 @@ def unread_mask_fraction(
     return float((text & ~covered).sum()) / total
 
 
+#: Which scripts each language is actually written in. Used to notice that a
+#: chapter is not in the language its adapter claims.
+LANGUAGE_SCRIPTS: dict[str, frozenset[str]] = {
+    "ko": frozenset({"hangul"}),
+    "kor": frozenset({"hangul"}),
+    "korean": frozenset({"hangul"}),
+    "ja": frozenset({"kana", "han"}),
+    "jp": frozenset({"kana", "han"}),
+    "japanese": frozenset({"kana", "han"}),
+    "zh": frozenset({"han"}),
+    "ch": frozenset({"han"}),
+    "zh-cn": frozenset({"han"}),
+    "zh-tw": frozenset({"han"}),
+    "en": frozenset({"latin"}),
+}
+
+#: Share of readings that must disagree before the chapter is called wrong.
+#: High, because one English sign in a Korean comic is ordinary; a whole
+#: chapter of them is a misconfigured adapter.
+MISMATCH_SHARE = 0.6
+
+
+def dominant_script(text: str) -> str | None:
+    """Which script most of ``text`` is written in, ignoring punctuation."""
+    counts: dict[str, int] = {}
+    for char in text:
+        if "가" <= char <= "힣" or "ᄀ" <= char <= "ᇿ":
+            key = "hangul"
+        elif "぀" <= char <= "ヿ":
+            key = "kana"
+        elif "一" <= char <= "鿿" or "㐀" <= char <= "䶿":
+            key = "han"
+        elif char.isascii() and char.isalpha():
+            key = "latin"
+        else:
+            continue
+        counts[key] = counts.get(key, 0) + 1
+    if not counts:
+        return None
+    return max(counts, key=lambda k: counts[k])
+
+
+#: Longest plausible word in Latin comic lettering. Above this, the recogniser
+#: has fused words together.
+#:
+#: Measured on a real English scanlation: after runs are joined correctly, 64
+#: of 80 readings have sane word lengths and 16 carry a token of 15-17
+#: characters. Those are not long words, they are two or three short ones run
+#: together -- the recogniser drops spaces *inside* a run on stylised
+#: lettering, which no amount of joining can repair.
+#:
+#: So this does not try to fix them; it sends them to the gate, in the same
+#: spirit as ``unread_mask_fraction``: notice the reading is degraded, let the
+#: agent supply the words, never guess where a space belongs.
+MAX_LATIN_WORD = 14
+
+
+def reading_looks_fused(text: str) -> bool:
+    """Whether a Latin reading has words run together."""
+    if dominant_script(text) != "latin":
+        return False
+    return any(len(word) > MAX_LATIN_WORD for word in text.split())
+
+
+def join_runs(parts: list[str]) -> str:
+    """Join OCR runs with the separator the script actually requires.
+
+    An engine returns *runs*, not sentences, and how they go back together
+    depends on the writing system. CJK sets without spaces, so ``"".join`` is
+    right -- and being right there is why it went unnoticed, since the engine
+    was measured on Chinese first.
+
+    Latin scripts put a space between words and each run is a word or short
+    phrase, so joining those with nothing yields run-together text: measured on
+    a real English scanlation, a whole line of dialogue came back as one
+    unbroken token. That cannot be translated, cannot be wrapped, and the
+    length checks read it as a single enormous word.
+
+    Decided from the text itself rather than from the declared language, so it
+    stays right for a Latin caption inside a Chinese page.
+    """
+    kept = [p.strip() for p in parts if p and p.strip()]
+    if not kept:
+        return ""
+    if dominant_script("".join(kept)) == "latin":
+        return " ".join(kept)
+    return "".join(kept)
+
+
+def language_mismatch(texts: list[str], language: str) -> str | None:
+    """Whether a chapter is written in a different script than declared.
+
+    A wrong-language engine produces *confident nonsense*, and the one check
+    that would catch it -- ``provider_for`` refusing to substitute an engine --
+    never fires when the **adapter** is what is wrong: the pipeline is told
+    `ko`, loads a Korean recogniser, and points it at English lettering.
+
+    Measured on a real chapter: yaoiscan publishes English scanlations of
+    Korean manhwa, so every bubble is English while the SFX stay Hangul. The
+    adapter said `ko` and nothing downstream noticed.
+
+    Returns a message naming what was actually found, or None.
+    """
+    expected = LANGUAGE_SCRIPTS.get((language or "").lower())
+    if not expected:
+        return None
+    found = [s for s in (dominant_script(t) for t in texts if t.strip()) if s]
+    if len(found) < 5:
+        return None
+    wrong = [s for s in found if s not in expected]
+    share = len(wrong) / len(found)
+    if share < MISMATCH_SHARE:
+        return None
+    actual: dict[str, int] = {}
+    for script in wrong:
+        actual[script] = actual.get(script, 0) + 1
+    winner = max(actual, key=lambda k: actual[k])
+    return (
+        f"{share:.0%} of readings are {winner}, not the {sorted(expected)[0]} "
+        f"that --language {language!r} implies. The source language is probably "
+        f"wrong -- check the site adapter; OCR has been using the wrong engine."
+    )
+
+
 def _reads_vertically(chunks: list[_Chunk], hint: bool) -> bool:
     """Whether this block is set in columns, decided by what was detected.
 
@@ -232,13 +362,28 @@ class RapidOcrProvider:
     languages = frozenset({"zh", "ch", "en", "zh-cn", "zh-tw"})
     #: The *recogniser* cannot read a column as a unit; see the class docstring.
     supports_vertical = False
+    #: manga-ocr is trained on Japanese but shares the Han script, and scored
+    #: 0.62 against hand-transcribed vertical Chinese -- worth offering as a
+    #: candidate the agent then checks, which is why it is gated behind
+    #: VERTICAL_FALLBACK_CONFIDENCE rather than trusted.
+    accepts_vertical_fallback = True
     #: Ships its own Chinese weights inside the package.
     requires_files = ()
 
     def __init__(self) -> None:
         from rapidocr_onnxruntime import RapidOCR
 
-        self._engine = RapidOCR()
+        # Deliberately CPU, whatever the detector uses. RapidOCR is handed one
+        # small crop at a time, and per-call dispatch and transfer costs swamp
+        # the compute: measured on this machine, a single trivial crop took
+        # 1.40s on CPU and 71.12s through DirectML -- 51x *slower*. The GPU
+        # win only exists for one big inference per page, which is what the
+        # text detector does.
+        from comic.cpu import threads_per_worker
+
+        self._engine = RapidOCR(
+            intra_op_num_threads=threads_per_worker(), inter_op_num_threads=1
+        )
 
     def read(
         self,
@@ -251,7 +396,7 @@ class RapidOcrProvider:
             return OcrOutcome("", 0.0, self.name)
         chunks = _chunks(result)
         ordered = _in_reading_order(chunks, _reads_vertically(chunks, vertical))
-        text = "".join(c.text for c in ordered)
+        text = join_runs([c.text for c in ordered])
         scores = [c.score for c in chunks if c.score]
         confidence = float(np.mean(scores)) if scores else 0.0
         boxes = tuple(
@@ -364,6 +509,13 @@ class KoreanOcrProvider:
     languages = frozenset({"ko", "kor", "korean"})
     #: Korean is set horizontally in comics; vertical Hangul is a rarity.
     supports_vertical = False
+    #: **Never.** manga-ocr's charset holds no Hangul, so handed a Korean crop
+    #: it can only emit Japanese -- a confident-looking reading of a language
+    #: that is not on the page. Measured on the first real chapter, the
+    #: fallback fired on 1 of 152 regions and that is 1 too many: the project
+    #: rule is that a wrong-language engine is worse than an error, because
+    #: nothing downstream can tell.
+    accepts_vertical_fallback = False
 
     MODEL = "korean_PP-OCRv5_rec.onnx"
     KEYS = "korean_PP-OCRv5_rec_keys.txt"
@@ -382,11 +534,15 @@ class KoreanOcrProvider:
                 f"Korean OCR needs {', '.join(missing)} in models/. "
                 f"Run: python scripts/fetch_models.py --only korean"
             )
+        from comic.cpu import threads_per_worker
+
         self._engine = RapidOCR(
             rec_model_path=str(model),
             rec_keys_path=str(keys),
             use_det=False,
             use_cls=False,
+            intra_op_num_threads=threads_per_worker(),
+            inter_op_num_threads=1,
         )
 
     def read(
@@ -436,6 +592,8 @@ class MangaOcrProvider:
     name = "manga_ocr"
     languages = frozenset({"ja", "jp", "japanese"})
     supports_vertical = True
+    #: Moot: it reads columns itself, so the fallback never fires for it.
+    accepts_vertical_fallback = False
     #: Pulls its weights from HuggingFace on first use, not from ``models/``.
     requires_files = ()
 
@@ -560,6 +718,11 @@ def read_region(
             ),
         )
     if result.text.strip() or not vertical or engine.supports_vertical:
+        return result
+    if not getattr(engine, "accepts_vertical_fallback", False):
+        # An empty reading is the honest answer. Substituting an engine that
+        # cannot spell this language would put unreadable text into the gate
+        # request and send the agent looking for the wrong problem.
         return result
 
     try:

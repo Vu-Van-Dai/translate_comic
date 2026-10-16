@@ -1,0 +1,242 @@
+{
+ "gate": "video_plan",
+ "style": "story",
+ "background": "white",
+ "story": "Kanghyun x Jiun: the drunk 'stay by my side' (Ch.18), the night-market date (Ch.23), the confession and hug (Ch.46), falling asleep together (Ch.53), and the ending 'this time as real lovers' (Ch.60). Both are adults.",
+ "music": {
+  "track": "tt_moments_like_this_1281",
+  "start": 0.07,
+  "beat_sync": true
+ },
+ "caption": "Từ 'pakuri' thành người yêu thật 🥹💛 Kanghyun x Jiun — Mi Imitador",
+ "hashtags": [
+  "MiImitador",
+  "KanghyunJiun",
+  "manhwabl",
+  "BL",
+  "truyentranh",
+  "webtoon",
+  "fyp"
+ ],
+ "shots": [
+  {
+   "panel": "p008_k0",
+   "chapter": "18",
+   "seconds": 2.784,
+   "motion": "zoom_in",
+   "strength": 0.2,
+   "transition": "cut",
+   "transition_seconds": 0.2,
+   "fit": "contain",
+   "crop": {
+    "x1": 0,
+    "y1": 0,
+    "x2": 700,
+    "y2": 1185
+   },
+   "effects": [
+    "glow"
+   ]
+  },
+  {
+   "panel": "p022_k0",
+   "chapter": "18",
+   "seconds": 2.436,
+   "motion": "drift",
+   "strength": 0.2,
+   "transition": "fade",
+   "transition_seconds": 0.45,
+   "fit": "contain",
+   "crop": {
+    "x1": 0,
+    "y1": 100,
+    "x2": 700,
+    "y2": 991
+   },
+   "effects": [
+    "glow"
+   ]
+  },
+  {
+   "panel": "p023_k0",
+   "chapter": "18",
+   "seconds": 2.436,
+   "motion": "zoom_in",
+   "strength": 0.2,
+   "transition": "fade",
+   "transition_seconds": 0.45,
+   "fit": "contain",
+   "crop": {
+    "x1": 0,
+    "y1": 330,
+    "x2": 700,
+    "y2": 1330
+   },
+   "effects": [
+    "glow"
+   ]
+  },
+  {
+   "panel": "p015_k0",
+   "chapter": "23",
+   "seconds": 2.784,
+   "motion": "pan_down",
+   "strength": 0.25,
+   "transition": "fade",
+   "transition_seconds": 0.45,
+   "fit": "contain",
+   "crop": {
+    "x1": 0,
+    "y1": 90,
+    "x2": 700,
+    "y2": 1467
+   },
+   "effects": [
+    "glow"
+   ]
+  },
+  {
+   "panel": "p024_k0",
+   "chapter": "23",
+   "seconds": 2.436,
+   "motion": "zoom_in",
+   "strength": 0.2,
+   "transition": "fade",
+   "transition_seconds": 0.45,
+   "fit": "contain",
+   "crop": {
+    "x1": 0,
+    "y1": 90,
+    "x2": 700,
+    "y2": 1102
+   },
+   "effects": [
+    "glow"
+   ]
+  },
+  {
+   "panel": "p034_k0",
+   "chapter": "23",
+   "seconds": 2.436,
+   "motion": "drift",
+   "strength": 0.2,
+   "transition": "fade",
+   "transition_seconds": 0.45,
+   "fit": "contain",
+   "crop": {
+    "x1": 0,
+    "y1": 0,
+    "x2": 700,
+    "y2": 650
+   },
+   "effects": [
+    "glow"
+   ]
+  },
+  {
+   "panel": "p011_k0",
+   "seconds": 2.784,
+   "motion": "zoom_in",
+   "strength": 0.2,
+   "transition": "dip_white",
+   "transition_seconds": 0.5,
+   "fit": "contain",
+   "crop": {
+    "x1": 0,
+    "y1": 0,
+    "x2": 700,
+    "y2": 1469
+   },
+   "effects": [
+    "glow"
+   ]
+  },
+  {
+   "panel": "p016_k0",
+   "seconds": 2.436,
+   "motion": "zoom_in",
+   "strength": 0.2,
+   "transition": "fade",
+   "transition_seconds": 0.45,
+   "fit": "contain",
+   "crop": {
+    "x1": 0,
+    "y1": 1380,
+    "x2": 700,
+    "y2": 2435
+   },
+   "effects": [
+    "glow"
+   ]
+  },
+  {
+   "panel": "p019_k0",
+   "seconds": 2.436,
+   "motion": "drift",
+   "strength": 0.2,
+   "transition": "fade",
+   "transition_seconds": 0.45,
+   "fit": "contain",
+   "crop": {
+    "x1": 0,
+    "y1": 0,
+    "x2": 700,
+    "y2": 904
+   },
+   "effects": [
+    "glow"
+   ]
+  },
+  {
+   "panel": "p025_k0",
+   "chapter": "53",
+   "seconds": 2.436,
+   "motion": "zoom_in",
+   "strength": 0.2,
+   "transition": "fade",
+   "transition_seconds": 0.45,
+   "fit": "contain",
+   "effects": [
+    "glow"
+   ],
+   "crop": {
+    "x1": 20,
+    "y1": 100,
+    "x2": 470,
+    "y2": 690
+   }
+  },
+  {
+   "panel": "p026_k0",
+   "chapter": "53",
+   "seconds": 2.436,
+   "motion": "drift",
+   "strength": 0.2,
+   "transition": "fade",
+   "transition_seconds": 0.45,
+   "fit": "contain",
+   "crop": {
+    "x1": 0,
+    "y1": 0,
+    "x2": 700,
+    "y2": 1000
+   },
+   "effects": [
+    "glow"
+   ]
+  },
+  {
+   "panel": "p030_k1",
+   "chapter": "60",
+   "seconds": 3.828,
+   "motion": "zoom_in",
+   "strength": 0.15,
+   "transition": "dip_white",
+   "transition_seconds": 0.5,
+   "fit": "contain",
+   "effects": [
+    "glow"
+   ]
+  }
+ ]
+}

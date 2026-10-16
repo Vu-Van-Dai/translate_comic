@@ -1,0 +1,31 @@
+# Korean webtoon (manhwa), usually read from an English scanlation.
+#
+# Full-colour long strip; the scanlation letters in comic caps, and Vietnamese
+# webtoon groups set AnimeAce3 for dialogue. Caps for everything, the
+# dialogue face's own italic for thought and narration, bold italic for a
+# shout (Piekos ch. 4). See docs/lettering.md.
+preset: voices
+
+ink: [20, 20, 20]
+stroke: [255, 255, 255]
+# Bubbles and boxes are cleaned to their own pale fill, so one ink colour
+# holds; type that would need flipping is drawn-in art, left untranslated.
+auto_contrast: false
+
+# One capital O of room on every side; type at most ~the source's size;
+# leading from each face's accents.
+pad_em: 0.6
+size_scale: 0.9
+leading: auto
+
+# Case (docs/lettering.md, section 9): bubbles and caption boxes caps, as
+# most webtoon groups set them; asides on the art sentence case when the
+# source's were, in `sentence_font`.
+sentence_font: "000AugieVN-TB.ttf"
+
+styles:
+  dialogue:  {font: "000AnimeAce3-TeddyBear.ttf", uppercase: true}
+  caption:   {font: "000AnimeAce3-TeddyBear.ttf", uppercase: true}
+  thought:   {font: "000AnimeAce3-Italic-Kyo.ttf", uppercase: true}
+  narration: {font: "000AnimeAce3-Italic-Kyo.ttf", uppercase: true}
+  shout:     {font: "000FamousLWTB-BoldItalic.ttf", uppercase: true}

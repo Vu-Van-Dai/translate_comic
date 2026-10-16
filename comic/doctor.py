@@ -184,6 +184,20 @@ def check_models(report: Report) -> None:
             report.add(f"model:{filename}", level, f"missing -- {purpose}",
                        "python scripts/fetch_models.py")
 
+    # Whole-page detection on DirectML measured 38x faster than CPU on Iris Xe
+    # (see vision/detector.py). The plain onnxruntime wheel lacks DirectML,
+    # and a reinstall silently brings it back.
+    if sys.platform == "win32" and importlib.util.find_spec("onnxruntime"):
+        import onnxruntime as ort
+
+        if "DmlExecutionProvider" in ort.get_available_providers():
+            report.add("gpu:directml", Level.OK, "detection runs on the GPU")
+        else:
+            report.add("gpu:directml", Level.WARN,
+                       "onnxruntime has no DirectML -- detection runs on the CPU",
+                       "python -m pip uninstall -y onnxruntime && "
+                       "python -m pip install onnxruntime-directml")
+
 
 def check_fonts(report: Report) -> None:
     """A font that cannot render Vietnamese is worse than no font: it renders tofu."""
@@ -217,17 +231,33 @@ def check_external_tools(report: Report) -> None:
         report.add("tool:imagemagick", Level.WARN,
                    "not found -- built-in Pillow/OpenCV path is used instead")
 
-    ps = any(
-        (Path(base) / "Adobe").exists()
-        and any(p.name.startswith("Adobe Photoshop") for p in (Path(base) / "Adobe").iterdir())
-        for base in (r"C:\Program Files", r"C:\Program Files (x86)")
-        if (Path(base) / "Adobe").exists()
-    )
-    if ps:
-        report.add("tool:photoshop", Level.OK, "detected -- COM backend can be enabled")
-    else:
+    # Ask COM where it would launch Photoshop from: it may be installed on any
+    # drive, and a folder scan of Program Files misses a copy on D:.
+    from comic.photoshop.driver import registered_executable
+
+    exe = registered_executable() if sys.platform == "win32" else None
+    if not exe:
         report.add("tool:photoshop", Level.WARN,
                    "not installed -- cleaning uses the built-in three-tier path")
+    elif importlib.util.find_spec("win32com") is None:
+        report.add("tool:photoshop", Level.WARN,
+                   "installed, but pywin32 is missing -- `comic ps` cannot reach it",
+                   'python -m pip install -e ".[photoshop]"')
+    else:
+        report.add("tool:photoshop", Level.OK, f"registered for COM: {exe}")
+
+    # `comic video` only. winget installs it per user, so a shell opened
+    # before the install has no PATH entry -- the video module looks there too.
+    from comic.video.music import ffmpeg
+
+    try:
+        report.add("tool:ffmpeg", Level.OK, ffmpeg())
+    except FileNotFoundError:
+        report.add("tool:ffmpeg", Level.WARN, "not found -- `comic video` cannot encode",
+                   "winget install Gyan.FFmpeg")
+    if importlib.util.find_spec("librosa") is None:
+        report.add("pkg:librosa", Level.WARN, "missing -- `comic video` cannot sync cuts to the beat",
+                   'python -m pip install -e ".[video]"')
 
 
 def check_layout(report: Report) -> None:

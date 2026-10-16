@@ -1,0 +1,5 @@
+# Lettering for "Kimigazer (Fujitobi)": Japanese manga, black and white, paged, read from an
+# English scanlation. Same setup as Super Lovers: manga preset, no voices
+# (one face per kind), flat fill in plain bubbles. See docs/lettering.md.
+preset: manga
+clean: auto

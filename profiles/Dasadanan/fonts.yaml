@@ -1,0 +1,5 @@
+# Lettering for "Dasadanan" (Herb Mandu, Comico): a Korean full-colour webtoon
+# from an English scanlation (SnowFlower Scans via yaoiscan), so the manhwa
+# preset -- AnimeAce3 caps, one capital O of room in every bubble. See
+# docs/lettering.md. Same setup as Golden Light for You.
+preset: manhwa

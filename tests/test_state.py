@@ -152,3 +152,69 @@ def test_writes_are_atomic_leaving_no_temp_files(populated):
     store.save(state)
     leftovers = [p.name for p in store.paths.workspace.iterdir() if p.name.endswith(".tmp")]
     assert leftovers == []
+
+
+# --------------------------------------------------- parallel stage plumbing
+#
+# `analyze` ran single-threaded on an 8-core machine, at ~45s a page. Making
+# it parallel touched the two hottest functions in the project, and the suite
+# stayed green through two broken intermediate states -- a stray `progress`
+# call and a `continue` outside any loop -- because nothing imported the
+# module or exercised the early-exit paths. These cover that gap. Serial vs
+# parallel *equivalence* needs the real models and is measured against a live
+# chapter, not here.
+
+
+def test_stages_module_imports():
+    """Both breakages during the parallel refactor were import-time errors."""
+    import importlib
+
+    import comic.stages
+
+    importlib.reload(comic.stages)
+    for name in ("detect_one", "_detect_job", "ocr_one", "_ocr_job",
+                 "detect_workers", "run_detect", "run_ocr"):
+        assert hasattr(comic.stages, name), name
+
+
+def test_worker_count_is_bounded_by_memory_not_cores():
+    """Each worker loads its own detector (~1.1 GB), so cores alone overcommit."""
+    from comic.stages import DETECT_MAX_WORKERS, detect_workers
+
+    assert detect_workers(100) <= DETECT_MAX_WORKERS
+    assert detect_workers(2) == 2          # never more workers than pages
+    assert detect_workers(100, 1) == 1     # an explicit request is honoured
+    assert detect_workers(0) >= 1          # never zero
+
+
+def test_detect_reports_a_missing_page_instead_of_raising(home):
+    """The worker returns a summary; it must not throw across the pool."""
+    from comic.paths import ChapterPaths
+    from comic.schemas import ReadingDirection
+    from comic.stages import detect_one
+
+    paths = ChapterPaths("missing-page", 1)
+    paths.ensure()
+    result = detect_one(paths, 3, "003.png", ReadingDirection.TTB)
+    assert result["ok"] is False
+    assert "003.png" in result["note"]
+    assert result["page"] == 3
+
+
+def test_ocr_reports_an_undetected_page_instead_of_raising(home):
+    """Same contract on the OCR side: a summary dict, never an exception.
+
+    This is the path that was broken by a `continue` with no loop around it,
+    which the serial version could get away with and the extracted worker
+    could not.
+    """
+    from comic.paths import ChapterPaths
+    from comic.stages import ocr_one
+
+    paths = ChapterPaths("undetected", 1)
+    paths.ensure()
+    result = ocr_one(paths, 5, "005.png", "en", False)
+    assert result["ok"] is False
+    assert result["page"] == 5
+    assert result["regions"] == 0
+    assert result["flagged"] == []

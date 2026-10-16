@@ -1,0 +1,15 @@
+# Video rules for Super Lovers (`comic video`).
+#
+# Ren is a child in vol.1-2 (8 in the Canada flashback, a middle-schooler
+# from Ch.2) and the twins are high-schoolers. While that holds, videos are
+# family / comedy / drama -- never framed as romance: no romantic style,
+# hook, music or "couple" edit around Ren, and never nudity of a minor
+# (Ch.2's bath scene, pp. 32-33, is out). Revisit when the story's ages change.
+rtl: true
+hashtags: [superlovers, truyentranh, manga, truyenhay]
+forbid_styles: [romantic]
+minors:
+  Kaidou Ren: "middle-schooler (about 13) from Ch.2; 8 years old in Ch.0-1 flashbacks"
+  Kaidou Aki: "high-schooler, college entrance exams next year"
+  Kaidou Shima: "high-schooler, college entrance exams next year"
+notes: "Found-family comedy/drama. Haru (22) is the guardian."

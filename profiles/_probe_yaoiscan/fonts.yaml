@@ -1,0 +1,29 @@
+# Lettering for this series.
+#
+# One ink colour for the whole chapter, no shading and no intensity changes.
+# `auto_contrast: false` keeps it that way: the pipeline will not flip to
+# white type over a dark panel. That is safe because everything we set goes
+# into a bubble or a caption box, which cleaning fills with its own pale
+# background -- text sitting directly on artwork is drawn-in SFX or a label,
+# and those are dropped at the review gate rather than translated.
+ink: [20, 20, 20]
+stroke: [255, 255, 255]
+auto_contrast: false
+
+# Faces must cover the full Vietnamese repertoire or they render tofu in
+# silence, so every one here was checked before being listed. Note what that
+# rules out: Comic Neue misses 98 glyphs, Anime Ace 106 (including D-stroke
+# and A-breve), Fredoka 102, Titan One 94. A display face that looks right
+# and cannot spell is worse than a plain one that can.
+#
+# To use a Việt-hoá comic font instead: drop the .ttf in assets/fonts/, put
+# its filename here, and run `comic doctor` -- the coverage gate rejects it
+# at registration if it is missing diacritics.
+styles:
+  # Narration and captions: heavy display caps, like a boxed caption.
+  narration: {font: "Bangers-Regular.ttf", uppercase: true}
+  caption:   {font: "Bangers-Regular.ttf", uppercase: true}
+  # Dialogue: a lighter hand, deliberately a different voice from the boxes.
+  dialogue:  {font: "Mali-Regular.ttf"}
+  thought:   {font: "Mali-Italic.ttf"}
+  shout:     {font: "Bangers-Regular.ttf", uppercase: true, stroke_em: 0.06}

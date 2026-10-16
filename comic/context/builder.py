@@ -122,6 +122,29 @@ def build_context(
             "",
         ]
 
+    from comic.paths import SeriesPaths
+    from comic.typesetting.render import voice_uses
+
+    voices = voice_uses(SeriesPaths(series).fonts_file)
+    if voices:
+        parts += [
+            "## Voices",
+            "",
+            "Read each bubble's delivery from the character's face and the line. "
+            "Most lines are ordinary speech: leave `voice` out and they take their "
+            "kind's face. Name a voice only at a **real peak** -- a shout, a stammer, "
+            "a tender beat, a message on a phone -- and **hold it for the run of "
+            "bubbles in that mood** (one mood per scene beat), rather than switching "
+            "face bubble to bubble: a page in five faces reads as random. Aim for "
+            "two or three faces on a page. **Bubbles joined into one shape, and a "
+            "speaker's run of bubbles in one beat, take the same voice** -- never "
+            "one half sentence case and the other caps. Never a face that "
+            "contradicts the panel -- a stammer set firm, a cheerful line set creepy.",
+            "",
+        ]
+        parts += [f"- `{name}` -- {use}" for name, use in voices.items()]
+        parts.append("")
+
     parts += ["## Characters", "", _character_section(characters), ""]
     parts += ["## Forms of address", "", _pronoun_table(characters), ""]
 
@@ -148,6 +171,10 @@ def build_context(
         "the shorter phrasing where two are equally good.",
         "- Say who is speaking when you can tell; it is how the pronoun table "
         "gets built.",
+        "- Lines break only at ordinary spaces. Join the syllables of a word "
+        "that must not split across lines with a no-break space (U+00A0): "
+        "`hôm\\u00a0nay`, `bây\\u00a0giờ`. Break where the meaning breaks; "
+        "never trade sense for a prettier shape.",
         "- Report the forms of address you used in `address_pairs`, one entry "
         "per ordered (speaker, addressee). Any pair already in the table above "
         "is fixed -- match it rather than re-deciding, because pronouns "

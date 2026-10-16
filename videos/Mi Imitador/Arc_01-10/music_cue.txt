@@ -1,0 +1,4 @@
+Length: 32.20s
+Cuts at (s): 2.44, 4.85, 7.27, 9.68, 12.1, 14.42, 17.18, 19.6, 22.04, 24.45, 26.87, 28.79
+Music in video.mp4: One Kiss -- Calvin Harris & Dua Lipa, from 4.4s (123.0 BPM)
+For video_silent.mp4: add a TikTok sound in the app; the cuts above follow the beat of the track above.

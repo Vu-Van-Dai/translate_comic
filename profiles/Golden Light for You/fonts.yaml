@@ -1,0 +1,7 @@
+# Lettering for "Golden Light for You": a Korean webtoon from an English
+# scanlation (yaoiscan), so the manhwa preset -- AnimeAce3 caps, one capital
+# O of room in every bubble, the shared mood voices. See docs/lettering.md.
+#
+# The operator's reader found Mi Imitador's type "too big, it touches the
+# frame" and named AnimeAce3; the preset's pad_em / size_scale answer that.
+preset: manhwa

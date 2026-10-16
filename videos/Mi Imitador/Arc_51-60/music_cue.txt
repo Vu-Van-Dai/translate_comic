@@ -1,0 +1,4 @@
+Length: 30.13s
+Cuts at (s): 2.3, 3.85, 5.92, 8.52, 10.59, 12.66, 14.72, 17.3, 19.9, 21.97, 24.57, 27.14
+Music in video.mp4: original sound -- hnmmusic015, from 0.1s (117.5 BPM)
+For video_silent.mp4: add a TikTok sound in the app; the cuts above follow the beat of the track above.

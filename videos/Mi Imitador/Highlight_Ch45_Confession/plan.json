@@ -1,0 +1,185 @@
+{
+ "gate": "video_plan",
+ "style": "story",
+ "background": "white",
+ "story": "Ch.45: Kangjin drives Jiun over, the door code, 'xin phép!', San Park calls, Jiun holds out Kanghan's book and confesses: 'Em thích anh.'",
+ "music": {
+  "track": "tt_am_thanh_goc_quien_6725",
+  "start": 0.07,
+  "beat_sync": true
+ },
+ "caption": "Cầm cuốn sách của thần tượng, run cầm cập… rồi nói thẳng: 'Em thích anh.' Và câu trả lời là… 🥹 Mi Imitador chap 45",
+ "hashtags": [
+  "MiImitador",
+  "FromPakuriToAssistant",
+  "manhwabl",
+  "BL",
+  "truyentranh",
+  "webtoon",
+  "fyp",
+  "KanghyunJiun"
+ ],
+ "shots": [
+  {
+   "panel": "p010_k0",
+   "motion": "static",
+   "strength": 0.12,
+   "transition": "cut",
+   "transition_seconds": 0.2,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 100,
+    "y1": 1030,
+    "x2": 700,
+    "y2": 1820
+   },
+   "seconds": 2.321
+  },
+  {
+   "panel": "p015_k0",
+   "motion": "static",
+   "strength": 0.12,
+   "transition": "cut",
+   "transition_seconds": 0.2,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 0,
+    "y1": 120,
+    "x2": 700,
+    "y2": 1837
+   },
+   "seconds": 2.321
+  },
+  {
+   "panel": "p017_k0",
+   "motion": "punch",
+   "strength": 0.2,
+   "transition": "cut",
+   "transition_seconds": 0.2,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 0,
+    "y1": 52,
+    "x2": 700,
+    "y2": 1691
+   },
+   "seconds": 2.321
+  },
+  {
+   "panel": "p020_k0",
+   "motion": "zoom_in",
+   "strength": 0.12,
+   "transition": "cut",
+   "transition_seconds": 0.2,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 11,
+    "y1": 125,
+    "x2": 688,
+    "y2": 1467
+   },
+   "seconds": 2.321
+  },
+  {
+   "panel": "p024_k0",
+   "motion": "static",
+   "strength": 0.12,
+   "transition": "cut",
+   "transition_seconds": 0.2,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 2,
+    "y1": 88,
+    "x2": 700,
+    "y2": 1561
+   },
+   "seconds": 2.321
+  },
+  {
+   "panel": "p026_k0",
+   "motion": "zoom_in",
+   "strength": 0.12,
+   "transition": "cut",
+   "transition_seconds": 0.2,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 0,
+    "y1": 600,
+    "x2": 700,
+    "y2": 2130
+   },
+   "seconds": 2.901
+  },
+  {
+   "panel": "p027_k0",
+   "motion": "static",
+   "strength": 0.12,
+   "transition": "cut",
+   "transition_seconds": 0.2,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 3,
+    "y1": 176,
+    "x2": 700,
+    "y2": 1435
+   },
+   "seconds": 2.321
+  },
+  {
+   "panel": "p028_k0",
+   "motion": "zoom_in",
+   "strength": 0.12,
+   "transition": "fade",
+   "transition_seconds": 0.35,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 0,
+    "y1": 950,
+    "x2": 700,
+    "y2": 2330
+   },
+   "seconds": 3.482
+  },
+  {
+   "panel": "p029_k0",
+   "motion": "zoom_in",
+   "strength": 0.12,
+   "transition": "cut",
+   "transition_seconds": 0.2,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 3,
+    "y1": 99,
+    "x2": 700,
+    "y2": 1714
+   },
+   "seconds": 3.482
+  },
+  {
+   "panel": "p016_k0",
+   "chapter": "46",
+   "motion": "zoom_in",
+   "strength": 0.12,
+   "transition": "dip_white",
+   "transition_seconds": 0.35,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 0,
+    "y1": 1380,
+    "x2": 700,
+    "y2": 2435
+   },
+   "seconds": 4.062
+  }
+ ]
+}

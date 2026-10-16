@@ -1,0 +1,242 @@
+{
+ "gate": "video_plan",
+ "style": "story",
+ "background": "white",
+ "story": "Arc 6 (Ch.51-60): San Park confronts and slaps Jiun, Kanghyun's panic, the first night together, the stalker photos and the hotel note, the kiss trap, the reconciliation hug, the surprise beach trip, the night hug, and the ending.",
+ "music": {
+  "track": "tt_original_sound_6959",
+  "start": 0.07,
+  "beat_sync": true
+ },
+ "caption": "Mi Imitador chap 51–60 (hết): bị tát, bị chụp lén, bị gài bẫy… nhưng cuối cùng Kanghyun & Jiun vẫn nắm tay nhau ra biển 🌊💛 Happy ending! (Vietsub)",
+ "hashtags": [
+  "MiImitador",
+  "FromPakuriToAssistant",
+  "manhwabl",
+  "BL",
+  "truyentranh",
+  "webtoon",
+  "fyp"
+ ],
+ "shots": [
+  {
+   "panel": "p007_k0",
+   "motion": "punch",
+   "strength": 0.2,
+   "transition": "cut",
+   "transition_seconds": 0.2,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 0,
+    "y1": 96,
+    "x2": 700,
+    "y2": 1339
+   },
+   "seconds": 2.043
+  },
+  {
+   "panel": "p012_k0",
+   "motion": "shake",
+   "strength": 0.3,
+   "transition": "cut",
+   "transition_seconds": 0.2,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 0,
+    "y1": 768,
+    "x2": 700,
+    "y2": 2058
+   },
+   "seconds": 2.043
+  },
+  {
+   "panel": "p011_k0",
+   "chapter": "52",
+   "motion": "static",
+   "strength": 0.12,
+   "transition": "whip",
+   "transition_seconds": 0.25,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 0,
+    "y1": 640,
+    "x2": 700,
+    "y2": 2030
+   },
+   "seconds": 2.043
+  },
+  {
+   "panel": "p026_k0",
+   "chapter": "53",
+   "motion": "zoom_in",
+   "strength": 0.12,
+   "transition": "fade",
+   "transition_seconds": 0.35,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 0,
+    "y1": 0,
+    "x2": 700,
+    "y2": 1000
+   },
+   "seconds": 2.553
+  },
+  {
+   "panel": "p003_k0",
+   "chapter": "55",
+   "motion": "punch",
+   "strength": 0.2,
+   "transition": "cut",
+   "transition_seconds": 0.2,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 60,
+    "y1": 170,
+    "x2": 700,
+    "y2": 1140
+   },
+   "seconds": 2.043
+  },
+  {
+   "panel": "p007_k0",
+   "chapter": "55",
+   "motion": "static",
+   "strength": 0.12,
+   "transition": "cut",
+   "transition_seconds": 0.2,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 16,
+    "y1": 196,
+    "x2": 684,
+    "y2": 1034
+   },
+   "seconds": 2.043
+  },
+  {
+   "panel": "p008_k0",
+   "chapter": "56",
+   "motion": "shake",
+   "strength": 0.3,
+   "transition": "flash",
+   "transition_seconds": 0.2,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 0,
+    "y1": 236,
+    "x2": 700,
+    "y2": 1550
+   },
+   "seconds": 2.043
+  },
+  {
+   "panel": "p027_k0",
+   "chapter": "56",
+   "motion": "static",
+   "strength": 0.12,
+   "transition": "cut",
+   "transition_seconds": 0.2,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 19,
+    "y1": 77,
+    "x2": 689,
+    "y2": 1264
+   },
+   "seconds": 2.553
+  },
+  {
+   "panel": "p020_k0",
+   "chapter": "58",
+   "motion": "zoom_in",
+   "strength": 0.12,
+   "transition": "fade",
+   "transition_seconds": 0.35,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 0,
+    "y1": 88,
+    "x2": 700,
+    "y2": 1493
+   },
+   "seconds": 2.553
+  },
+  {
+   "panel": "p033_k0",
+   "chapter": "58",
+   "motion": "punch",
+   "strength": 0.2,
+   "transition": "whip",
+   "transition_seconds": 0.25,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 23,
+    "y1": 188,
+    "x2": 672,
+    "y2": 1190
+   },
+   "seconds": 2.043
+  },
+  {
+   "panel": "p024_k0",
+   "chapter": "59",
+   "motion": "zoom_in",
+   "strength": 0.12,
+   "transition": "fade",
+   "transition_seconds": 0.35,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 0,
+    "y1": 0,
+    "x2": 700,
+    "y2": 1519
+   },
+   "seconds": 2.553
+  },
+  {
+   "panel": "p034_k0",
+   "chapter": "59",
+   "motion": "zoom_in",
+   "strength": 0.12,
+   "transition": "cut",
+   "transition_seconds": 0.2,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 0,
+    "y1": 0,
+    "x2": 700,
+    "y2": 1318
+   },
+   "seconds": 2.553
+  },
+  {
+   "panel": "p030_k0",
+   "chapter": "60",
+   "motion": "zoom_in",
+   "strength": 0.12,
+   "transition": "dip_white",
+   "transition_seconds": 0.4,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 0,
+    "y1": 317,
+    "x2": 700,
+    "y2": 1740
+   },
+   "seconds": 3.064
+  }
+ ]
+}

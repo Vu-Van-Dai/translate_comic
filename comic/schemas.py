@@ -236,6 +236,10 @@ class TranslationEntry(Base):
     #: Free-form rationale, surfaced back to the agent on a rerun so it can see why
     #: a line was phrased the way it was last time.
     note: str | None = None
+    #: A named voice from the series' ``fonts.yaml`` (``voices:``): the face
+    #: this one line is set in -- a stammer, a whisper, a cheerful aside. The
+    #: agent picks it from the panel; None sets the line in its kind's face.
+    voice: str | None = None
 
 
 class ChapterTranslation(Base):
@@ -269,6 +273,9 @@ class RegionOverride(Base):
     force_inpaint: bool = False
     #: Render as a different kind of text than detection decided.
     style_kind: TextKind | None = None
+    #: Set in a named voice from ``fonts.yaml``; wins over ``style_kind`` and
+    #: over the voice chosen at translation.
+    voice: str | None = None
     #: Set by ``retranslate_shorter``; the translate gate reopens for these.
     max_chars: int | None = None
 
@@ -282,6 +289,23 @@ class RenderPlan(Base):
 
     def for_region(self, region_id: str) -> RegionOverride:
         return self.overrides.get(region_id) or RegionOverride()
+
+    def with_voices(self, translation: "ChapterTranslation | None") -> "RenderPlan":
+        """A copy with each line's translation-time voice folded in.
+
+        For rendering only, never saved: a voice chosen at the translate gate
+        lives in ``translation.json``, so retranslating can change it, while a
+        ``visual_qa`` restyle (``RegionOverride.voice``) still wins.
+        """
+        plan = self.model_copy(deep=True)
+        for entry in (translation.entries if translation else []):
+            if entry.voice:
+                current = plan.for_region(entry.region_id)
+                # A restyle to a kind at visual_qa is a choice too: it beats
+                # the translation's voice rather than being undone by it.
+                if current.voice is None and current.style_kind is None:
+                    plan.edit(entry.region_id).voice = entry.voice
+        return plan
 
     def edit(self, region_id: str) -> RegionOverride:
         """The override for a region, created on first use."""
@@ -304,6 +328,18 @@ class PageRecord(Base):
     sha256: str | None = None
     #: Per-page stage status, so one bad page never forces a whole-chapter redo.
     stages: dict[Stage, StageStatus] = Field(default_factory=dict)
+    #: Not part of the work: drop it instead of publishing it.
+    #:
+    #: Distinct from a page that merely has nothing to translate. A cover or a
+    #: wordless splash *is* the comic, so it is published untranslated and the
+    #: page numbers keep matching the source. An uploader's insert -- a
+    #: scanlation group's credits card, a "read it on <host>" notice, an ad --
+    #: is not the comic at all, and leaving it in the library publishes
+    #: somebody else's banner as though it were a page of the story.
+    #:
+    #: Kept in ``original/`` regardless: that stays the verbatim archive of
+    #: what the source served. This only decides what reaches ``library/``.
+    excluded: bool = False
 
     def status_of(self, stage: Stage) -> StageStatus:
         return self.stages.get(stage, StageStatus.PENDING)

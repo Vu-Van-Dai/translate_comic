@@ -19,7 +19,7 @@ from statistics import median
 
 from comic.browser.session import DomImage
 from comic.downloader.adapters import SiteAdapter
-from comic.schemas import ReadingDirection
+from comic.schemas import PageKind, ReadingDirection
 
 #: Anything narrower than this fraction of the widest page is chrome.
 WIDTH_FLOOR_RATIO = 0.4
@@ -218,7 +218,21 @@ def select_pages(
     if not wide_enough:
         return SelectionResult((), tuple(rejected))
 
-    shaped, odd_shapes = _aspect_outliers(_dedupe(wide_enough))
+    # The shape test assumes the pages of a chapter share an aspect ratio.
+    # That holds for a paged source and is false for a long strip, where slice
+    # height is an artifact of the uploader's export: measured on this series,
+    # one chapter mixes body slices of 12156-12781px with a 693px intro page,
+    # all 700px wide. The intro is then 18x off the median and is discarded as
+    # an ad -- it silently cost two pages per chapter on four chapters.
+    #
+    # Width already separates pages from furniture here (every real page sits
+    # at the column width, the junk at 200x75 and 75x105), and
+    # MAX_ASPECT_RATIO still rejects anything truly absurd, so a long strip
+    # simply keeps what cleared the width floor.
+    if adapter.page_kind is PageKind.LONGSTRIP:
+        shaped, odd_shapes = _dedupe(wide_enough), []
+    else:
+        shaped, odd_shapes = _aspect_outliers(_dedupe(wide_enough))
     rejected.extend((image, "shape unlike the other pages") for image in odd_shapes)
     if not shaped:
         return SelectionResult((), tuple(rejected))

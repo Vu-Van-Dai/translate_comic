@@ -1,0 +1,263 @@
+{
+  "Lee Jiun": {
+    "name": "Lee Jiun",
+    "aliases": [],
+    "role": null,
+    "personality": "Coi như San Park đã chết; biết ơn Haeyong đã tạo dịp làm lành. Bắt đầu đăng truyện của mình trên blog; vừa làm trợ lý vừa học, và giục Kanghyun chạy deadline.",
+    "speech_style": "Với Kanghyun 'em/anh'; với Yoonjae 'tôi/anh'.",
+    "addresses": {
+      "Han Kanghyun": {
+        "self_term": "em",
+        "other_term": "anh",
+        "formality": "neutral",
+        "note": "Đổi từ tôi/cậu sang anh/em theo yêu cầu của người vận hành, áp dụng từ chương 18 trở đi."
+      },
+      "Wonjun": {
+        "self_term": "tớ",
+        "other_term": "cậu",
+        "formality": "neutral",
+        "note": null
+      },
+      "Haeyong": {
+        "self_term": "tôi",
+        "other_term": "anh",
+        "formality": "neutral",
+        "note": null
+      },
+      "Kangjin": {
+        "self_term": "tôi",
+        "other_term": "anh",
+        "formality": "neutral",
+        "note": null
+      },
+      "Yoonjae": {
+        "self_term": "tôi",
+        "other_term": "anh",
+        "formality": "neutral",
+        "note": null
+      },
+      "San Park": {
+        "self_term": "tôi",
+        "other_term": "anh",
+        "formality": "polite",
+        "note": "Giữ lễ phép cả khi phản bác; sự cứng rắn nằm ở lời, không ở xưng hô."
+      }
+    },
+    "notes": [
+      "Bạn bè cũng hay nói tóc cậu giống lông cún.",
+      "Là fan webtoon của Haeyong -- thích nét vẽ, nhân vật dễ thương và các đoạn hài.",
+      "Đây là lần đầu Jiun tự nói ra tình cảm của mình."
+    ]
+  },
+  "Han Kanghyun": {
+    "name": "Han Kanghyun",
+    "aliases": [],
+    "role": null,
+    "personality": "Ra đón Jiun vì nhớ; vẽ lại chuyện hai người vào truyện mới, rồi rủ Jiun đi chợ đêm -- lần này với tư cách người yêu thật.",
+    "speech_style": "Với Jiun 'anh/em', dịu dàng, hay trêu.",
+    "addresses": {
+      "Lee Jiun": {
+        "self_term": "anh",
+        "other_term": "em",
+        "formality": "neutral",
+        "note": "Đổi từ tôi/cậu sang anh/em theo yêu cầu của người vận hành, áp dụng từ chương 18 trở đi."
+      },
+      "Haeyong": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "neutral",
+        "note": null
+      },
+      "Kangjin": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "neutral",
+        "note": null
+      },
+      "Yoonjae": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "neutral",
+        "note": null
+      },
+      "San Park": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "cold",
+        "note": "Lạnh nhạt, cự tuyệt; lệch hẳn với giọng 'anh/em' mà San Park áp vào."
+      }
+    },
+    "notes": [
+      "Có điều muốn nói với Jiun nhưng lại thôi.",
+      "Kangjin ngầm hiểu Kanghan chính là Kanghyun, và Jiun thì chưa nhận ra.",
+      "Không rõ vì sao mình lại quan tâm Jiun đến vậy.",
+      "Để ý việc Jiun đọc được nét mặt Yoonjae, điều chính anh không làm được.",
+      "Sáng hôm sau chỉ nhớ đã nắm cổ tay Jiun, nhưng rồi nhớ ra cả cái ôm.",
+      "Sau đó cả tuần không nhắc lại chuyện giả làm người yêu.",
+      "Thừa nhận Jiun đúng gu mình.",
+      "Tự nhận 'mình tự hại mình' vì chính anh bày ra cớ diễn như một cặp.",
+      "Tim đập mạnh khi Jiun gọi với lại ở cuối chương.",
+      "Giữ Haeyong và Yoonjae ở lại để bàn chuyện tin nhắn; cuối chương số đó gọi tới và anh bắt máy.",
+      "Nhận phòng khách sạn Kangjin đặt để có chỗ nói chuyện bình tĩnh với Jiun; tự ra đón cậu.",
+      "Vẻ mặt lúc đó khiến Kangjin thấy đáng sợ.",
+      "Hôm sau chủ động mời Jiun đi ăn tối."
+    ]
+  },
+  "Wonjun": {
+    "name": "Wonjun",
+    "aliases": [],
+    "role": null,
+    "personality": "Say vào thì đòi hôn người ta và cởi đồ -- Jiun lấy đó làm mốc so sánh.",
+    "speech_style": "Thân mật, xưng 'tớ' gọi 'cậu'.",
+    "addresses": {
+      "Lee Jiun": {
+        "self_term": "tớ",
+        "other_term": "cậu",
+        "formality": "neutral",
+        "note": null
+      }
+    },
+    "notes": []
+  },
+  "Yoonjae": {
+    "name": "Yoonjae",
+    "aliases": [],
+    "role": null,
+    "personality": "Xách đồ giúp Jiun, giải thích Haeyong chỉ lo cho hai người; mắng Haeyong tiêu tiền kinh khủng.",
+    "speech_style": "Với Haeyong 'em/anh'; với Jiun 'tôi/cậu'.",
+    "addresses": {
+      "Haeyong": {
+        "self_term": "em",
+        "other_term": "anh",
+        "formality": "neutral",
+        "note": null
+      },
+      "Lee Jiun": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "neutral",
+        "note": null
+      },
+      "Han Kanghyun": {
+        "self_term": "em",
+        "other_term": "anh",
+        "formality": "neutral",
+        "note": null
+      }
+    },
+    "notes": [
+      "Có vẻ đang lo chuyện riêng gì đó nhưng không nói ra.",
+      "Jiun thấy anh đang vui, dù Kanghyun bảo mặt anh lúc nào cũng khó đoán.",
+      "Đánh giá Jiun đã đáng tin hẳn từ khi làm bản in.",
+      "Bỏng họng ở chương trước là Haeyong, không phải Yoonjae -- Yoonjae là người hỏi han.",
+      "Tự nhận không thoát ra được vì chính cậu cũng không biết vì sao mình lại thích anh."
+    ]
+  },
+  "Haeyong": {
+    "name": "Haeyong",
+    "aliases": [],
+    "role": null,
+    "personality": "Chuyến đi biển là vì hai người kia; say bí tỉ, ghen vặt khi Yoonjae nói chuyện với Jiun.",
+    "speech_style": "Với Yoonjae 'anh/em'.",
+    "addresses": {
+      "Han Kanghyun": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "neutral",
+        "note": null
+      },
+      "Yoonjae": {
+        "self_term": "anh",
+        "other_term": "em",
+        "formality": "neutral",
+        "note": null
+      },
+      "Lee Jiun": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "neutral",
+        "note": null
+      }
+    },
+    "notes": [
+      "Với Yoonjae thì nhõng nhẽo, hờn dỗi chứ không gắt như với người khác.",
+      "Hay làm mình làm mẩy với Yoonjae rồi lại nghe lời.",
+      "Cuối chương bùng nổ vì Yoonjae chưa đọc webtoon của mình.",
+      "Gục vì thức trắng đêm, say rượu và stress nặng. Bực vì Kanghyun tự quyết chuyện giữ Jiun mà không hỏi ý mình.",
+      "Thầm nghĩ Jiun tốt bụng thật hay chỉ là khờ.",
+      "Dụi mắt để giấu; được Yoonjae xoa đầu thì bảo đừng ngượng ngùng thế.",
+      "Yoonjae hỏi ngược lại rằng có phải giờ anh sẽ để tâm đến cậu.",
+      "Cuối chương hỏi thẳng vì sao Yoonjae lại vì mình đến mức đó -- anh thật sự không hiểu.",
+      "Cuối chương vẫn dặn Yoonjae nhớ lên giường mà ngủ dù đang giận."
+    ]
+  },
+  "Kangjin": {
+    "name": "Kangjin",
+    "aliases": [],
+    "role": null,
+    "personality": "Ập vào phòng, lôi San lại, giục Kanghyun đuổi theo Jiun, giữ San lại để 'nói chuyện'.",
+    "speech_style": "Với San 'tôi/cậu'; với Kanghyun 'tôi/cậu'.",
+    "addresses": {
+      "Lee Jiun": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "neutral",
+        "note": null
+      },
+      "Han Kanghyun": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "neutral",
+        "note": null
+      },
+      "Haeyong": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "neutral",
+        "note": null
+      },
+      "San Park": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "neutral",
+        "note": null
+      }
+    },
+    "notes": [
+      "Gọi Jiun là 'gà con' xuyên suốt; hay nói mình ghen khi thấy Kanghyun và Jiun thân nhau.",
+      "Gọi Jiun là 'Pakuri'; bị Kanghyun trêu là già gân.",
+      "Cuối chương ghé tai bày cho Kanghyun một cách nào đó.",
+      "Nói đây là lần đầu Kanghyun phải lòng ai."
+    ]
+  },
+  "San Park": {
+    "name": "San Park",
+    "aliases": [],
+    "role": null,
+    "personality": "Lời 'từ bỏ' chỉ là cái bẫy: hắn ôm hôn Kanghyun đúng lúc Jiun tới -- chính hắn gọi Jiun đến -- để 'ít nhất để lại một vết nứt'.",
+    "speech_style": "Với Kanghyun 'anh/em' (thân mật áp đặt).",
+    "addresses": {
+      "Han Kanghyun": {
+        "self_term": "anh",
+        "other_term": "em",
+        "formality": "intimate",
+        "note": "Thân mật một chiều và mang tính chiếm hữu -- hắn tự áp đặt lại quan hệ cũ, không phải Kanghyun chấp nhận."
+      },
+      "Lee Jiun": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "polite",
+        "note": "Lần đầu hai người nói chuyện trực tiếp; giọng hắn nhã nhặn, chưa lộ gì."
+      },
+      "Kangjin": {
+        "self_term": "tôi",
+        "other_term": "anh",
+        "formality": "neutral",
+        "note": null
+      }
+    },
+    "notes": [
+      "Nhân vật mới được gọi tên trong chương này."
+    ]
+  }
+}

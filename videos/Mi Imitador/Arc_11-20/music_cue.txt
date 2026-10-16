@@ -1,0 +1,4 @@
+Length: 35.74s
+Cuts at (s): 2.51, 5.02, 7.01, 9.52, 12.01, 15.02, 17.53, 19.53, 22.52, 25.03, 28.03, 30.02, 32.51
+Music in video.mp4: How You Get The Girl (Taylor's Version) -- Taylor Swift, from 1.8s (117.5 BPM)
+For video_silent.mp4: add a TikTok sound in the app; the cuts above follow the beat of the track above.

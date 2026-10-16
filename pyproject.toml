@@ -17,9 +17,14 @@ dependencies = [
 # Installed by `python scripts/bootstrap.py`; kept optional so `comic doctor`
 # can run and *report* on a machine where they are still missing.
 browser = ["playwright>=1.44"]
-vision = ["opencv-python-headless>=4.9", "shapely>=2.0", "scipy>=1.11", "onnxruntime>=1.17"]
+vision = ["opencv-python-headless>=4.9", "shapely>=2.0", "scipy>=1.11", "onnxruntime>=1.17", "openvino>=2024.0"]
 ocr = ["manga-ocr>=0.1.14", "rapidocr-onnxruntime>=1.3"]
 dev = ["pytest>=8.0"]
+# `comic ps`: Photoshop over COM. Windows only.
+photoshop = ["pywin32>=306; sys_platform == 'win32'"]
+# `comic video`: beat tracking for the music. FFmpeg itself is a system tool
+# (`winget install Gyan.FFmpeg`), checked by `comic doctor`.
+video = ["librosa>=0.10", "soundfile>=0.12"]
 
 [project.scripts]
 comic = "comic.cli.app:main"

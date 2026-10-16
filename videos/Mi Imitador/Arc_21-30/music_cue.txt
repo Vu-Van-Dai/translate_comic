@@ -1,0 +1,4 @@
+Length: 37.05s
+Cuts at (s): 2.53, 5.27, 8.57, 11.21, 13.84, 16.48, 19.11, 21.11, 23.08, 25.73, 28.35, 30.79, 33.95
+Music in video.mp4: Jaded -- Miley Cyrus, from 0.1s (92.3 BPM)
+For video_silent.mp4: add a TikTok sound in the app; the cuts above follow the beat of the track above.

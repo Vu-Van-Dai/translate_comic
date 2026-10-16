@@ -1,0 +1,4 @@
+Length: 25.90s
+Cuts at (s): 2.18, 3.88, 6.04, 7.31, 9.03, 11.17, 13.33, 16.74, 18.46, 20.62, 22.75
+Music in video.mp4: nhạc nền - linh -- linh, from 0.1s (143.6 BPM)
+For video_silent.mp4: add a TikTok sound in the app; the cuts above follow the beat of the track above.

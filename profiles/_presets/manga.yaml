@@ -1,0 +1,40 @@
+# Japanese manga, black and white, paged.
+#
+# Bubbles in caps, like the other presets: sentence-case dialogue was tried
+# first and dropped on Super Lovers ch.1, where a page mixing sentence-case
+# and caps bubbles read as two letterers. Caption boxes are the exception,
+# in sentence case as the manga groups set them (see "Case" below).
+#
+# Inverted panels -- white lettering on black -- are ordinary in manga, and
+# cleaning restores such a bubble to black, so auto_contrast is on: one
+# measured chapter lost three lines to dark-on-black without it.
+#
+# A starting point: confirm it against the first reviewed chapter of a
+# manga series and record what changed. See docs/lettering.md.
+preset: voices
+
+ink: [20, 20, 20]
+stroke: [255, 255, 255]
+auto_contrast: true
+
+pad_em: 0.6
+size_scale: 0.9
+leading: auto
+
+# Case (docs/lettering.md, section 9): bubbles caps; caption and narration
+# boxes sentence case, as the manga groups set them; asides on the art
+# sentence case when the source's were. Caps-only faces hand sentence-case
+# lines to `sentence_font`. Augie, not the thin Mali: a thin face over
+# dot tone read as faint (the operator, Super Lovers ch.0).
+# Felt, not Augie (2026-10-15): Augie's thin strokes at caption sizes on an
+# ~850 px scan anti-alias to grey -- "some colours are too pale" (the
+# operator). Felt is a heavier sentence-case comic face, full coverage, no
+# advance-width defect. Super Lovers keeps Augie in its own profile.
+sentence_font: "000Felt-TB.ttf"
+
+styles:
+  dialogue:  {font: "000AnimeAce3-TeddyBear.ttf", uppercase: true}
+  thought:   {font: "000AnimeAce3-TeddyBear.ttf", uppercase: true}
+  caption:   {font: "000Felt-TB.ttf", uppercase: false}
+  narration: {font: "000Felt-TB.ttf", uppercase: false}
+  shout:     {font: "000FamousLWTB-BoldItalic.ttf", uppercase: true}

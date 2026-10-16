@@ -1,0 +1,4 @@
+# Western comics. The all-caps convention is native here (Piekos ch. 4), and
+# so are boxed narrator captions; same faces as the manhwa preset, which
+# already follows it. See docs/lettering.md.
+preset: manhwa

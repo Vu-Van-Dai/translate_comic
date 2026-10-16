@@ -292,6 +292,47 @@ class BrowserSession:
             raise BrowserError("session is not started; use it as a context manager")
         return self._context
 
+    #: How long to keep waiting for images that are still decoding, and how
+    #: many quiet rounds end the wait. See ``_wait_for_images``.
+    IMAGE_SETTLE_ROUNDS = 4
+    IMAGE_SETTLE_CAP_MS = 120_000
+
+    def _wait_for_images(self, page: "Page", *, settle_ms: int) -> None:
+        """Block until the number of decoded images stops growing.
+
+        Scrolling to the bottom is not the same as the chapter having loaded.
+        A long strip keeps streaming after the scroller reaches the footer, and
+        harvesting at that moment records whatever happens to be decoded --
+        which is how a run produced chapters of 6, 1 and 1 pages while
+        reporting success. `networkidle` does not cover it either: it is capped
+        at ten seconds and these pages are still fetching well past that.
+
+        So watch the thing that actually matters -- how many images have a
+        natural size -- and stop when it holds steady, or at a hard cap so a
+        page that never settles cannot hang the run.
+        """
+        stable = 0
+        seen = -1
+        waited = 0
+        while waited < self.IMAGE_SETTLE_CAP_MS:
+            try:
+                count = page.evaluate(
+                    "() => [...document.querySelectorAll('img')]"
+                    ".filter(i => i.naturalWidth > 300).length"
+                )
+            except Exception:
+                return
+            if count == seen:
+                stable += 1
+                if stable >= self.IMAGE_SETTLE_ROUNDS:
+                    break
+            else:
+                stable = 0
+            seen = count
+            page.wait_for_timeout(settle_ms)
+            waited += settle_ms
+        log.debug("images settled at %s after %sms", seen, waited)
+
     # -- capture -----------------------------------------------------------
     def harvest(
         self,
@@ -356,6 +397,9 @@ class BrowserSession:
             except Exception:
                 # A site with polling or video never goes idle; not fatal.
                 pass
+
+            if scroll:
+                self._wait_for_images(page, settle_ms=settle_ms)
 
             raw = page.evaluate(_HARVEST_JS)
             harvest = PageHarvest(

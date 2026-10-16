@@ -1,0 +1,30 @@
+---
+name: channel-videos
+description: The user's TikTok/Facebook BL channel folders (D:\Kênh\Kênh tiktok\bl) -- one video per image folder, saved in place, varied styles and songs (2026-10-14)
+metadata:
+  type: feedback
+---
+
+The user (2026-10-14) keeps finished BL images per series in `D:\Kênh\Kênh tiktok\bl\<manga|manhua|manhwa|lụm nhặt>\<series>\` (also seasonal folders: halloween, noel, năm mới, trung thu, valentine, sách bán -- not part of that request). Rules:
+- One video per leaf folder; **skip folders that already have a video**, and **skip folders containing subfolders** (e.g. "ăn sạch bão mẫu").
+- **Save the video directly in the folder with its images** (no extra copy step).
+- **Vary the music widely** -- Taylor Swift, V-pop trends, K-pop, J-pop, etc. -- never cycle a few tracks. Copyright is not a concern (not monetized; short clips).
+- **Vary the editing style** -- no repetitive format; invent new styles. "Keep this in mind for future work."
+- Their own past edits: 13-30 s, 1080x1920, CapCut-style.
+
+Built: `comic/video/folder.py` (10 recipes: recap, beat, split, pan, dreamy, night, flash, zoomblur, whip, slide; `assign` spreads recipes and tracks so neighbours differ and every track is used once before repeats; manga B&W pages only get whole-page recipes), `scripts/folder_videos.py <root>` (plan fixed in workspace/_logs/folder_videos.json, resumable), `scripts/sound_fetch.py tag:moods ...` (named songs from TikTok tag pages via the project Edge on 9223 -> assets/music/trending, ~140 tracks by 2026-10-14). Folder images named `Screenshot_N.png` are real art; whole-desktop captures (1920x1080 etc.) are notes and skipped.
+
+**How to apply:** for any new channel batch, re-run the script; add fresh sounds with sound_fetch first so songs stay new. See [[video-feature]].
+
+**Posting (2026-10-15, the user):** post the 147 videos to TikTok (account "Rồng con mê đam") and the Facebook page "Rồng Nhỏ" (Meta Business Suite), random order and times, 1 per posting day, 1-2 days/week left free for the user's own posts, every caption with #review #spoiler (+ their usual #truyentranhdammy #metruyentranh #dammy #xuhuong...). Plan: workspace/_logs/channel_schedule.json (scripts/channel_schedule.py, fixed once: 2026-10-16 -> 2027-04-19). Scheduler: scripts/channel_post.py through the project Edge on 9223 (user logs in; sessions persist in profiles/_edge). Platforms accept up to **30 days ahead on TikTok** (measured: Nov open to the 14th from Oct 15) and ~29 on FB, so **re-run `python scripts/channel_post.py` every 2-4 weeks** until the plan is exhausted -- nothing auto-starts. It skips done entries and retries failed ones.
+
+**Status 2026-10-15:** TikTok 23/147 scheduled (16/10 -> 12/11/2026), **124 left** (next 14/11/2026). Facebook 23/147 scheduled (16/10 -> 12/11/2026), **124 left** (next 14/11/2026). Next run due by ~2026-11-10 at the latest. Script fixes learned: day picker greys neighbouring months (pick first match for day<15, last otherwise); close stale upload tabs first ("leave page?" dialog crashed the driver); TikTok caption box sometimes misses focus (retry loop).
+
+**2026-10-15 additions (user):**
+- **New style to use:** the user likes the reels of FB page "Lazy Kids Team" (facebook.com/LuoiThichReviewBL/reels): full-frame 9:16 crops, a joking Vietnamese narration line on *every* shot (white bold, dark outline, ":))"), 2-4 s holds, zoom-blur/glitch/black-dip switches, trending remix. Built as folder recipe `caption` (needs per-image captions written by me; `scripts/folder_custom.py` + `workspace/_logs/folder_captions.json`). This overrides the old "no on-screen text" rule for channel videos -- mix it in, don't make every video this style.
+- **More Chinese music + trending:** `sound_fetch.py` takes `q=<search>` (TikTok search) and `--originals N` (Chinese songs on TikTok are mostly "original sound" re-uploads; take those with >= N plays). Library 207 tracks, 20 chinese, 14 halloween (2026-10-15). Screen out non-music re-uploads (news/voice-over).
+- **YouTube joins:** channel "Rồng Nhỏ" (studio.youtube.com/channel/UC8doy0uehsgE57i1IE527Hw), logged in in the project Edge. `channel_post.py --platform all` schedules youtube slots (entry key "youtube"; title from entry["title"]). Only the new videos have youtube slots so far; the 147-batch had none -- ask/decide before adding.
+- Done 2026-10-15: cây nấm nhỏ/1 (caption style, Chinese Douyin remix) -> 21/10 12:15; cây nấm nhỏ/2 (dreamy, Chinese cổ phong) -> 28/10 12:10; halloween 1 (caption, Spooky Scary Skeletons remix) -> 25/10 20:30; halloween 2 (night, This Is Halloween) -> 31/10 11:30. All three platforms (FB +15-20 min).
+- **Status 2026-10-15 evening:** TikTok/FB 27 scheduled each (124 of the 147-batch left, next run by ~10/11); YouTube 4/4 (the new videos only). YouTube trap fixed in channel_post: "still checking content" dialog ("Đã hiểu") leaves the upload as a *draft* -- the script now dismisses it and presses done again; a stuck upload is resumed via Studio > Shorts > "Chỉnh sửa bản nháp", never re-uploaded. The user also uploads by hand in the same Studio (e.g. draft "5381865110128") -- never touch drafts that are not ours.
+- **Hashtags (user, 2026-10-15):** every post on TikTok, Facebook (and YouTube) also carries `#mangabl #manhuabl #manhwabl #truyentranhdammy` besides #review #spoiler. Applied to all unscheduled captions in channel_schedule.json; BASE_TAGS in channel_schedule.py. Keep <= 15 hashtags (YouTube drops all hashtags above 15).
+- **YouTube daily upload limit (2026-10-15):** "Đã đạt giới hạn tải video lên hằng ngày" after ~100-110 uploads in a day; it blocks the user's own uploads too for 24 h. **Never push more than ~50 YouTube uploads in one day** (`--limit 50`) so the user keeps headroom. Status: YouTube 99/151 scheduled; 52 left (earliest slot 29/11/2026) -> run `python scripts/channel_post.py --platform youtube --limit 50` after ~23:10 on 16/10, then the rest the next day. channel_post now stops at the limit by itself.

@@ -95,6 +95,12 @@ def open_translate_gate(
     total = 0
 
     for record in state.pages:
+        # An uploader's insert is not the comic. Its lettering reads as real
+        # text at full confidence -- a "do not repost" banner is words on a
+        # card -- so nothing upstream drops it and it arrives here looking
+        # exactly like narration.
+        if record.excluded:
+            continue
         if only and record.page not in only:
             continue
         analysis = analysis_for(paths, record.page)
@@ -217,6 +223,8 @@ def _source_text_for(paths: ChapterPaths, state: ChapterState) -> dict[str, str]
     """region id -> source text, read once rather than per entry."""
     lookup: dict[str, str] = {}
     for record in state.pages:
+        if record.excluded:
+            continue
         analysis = analysis_for(paths, record.page)
         if analysis is None:
             continue
@@ -263,9 +271,17 @@ def apply_translation(
     if unknown:
         problems.append(f"unknown region(s): {', '.join(unknown[:6])}")
 
+    from comic.paths import SeriesPaths
+    from comic.typesetting.render import voice_uses
+
+    voices = voice_uses(SeriesPaths(state.series).fonts_file)
     entries: list[TranslationEntry] = []
     for item in response.items:
         if item.region_id in unknown:
+            continue
+        if item.voice and item.voice not in voices:
+            known = ", ".join(sorted(voices)) or "none defined"
+            problems.append(f"{item.region_id}: unknown voice {item.voice!r} ({known})")
             continue
         if not item.target_text.strip():
             problems.append(f"{item.region_id}: empty translation")
@@ -278,6 +294,7 @@ def apply_translation(
                 speaker=item.speaker,
                 addressee=item.addressee,
                 note=item.note,
+                voice=item.voice,
             )
         )
 
@@ -363,6 +380,11 @@ def missing_translations(
 
     pending: list[str] = []
     for record in state.pages:
+        # Excluded pages hold no work. Counting their regions as pending would
+        # leave the chapter permanently short of translated, so it could never
+        # be marked complete.
+        if record.excluded:
+            continue
         analysis = analysis_for(paths, record.page)
         if analysis is None:
             continue

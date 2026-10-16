@@ -1,0 +1,16 @@
+- [Mistakes log](mistakes-log.md) — my own mistakes and the rule each taught; read before every chapter
+- [Environment after reinstall](environment-after-reinstall.md) — 2026-10-12 machine reset: Python/Git paths, git safe.directory, Photoshop on D:, fonts
+- [No commit reminders](no-commit-reminders.md) — never suggest or mention git commits
+- [Author permission](author-permission.md) — user holds authors' permission for every series they provide
+- [Super Lovers sources](super-lovers-sources.md) — full chapters re-downloaded 2026-10-11, booklets archived, Ch.41 missing; ON HOLD since 2026-10-14 (Ch.0-2 done)
+- [Super Lovers: finishing](super-lovers-finish.md) — done = Photoshop route (sfx, build, publish); no voices, one face per kind like Ch.0
+- [Work autonomously](work-autonomously.md) — no per-step updates; only report pronoun changes, errors, or real decisions
+- [CPU limit](cpu-limit.md) — pipeline max 80-90% CPU, never above 90%; LaMa on OpenVINO CPU, detection on GPU
+- [No background processes](no-background-processes.md) — nothing auto-starts at boot; close every project process after work
+- [Content boundaries](content-boundaries.md) — minors: translate romance faithfully; never sexual content with minors (flag pages); no romantic video edits of child characters
+- [Video feature](video-feature.md) — TikTok chapter videos: never translated-dialogue images, music only, my creative call; decisions 2026-10-14: no branding, 25-40 s, music + silent; Mi Imitador may use its translated pages
+- [Watermarks: erase](watermarks-erase.md) — other groups' credit tags/site watermarks in story pages: remove completely (replace with Raichi/Rồng nhỏ only as second choice)
+- [Current work](current-work.md) — 2026-10-14: Dasadanan + Destined to Meet on the Trends, analyse all chapters first; Super Lovers on hold
+- [Channel videos](channel-videos.md) — D:\Kênh\Kênh tiktokl: one video per image folder, saved in place; scheduled posting to TikTok + FB page Rồng Nhỏ -- 124 left each side, re-run channel_post.py every 2-4 weeks
+- [Throughput over perfect SFX](throughput-over-perfect-sfx.md) — 2026-10-15: many chapters > perfect SFX (50-70% ok, note hard ones); dialogue centred is #1; no pale ink
+- [Reply in English](reply-in-english.md) — always answer in English (fewest tokens), whatever language the user writes in

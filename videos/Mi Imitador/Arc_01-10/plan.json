@@ -1,0 +1,242 @@
+{
+ "gate": "video_plan",
+ "style": "story",
+ "background": "white",
+ "story": "Arc 1 (Ch.1-10): the copy, the apology, assistant job, Haeyong's anger, Kangjin's teasing and his past with Kanghyun, Haeyong's secret crush, and Jiun's heart starting to race.",
+ "music": {
+  "track": "tt_one_kiss_9436",
+  "start": 4.412,
+  "beat_sync": true
+ },
+ "caption": "Mi Imitador chap 1–10: lỡ đạo nhái nét vẽ của crush, bị bắt về làm trợ lý… rồi tim bắt đầu loạn nhịp 😳 (Vietsub)",
+ "hashtags": [
+  "MiImitador",
+  "FromPakuriToAssistant",
+  "manhwabl",
+  "BL",
+  "truyentranh",
+  "webtoon",
+  "fyp"
+ ],
+ "shots": [
+  {
+   "panel": "p019_k0",
+   "motion": "static",
+   "strength": 0.12,
+   "transition": "cut",
+   "transition_seconds": 0.2,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 0,
+    "y1": 41,
+    "x2": 700,
+    "y2": 1196
+   },
+   "seconds": 2.439
+  },
+  {
+   "panel": "p046_k0",
+   "motion": "zoom_in",
+   "strength": 0.12,
+   "transition": "cut",
+   "transition_seconds": 0.2,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 0,
+    "y1": 25,
+    "x2": 700,
+    "y2": 1197
+   },
+   "seconds": 2.439
+  },
+  {
+   "panel": "p053_k0",
+   "chapter": "2",
+   "motion": "static",
+   "strength": 0.12,
+   "transition": "cut",
+   "transition_seconds": 0.2,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 0,
+    "y1": 110,
+    "x2": 700,
+    "y2": 800
+   },
+   "seconds": 2.439
+  },
+  {
+   "panel": "p004_k0",
+   "chapter": "3",
+   "motion": "punch",
+   "strength": 0.2,
+   "transition": "whip",
+   "transition_seconds": 0.25,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 0,
+    "y1": 0,
+    "x2": 700,
+    "y2": 1443
+   },
+   "seconds": 2.439
+  },
+  {
+   "panel": "p038_k0",
+   "chapter": "4",
+   "motion": "zoom_in",
+   "strength": 0.12,
+   "transition": "cut",
+   "transition_seconds": 0.2,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 0,
+    "y1": 111,
+    "x2": 700,
+    "y2": 1533
+   },
+   "seconds": 2.439
+  },
+  {
+   "panel": "p014_k0",
+   "chapter": "5",
+   "motion": "static",
+   "strength": 0.12,
+   "transition": "cut",
+   "transition_seconds": 0.2,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 0,
+    "y1": 50,
+    "x2": 720,
+    "y2": 826
+   },
+   "seconds": 2.439
+  },
+  {
+   "panel": "p039_k0",
+   "chapter": "6",
+   "motion": "zoom_in",
+   "strength": 0.12,
+   "transition": "cut",
+   "transition_seconds": 0.2,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 0,
+    "y1": 315,
+    "x2": 698,
+    "y2": 1529
+   },
+   "seconds": 2.439
+  },
+  {
+   "panel": "p045_k0",
+   "chapter": "7",
+   "motion": "static",
+   "strength": 0.12,
+   "transition": "cut",
+   "transition_seconds": 0.2,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 25,
+    "y1": 166,
+    "x2": 698,
+    "y2": 1119
+   },
+   "seconds": 2.439
+  },
+  {
+   "panel": "p042_k0",
+   "chapter": "8",
+   "motion": "punch",
+   "strength": 0.2,
+   "transition": "cut",
+   "transition_seconds": 0.2,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 0,
+    "y1": 54,
+    "x2": 700,
+    "y2": 1544
+   },
+   "seconds": 2.439
+  },
+  {
+   "panel": "p022_k0",
+   "chapter": "9",
+   "motion": "static",
+   "strength": 0.12,
+   "transition": "cut",
+   "transition_seconds": 0.2,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 11,
+    "y1": 78,
+    "x2": 690,
+    "y2": 832
+   },
+   "seconds": 2.439
+  },
+  {
+   "panel": "p025_k0",
+   "chapter": "10",
+   "motion": "zoom_in",
+   "strength": 0.12,
+   "transition": "cut",
+   "transition_seconds": 0.2,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 0,
+    "y1": 339,
+    "x2": 700,
+    "y2": 1471
+   },
+   "seconds": 2.439
+  },
+  {
+   "panel": "p038_k0",
+   "chapter": "10",
+   "motion": "punch",
+   "strength": 0.2,
+   "transition": "cut",
+   "transition_seconds": 0.2,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 0,
+    "y1": 278,
+    "x2": 671,
+    "y2": 1151
+   },
+   "seconds": 1.951
+  },
+  {
+   "panel": "p040_k0",
+   "chapter": "10",
+   "motion": "zoom_in",
+   "strength": 0.12,
+   "transition": "dip_white",
+   "transition_seconds": 0.4,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 43,
+    "y1": 4,
+    "x2": 657,
+    "y2": 830
+   },
+   "seconds": 3.415
+  }
+ ]
+}

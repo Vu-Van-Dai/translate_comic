@@ -1,0 +1,4 @@
+Length: 26.34s
+Cuts at (s): 1.95, 3.88, 5.83, 7.76, 9.68, 11.63, 13.56, 15.98, 17.93, 20.34, 23.24
+Music in video.mp4: sonido original -- Carlos Bonillo, from 0.4s (123.0 BPM)
+For video_silent.mp4: add a TikTok sound in the app; the cuts above follow the beat of the track above.

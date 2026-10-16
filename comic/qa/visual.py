@@ -15,6 +15,8 @@ from __future__ import annotations
 
 import os
 from concurrent.futures import ProcessPoolExecutor
+
+from comic.image_processing.clean import series_clean_mode
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -29,7 +31,7 @@ from comic.handoff.schemas import (
 )
 from comic.image_processing.clean import clean_page
 from comic.image_processing.mask import fit_areas, region_glyphs
-from comic.paths import ChapterPaths
+from comic.paths import ChapterPaths, SeriesPaths
 from comic.schemas import (
     ChapterState,
     ChapterTranslation,
@@ -41,7 +43,12 @@ from comic.schemas import (
 from comic.stages import analysis_for
 from comic.state.store import read_json, write_json
 from comic.typesetting.fit import Layout
-from comic.typesetting.render import DARK_BACKGROUND, background_luma, render_page
+from comic.typesetting.render import (
+    DARK_BACKGROUND,
+    background_luma,
+    load_styles,
+    render_page,
+)
 from comic.vision.analyze import load_mask, write_crop
 from comic.vision.detector import load_page
 
@@ -214,6 +221,7 @@ def render_one(
     cleaned, touched, report = clean_page(
         image, page_mask, analysis.regions, areas,
         model=model, overrides=plan.overrides,
+        inpaint_all=series_clean_mode(SeriesPaths(paths.series).fonts_file) == "lama",
     )
     outside = touched == 0
     if not bool((cleaned[outside] == image[outside]).all()):
@@ -225,8 +233,12 @@ def render_one(
     result["inpainted"] = report.count("inpaint")
     result["notes"].extend(report.notes)
 
+    # Lettering is a per-series choice, so the faces and the single ink colour
+    # come from profiles/<series>/fonts.yaml when one exists.
     rendered, layouts = render_page(
-        cleaned, analysis.regions, text, areas, fonts, plan.overrides
+        cleaned, analysis.regions, text, areas, fonts, plan.overrides,
+        styles=load_styles(SeriesPaths(paths.series).fonts_file),
+        page_mask=page_mask,
     )
     write_crop(cleaned, paths.cleaned / filename)
     write_crop(rendered, paths.translated / filename)
@@ -271,17 +283,23 @@ def render_chapter(
 
     translation = read_json(paths.translation_file, ChapterTranslation)
     text = {e.region_id: e.target_text for e in translation.entries}
+    plan = plan.with_voices(translation)
     fonts = fonts_dir or (paths.root / "assets" / "fonts")
 
     paths.cleaned.mkdir(parents=True, exist_ok=True)
     paths.translated.mkdir(parents=True, exist_ok=True)
 
-    todo = [r for r in state.pages if not only or r.page in only]
+    todo = [
+        r for r in state.pages
+        if not r.excluded and (not only or r.page in only)
+    ]
     if not todo:
         return outcome
 
     if workers is None:
-        workers = min(len(todo), max(1, (os.cpu_count() or 2) - 1), 8)
+        from comic.stages import cpu_budget
+
+        workers = min(len(todo), cpu_budget(), 8)
 
     if workers <= 1 or len(todo) == 1:
         results = [
@@ -405,7 +423,11 @@ def apply_fixes(plan: RenderPlan, fixes: list[QaFix]) -> tuple[int, list[str]]:
         elif fix.action is FixAction.FORCE_INPAINT:
             override.force_inpaint = True
         elif fix.action is FixAction.RESTYLE:
-            override.style_kind = TextKind(value)
+            if value in {k.value for k in TextKind}:
+                override.style_kind = TextKind(value)
+                override.voice = None
+            else:
+                override.voice = value
         elif fix.action is FixAction.RETRANSLATE_SHORTER:
             override.max_chars = int(value)
             retranslate.append(fix.region_id)
@@ -431,6 +453,12 @@ def publish(paths: ChapterPaths, state: ChapterState) -> tuple[int, list[str]]:
     problems: list[str] = []
     ready = []
     for record in state.pages:
+        # An uploader's insert -- a group credits card, a "read it on <host>"
+        # notice -- is not a page of the comic, so it is dropped rather than
+        # published untranslated. It stays in `original/` either way.
+        if record.excluded:
+            continue
+
         rendered = paths.translated / record.filename
         if rendered.exists():
             ready.append((record, rendered))

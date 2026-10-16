@@ -10,6 +10,7 @@ malformed answer reopens the gate with an explanation instead of corrupting stat
 
 from __future__ import annotations
 
+import re
 from datetime import datetime
 from enum import Enum
 
@@ -118,6 +119,9 @@ class TranslateItemResponse(Base):
     speaker: str | None = None
     addressee: str | None = None
     note: str | None = None
+    #: A voice named in the series' ``fonts.yaml``, when the line's delivery
+    #: calls for a face other than its kind's (see translate_context.md).
+    voice: str | None = None
 
 
 class GlossaryProposal(Base):
@@ -243,9 +247,13 @@ class QaFix(Base):
                 except ValueError as exc:
                     raise ValueError(f"nudge components must be integers, got {self.value!r}") from exc
         elif self.action is FixAction.RESTYLE:
+            # A text kind, or a voice from the series' fonts.yaml -- checked
+            # against the profile when the fix is applied.
             valid = {k.value for k in TextKind}
-            if self.value not in valid:
-                raise ValueError(f"restyle value must be one of {sorted(valid)}")
+            if self.value not in valid and not re.fullmatch(r"[a-z][a-z0-9_]*", self.value or ""):
+                raise ValueError(
+                    f"restyle value must be a text kind {sorted(valid)} or a voice name"
+                )
         elif self.action is FixAction.FORCE_WRAP:
             if not (self.value or "").strip():
                 raise ValueError("force_wrap needs the wrapped text as its value")

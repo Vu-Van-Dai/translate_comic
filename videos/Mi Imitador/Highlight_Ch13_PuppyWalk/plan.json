@@ -1,0 +1,216 @@
+{
+ "gate": "video_plan",
+ "style": "story",
+ "background": "white",
+ "story": "Ch.13: Kanghyun and Jiun walk to dinner, meet a dog, Jiun's 'WOAHHH', Kanghyun pats Jiun's head: 'this one looks more like a puppy'.",
+ "music": {
+  "track": "tt_nhac_nen_linh_7159",
+  "start": 0.07,
+  "beat_sync": true
+ },
+ "caption": "Đi dạo gặp cún, ai ngờ người bị xoa đầu như cún lại là mình 🐶💛 Mi Imitador chap 13",
+ "hashtags": [
+  "MiImitador",
+  "FromPakuriToAssistant",
+  "manhwabl",
+  "BL",
+  "truyentranh",
+  "webtoon",
+  "fyp",
+  "cute"
+ ],
+ "shots": [
+  {
+   "panel": "p003_k0",
+   "motion": "pan_down",
+   "strength": 0.3,
+   "transition": "cut",
+   "transition_seconds": 0.2,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 0,
+    "y1": 110,
+    "x2": 700,
+    "y2": 1354
+   },
+   "seconds": 2.089
+  },
+  {
+   "panel": "p006_k0",
+   "motion": "static",
+   "strength": 0.12,
+   "transition": "cut",
+   "transition_seconds": 0.2,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 49,
+    "y1": 95,
+    "x2": 657,
+    "y2": 795
+   },
+   "seconds": 1.671
+  },
+  {
+   "panel": "p022_k0",
+   "motion": "punch",
+   "strength": 0.2,
+   "transition": "cut",
+   "transition_seconds": 0.2,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 0,
+    "y1": 17,
+    "x2": 700,
+    "y2": 2055
+   },
+   "seconds": 2.089
+  },
+  {
+   "panel": "p024_k0",
+   "motion": "zoom_in",
+   "strength": 0.12,
+   "transition": "cut",
+   "transition_seconds": 0.2,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 18,
+    "y1": 182,
+    "x2": 685,
+    "y2": 1351
+   },
+   "seconds": 1.671
+  },
+  {
+   "panel": "p026_k0",
+   "motion": "static",
+   "strength": 0.12,
+   "transition": "cut",
+   "transition_seconds": 0.2,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 12,
+    "y1": 35,
+    "x2": 688,
+    "y2": 737
+   },
+   "seconds": 1.671
+  },
+  {
+   "panel": "p027_k0",
+   "motion": "punch",
+   "strength": 0.2,
+   "transition": "cut",
+   "transition_seconds": 0.2,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 38,
+    "y1": 131,
+    "x2": 700,
+    "y2": 754
+   },
+   "seconds": 2.089
+  },
+  {
+   "panel": "p029_k0",
+   "motion": "zoom_in",
+   "strength": 0.12,
+   "transition": "fade",
+   "transition_seconds": 0.3,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 0,
+    "y1": 163,
+    "x2": 700,
+    "y2": 1871
+   },
+   "seconds": 2.089
+  },
+  {
+   "panel": "p031_k0",
+   "motion": "zoom_in",
+   "strength": 0.12,
+   "transition": "cut",
+   "transition_seconds": 0.2,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 9,
+    "y1": 64,
+    "x2": 645,
+    "y2": 1058
+   },
+   "seconds": 3.343
+  },
+  {
+   "panel": "p032_k0",
+   "motion": "static",
+   "strength": 0.12,
+   "transition": "cut",
+   "transition_seconds": 0.2,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 28,
+    "y1": 14,
+    "x2": 695,
+    "y2": 854
+   },
+   "seconds": 1.671
+  },
+  {
+   "panel": "p034_k0",
+   "motion": "punch",
+   "strength": 0.2,
+   "transition": "cut",
+   "transition_seconds": 0.2,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 9,
+    "y1": 190,
+    "x2": 689,
+    "y2": 908
+   },
+   "seconds": 2.089
+  },
+  {
+   "panel": "p036_k0",
+   "motion": "zoom_in",
+   "strength": 0.12,
+   "transition": "cut",
+   "transition_seconds": 0.2,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 51,
+    "y1": 210,
+    "x2": 700,
+    "y2": 857
+   },
+   "seconds": 2.089
+  },
+  {
+   "panel": "p040_k0",
+   "motion": "zoom_in",
+   "strength": 0.12,
+   "transition": "dip_white",
+   "transition_seconds": 0.3,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 3,
+    "y1": 68,
+    "x2": 630,
+    "y2": 818
+   },
+   "seconds": 3.343
+  }
+ ]
+}

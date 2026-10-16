@@ -1,0 +1,122 @@
+[
+  {
+    "source": "pakuri",
+    "target": "pakuri (đạo nhái)",
+    "note": "Tiếng lóng Nhật chỉ việc sao chép tác phẩm. Giữ nguyên vì là từ khoá của nhan đề.",
+    "category": "term"
+  },
+  {
+    "source": "little chick",
+    "target": "gà con",
+    "note": "Biệt danh Kangjin đặt cho Jiun; giữ xuyên suốt các chương sau.",
+    "category": "term"
+  },
+  {
+    "source": "Illusion World",
+    "target": "Illusion World",
+    "note": "Tên game Haeyong chơi. Giữ nguyên tiếng Anh như trong tranh.",
+    "category": "term"
+  },
+  {
+    "source": "Lucia",
+    "target": "Lucia",
+    "note": "Nhân vật nữ trong game Illusion World mà Haeyong mê.",
+    "category": "term"
+  },
+  {
+    "source": "Iyasen",
+    "target": "Iyasen",
+    "note": "Người chơi/nhân vật đối thủ trong Illusion World.",
+    "category": "term"
+  },
+  {
+    "source": "Tied Up in Twins",
+    "target": "Song Sinh Trói Buộc",
+    "note": "Tên đề cương truyện cũ của Kanghyun mà Kangjin muốn anh làm tiếp.",
+    "category": "term"
+  },
+  {
+    "source": "Kanghan",
+    "target": "Kanghan",
+    "note": "Bút danh tác giả truyện tranh thiếu nhi mà Jiun hâm mộ; Kangjin ngầm cho thấy đó chính là Han Kanghyun. Giữ nguyên bút danh.",
+    "category": "term"
+  },
+  {
+    "source": "beer with soju",
+    "target": "bia pha soju",
+    "note": "Somaek -- bia pha soju, kiểu uống phổ biến ở Hàn. Giữ 'soju' nguyên.",
+    "category": "term"
+  },
+  {
+    "source": "Zombie Walking",
+    "target": "Zombie Walking",
+    "note": "Game bắn zombie duy nhất Jiun chơi. Giữ nguyên tên tiếng Anh.",
+    "category": "term"
+  },
+  {
+    "source": "night market",
+    "target": "chợ đêm",
+    "note": "Nơi Kanghyun rủ Jiun đi hẹn hò.",
+    "category": "term"
+  },
+  {
+    "source": "Chickpea",
+    "target": "Đậu gà",
+    "note": "Biệt danh mới Kangjin đặt cho Jiun, nối tiếp 'gà con' và 'gà mới lớn'. Giữ chữ 'gà' để người đọc thấy đây vẫn là cùng một trò trêu.",
+    "category": "term"
+  },
+  {
+    "source": "Chick buddy",
+    "target": "Bạn gà",
+    "note": "Một biến thể nữa Kangjin bịa ra khi gọi Jiun, cùng họ với 'gà con', 'gà mới lớn' và 'Đậu gà'. Giữ chữ 'gà' cho nhất quán.",
+    "category": "term"
+  },
+  {
+    "source": "Director (Kangjin's title)",
+    "target": "anh nhà sản xuất",
+    "note": "Bản tiếng Anh đổi cách gọi Kangjin từ 'Producer' sang 'Director' giữa chừng, nhưng vẫn là cùng một chức danh. Giữ nguyên 'anh nhà sản xuất' cho nhất quán.",
+    "category": "term"
+  },
+  {
+    "source": "pretend boyfriend",
+    "target": "người yêu giả",
+    "note": "Thoả thuận 'diễn như một cặp' từ các chương trước (ch.20-23 dùng 'giả vờ', 'diễn').",
+    "category": "term"
+  },
+  {
+    "source": "fish bun",
+    "target": "bánh cá",
+    "note": "Bánh cá nướng (bungeoppang) mua ở xe bán hàng rong trong buổi hẹn ch.48.",
+    "category": "term"
+  },
+  {
+    "source": "split the bill (slang)",
+    "target": "Campuchia",
+    "note": "Tiếng lóng 'chia tiền' mà Jiun dùng thời đi học (ch.49); bản gốc là một từ lóng tuổi teen.",
+    "category": "term"
+  },
+  {
+    "source": "double date",
+    "target": "hẹn hò đôi",
+    "note": "Jiun rủ Kanghyun đi cùng Yoonjae và Haeyong (ch.50).",
+    "category": "term"
+  },
+  {
+    "source": "fabric softener",
+    "target": "nước xả vải",
+    "note": "Cái cớ Kanghyun đưa ra cho mùi lạ trong văn phòng (ch.52).",
+    "category": "term"
+  },
+  {
+    "source": "Hotel Sora",
+    "target": "Khách sạn Sora",
+    "note": "Nơi San Park hẹn Kanghyun tới một mình (ch.55).",
+    "category": "term"
+  },
+  {
+    "source": "deadline fairy",
+    "target": "tiên deadline",
+    "note": "Kanghyun than Jiun giục việc như 'tiên deadline'; Jiun đáp người yêu anh chính là tiên deadline (ch.60).",
+    "category": "term"
+  }
+]

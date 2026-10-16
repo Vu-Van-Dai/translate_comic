@@ -15,7 +15,13 @@ match: yaoiscan.com
 name: yaoiscan
 page_kind: longstrip
 reading_direction: ttb
-source_language: ko
+# English, not Korean. The site publishes English SCANLATIONS of Korean
+# manhwa: the bubbles are relettered in English, while the SFX are left as
+# stylised Hangul brushwork and the chapter title stays a drawn Korean logo.
+# Declaring `ko` here sent a Korean recogniser at English lettering and the
+# pipeline had no way to notice -- see the script-mismatch check in
+# `stages.py: run_ocr`.
+source_language: en
 container_selector: "#readerarea, .reading-content, .entry-content"
 min_image_width: 600
 url_blocklist:
@@ -25,4 +31,9 @@ url_blocklist:
   - wp-content/uploads/20
 chapter_number_regex: 'chapter-(\d+(?:\.\d+)?)'
 series_slug_regex: '/read/([^/]+)'
-settle_ms: 800
+# Raised from 800. The strip grows as it loads -- the document starts at
+# ~18000px and reaches ~58000px once the images arrive -- so the scroller keeps
+# discovering new content, and a short settle captures the DOM before the image
+# it just scrolled past has decoded. Measured on chapter 3: the page needs
+# roughly 70 viewport steps, and hurrying them yields a chapter of 10 pages.
+settle_ms: 1500

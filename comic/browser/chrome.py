@@ -38,6 +38,27 @@ _CANDIDATES = (
 )
 
 
+_EDGE = (
+    r"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe",
+    r"C:\Program Files\Microsoft\Edge\Application\msedge.exe",
+)
+
+
+def edge_profile_dir(root: Path | None = None) -> Path:
+    return (root or project_root()) / "profiles" / "_edge"
+
+
+def find_edge() -> Path | None:
+    """Locate Microsoft Edge -- the same Chromium CDP endpoint, a separate browser."""
+    found = shutil.which("msedge")
+    if found:
+        return Path(found)
+    for candidate in _EDGE:
+        if Path(candidate).exists():
+            return Path(candidate)
+    return None
+
+
 def find_chrome() -> Path | None:
     """Locate a Chrome/Edge binary, preferring Chrome."""
     for name in ("chrome", "google-chrome", "chromium", "msedge"):
@@ -74,7 +95,9 @@ def debug_target(port: int = DEFAULT_PORT) -> dict | None:
         return None
 
 
-def launch(port: int = DEFAULT_PORT, profile: Path | None = None) -> subprocess.Popen | None:
+def launch(
+    port: int = DEFAULT_PORT, profile: Path | None = None, edge: bool = False
+) -> subprocess.Popen | None:
     """Start Chrome with remote debugging on a dedicated profile.
 
     Returns ``None`` if no Chrome binary could be found. Does nothing if the
@@ -83,11 +106,11 @@ def launch(port: int = DEFAULT_PORT, profile: Path | None = None) -> subprocess.
     if debug_target(port):
         return None
 
-    binary = find_chrome()
+    binary = find_edge() if edge else find_chrome()
     if binary is None:
         return None
 
-    target = profile or chrome_profile_dir()
+    target = profile or (edge_profile_dir() if edge else chrome_profile_dir())
     target.mkdir(parents=True, exist_ok=True)
 
     return subprocess.Popen(
@@ -103,9 +126,9 @@ def launch(port: int = DEFAULT_PORT, profile: Path | None = None) -> subprocess.
     )
 
 
-def manual_command(port: int = DEFAULT_PORT, profile: Path | None = None) -> str:
+def manual_command(port: int = DEFAULT_PORT, profile: Path | None = None, edge: bool = False) -> str:
     """The command to paste if automatic launching does not work."""
-    binary = find_chrome()
-    target = profile or chrome_profile_dir()
+    binary = find_edge() if edge else find_chrome()
+    target = profile or (edge_profile_dir() if edge else chrome_profile_dir())
     exe = f'"{binary}"' if binary else "chrome.exe"
     return f'{exe} --remote-debugging-port={port} --user-data-dir="{target}"'

@@ -1,0 +1,159 @@
+{
+ "gate": "video_plan",
+ "style": "story",
+ "background": "white",
+ "story": "CapCut split-screen edit (@muoivungvietnam style): Haeyong x Yoonjae, the wait -> the snow -> the confession -> the flower wreath.",
+ "music": {
+  "track": "tt_am_thanh_goc_basic_shop_thu_uc_0086",
+  "start": 0.16,
+  "beat_sync": true
+ },
+ "caption": "anh người yêu khó ưa nhưng xin lỗi bằng cả lẵng hoa 😭💐 #MiImitador",
+ "hashtags": [
+  "MiImitador",
+  "FromPakuriToAssistant",
+  "manhwabl",
+  "BL",
+  "blrecommendations",
+  "capcut",
+  "fyp"
+ ],
+ "shots": [
+  {
+   "panel": "p019_k0",
+   "motion": "zoom_in",
+   "strength": 0.15,
+   "transition": "cut",
+   "transition_seconds": 0.5,
+   "fit": "cover",
+   "effects": [
+    "glow"
+   ],
+   "crop": {
+    "x1": 60,
+    "y1": 280,
+    "x2": 660,
+    "y2": 813
+   },
+   "text": {
+    "text": "Yoonjae đã tỏ tình và hứa sẽ đợi, nhưng Haeyong cứ lờ đi: “Anh quên là em từng nói em thích anh rồi à?”",
+    "role": "note",
+    "position": "center",
+    "anim": "fade",
+    "start": 0.3
+   },
+   "panel2": "p024_k0",
+   "motion2": "zoom_in",
+   "crop2": {
+    "x1": 40,
+    "y1": 620,
+    "x2": 660,
+    "y2": 1171
+   },
+   "seconds": 6.316
+  },
+  {
+   "panel": "p036_k0",
+   "motion": "zoom_in",
+   "strength": 0.15,
+   "transition": "dip_white",
+   "transition_seconds": 0.5,
+   "fit": "cover",
+   "effects": [
+    "glow"
+   ],
+   "crop": {
+    "x1": 0,
+    "y1": 50,
+    "x2": 700,
+    "y2": 672
+   },
+   "text": {
+    "text": "Giữa trời tuyết, Haeyong chạy theo níu Yoonjae lại… “…Yoonjae.”",
+    "role": "note",
+    "position": "center",
+    "anim": "fade",
+    "start": 0.3
+   },
+   "panel2": "p040_k0",
+   "motion2": "zoom_in",
+   "crop2": {
+    "x1": 20,
+    "y1": 380,
+    "x2": 690,
+    "y2": 976
+   },
+   "seconds": 6.316
+  },
+  {
+   "panel": "p019_k0",
+   "chapter": "43",
+   "motion": "zoom_in",
+   "strength": 0.15,
+   "transition": "dip_white",
+   "transition_seconds": 0.5,
+   "fit": "cover",
+   "effects": [
+    "glow"
+   ],
+   "crop": {
+    "x1": 0,
+    "y1": 120,
+    "x2": 700,
+    "y2": 742
+   },
+   "text": {
+    "text": "“Anh định dứt với em à?” — “Anh muốn xin lỗi em cho đàng hoàng, rồi mới nói cho em biết lòng anh…”",
+    "role": "note",
+    "position": "center",
+    "anim": "fade",
+    "start": 0.3
+   },
+   "panel2": "p026_k0",
+   "chapter2": "43",
+   "motion2": "zoom_in",
+   "crop2": {
+    "x1": 60,
+    "y1": 180,
+    "x2": 680,
+    "y2": 731
+   },
+   "seconds": 6.711
+  },
+  {
+   "panel": "p008_k0",
+   "chapter": "48",
+   "motion": "zoom_in",
+   "strength": 0.15,
+   "transition": "dip_white",
+   "transition_seconds": 0.5,
+   "fit": "cover",
+   "effects": [
+    "glow"
+   ],
+   "crop": {
+    "x1": 0,
+    "y1": 500,
+    "x2": 700,
+    "y2": 1122
+   },
+   "text": {
+    "text": "Cách xin lỗi của Haeyong: nguyên lẵng hoa “I LOVE YOU” giữa phố.",
+    "role": "note",
+    "position": "center",
+    "anim": "fade",
+    "start": 0.3
+   },
+   "panel2": "p019_k0",
+   "chapter2": "48",
+   "motion2": "zoom_in",
+   "crop2": {
+    "x1": 0,
+    "y1": 130,
+    "x2": 700,
+    "y2": 752
+   },
+   "seconds": 6.711
+  }
+ ]
+}

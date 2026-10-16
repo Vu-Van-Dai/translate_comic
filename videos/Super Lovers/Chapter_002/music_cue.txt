@@ -1,0 +1,4 @@
+Length: 29.91s
+Cuts at (s): 2.6, 4.97, 7.36, 9.73, 12.1, 14.47, 16.86, 19.23, 21.62, 23.99, 26.35
+Music in video.mp4: Who Says -- Selena Gomez & The Scene, from 0.0s (99.4 BPM)
+For video_silent.mp4: add a TikTok sound in the app; the cuts above follow the beat of the track above.

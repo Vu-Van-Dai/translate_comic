@@ -1,0 +1,252 @@
+{
+  "Kaidou Haru": {
+    "name": "Kaidou Haru",
+    "aliases": [],
+    "role": null,
+    "personality": "Hiện tại 22 tuổi, làm host tên \"Natsu\" ở quán Blue Rose để lo học phí cho cặp sinh đôi; mất trí nhớ mùa hè năm 17 tuổi sau tai nạn xe khiến bố mẹ mất; từng ở cơ sở bảo trợ 3 tháng, bị đuổi vì ngủ với nhân viên.",
+    "speech_style": "Với khách: anh/em ngọt ngào; với Ren: anh/em, hay cáu.",
+    "addresses": {
+      "Kaidou Ren": {
+        "self_term": "anh",
+        "other_term": "em",
+        "formality": "neutral",
+        "note": null
+      },
+      "Kaidou Aki": {
+        "self_term": "anh",
+        "other_term": "em",
+        "formality": "neutral",
+        "note": null
+      },
+      "Haruko": {
+        "self_term": "con",
+        "other_term": "mẹ",
+        "formality": "polite",
+        "note": null
+      },
+      "Kaidou Shima": {
+        "self_term": "anh",
+        "other_term": "em",
+        "formality": "neutral",
+        "note": null
+      },
+      "Rob": {
+        "self_term": "cháu",
+        "other_term": "ông",
+        "formality": "polite",
+        "note": null
+      },
+      "Fumie": {
+        "self_term": "cháu",
+        "other_term": "bà",
+        "formality": "polite",
+        "note": null
+      },
+      "Ikuyoshi": {
+        "self_term": "anh",
+        "other_term": "em",
+        "formality": "casual",
+        "note": "Haru là đàn anh ở quán host"
+      },
+      "Kashiwagi Mikiko": {
+        "self_term": "cháu",
+        "other_term": "cô",
+        "formality": "polite",
+        "note": "luật sư, bạn của Haruko"
+      },
+      "Asakura": {
+        "self_term": "anh",
+        "other_term": "em",
+        "formality": "polite",
+        "note": "khách quen ở quán host"
+      }
+    },
+    "notes": []
+  },
+  "Kaidou Ren": {
+    "name": "Kaidou Ren",
+    "aliases": [],
+    "role": null,
+    "personality": "Giờ là học sinh năm hai cấp hai, được nhà Kaidou chính thức nhận nuôi ba tháng trước khi bố mẹ Haru mất; sang Nhật để giữ lời hứa với Haru. Sợ phòng tắm chật tối, chưa từng đọc truyện tranh; Quark và Lepton đã chết.",
+    "speech_style": "Với Haru: tôi/anh; với Aki: tôi/anh, thản nhiên.",
+    "addresses": {
+      "Kaidou Haru": {
+        "self_term": "tôi",
+        "other_term": "anh",
+        "formality": "neutral",
+        "note": null
+      },
+      "Kaidou Aki": {
+        "self_term": "tôi",
+        "other_term": "anh",
+        "formality": "neutral",
+        "note": null
+      },
+      "Ikuyoshi": {
+        "self_term": "tôi",
+        "other_term": "anh",
+        "formality": "neutral",
+        "note": null
+      }
+    },
+    "notes": [
+      "Ch.1 kết bằng hồi ức tai nạn: bố mẹ Ren chảy máu, Ren không mở được mắt."
+    ]
+  },
+  "Haruko": {
+    "name": "Haruko",
+    "aliases": [],
+    "role": null,
+    "personality": "Mẹ ruột của Haru, nhà văn bán chạy sống ở Alberta, Canada; bắt Haru gọi là \"Haruko-san\"; nhận nuôi Ren.",
+    "speech_style": "Với Haru 'mẹ/con'.",
+    "addresses": {
+      "Kaidou Haru": {
+        "self_term": "mẹ",
+        "other_term": "con",
+        "formality": "neutral",
+        "note": null
+      }
+    },
+    "notes": []
+  },
+  "Kaidou Aki": {
+    "name": "Kaidou Aki",
+    "aliases": [],
+    "role": null,
+    "personality": "Học sinh cuối cấp ba sắp thi đại học; từng trách Haru về tai nạn; ghen với Ren, tuyên bố không chấp nhận Ren.",
+    "speech_style": "Với Ren: tao/mày khi nổi nóng; gọi Haru \"anh cả\".",
+    "addresses": {
+      "Kaidou Haru": {
+        "self_term": "em",
+        "other_term": "anh",
+        "formality": "neutral",
+        "note": null
+      },
+      "Kaidou Ren": {
+        "self_term": "tao",
+        "other_term": "mày",
+        "formality": "rude",
+        "note": "Aki chưa chấp nhận Ren"
+      }
+    },
+    "notes": []
+  },
+  "Kaidou Shima": {
+    "name": "Kaidou Shima",
+    "aliases": [],
+    "role": null,
+    "personality": "Đeo kính, điềm tĩnh, nắm tin tức (biết Haruko đi Thụy Sĩ, có bản sao sổ hộ tịch).",
+    "speech_style": "Gọi Haru \"anh cả\"; thường dẫn truyện.",
+    "addresses": {
+      "Kaidou Haru": {
+        "self_term": "em",
+        "other_term": "anh",
+        "formality": "neutral",
+        "note": null
+      }
+    },
+    "notes": []
+  },
+  "Ikuyoshi": {
+    "name": "Ikuyoshi",
+    "aliases": [],
+    "role": null,
+    "personality": "Đàn em của Haru ở quán host (Iku/Iku-chan), bỏ học cấp ba, ghét bị gọi tên thật.",
+    "speech_style": "Với Haru: em/anh, gọi \"Natsu-san\".",
+    "addresses": {
+      "Kaidou Ren": {
+        "self_term": "tôi",
+        "other_term": "Renren",
+        "formality": "neutral",
+        "note": null
+      },
+      "Kaidou Haru": {
+        "self_term": "em",
+        "other_term": "anh",
+        "formality": "casual",
+        "note": "gọi Haru là \"Natsu-san\""
+      }
+    },
+    "notes": []
+  },
+  "Kaidou Takashi": {
+    "name": "Kaidou Takashi",
+    "aliases": [],
+    "role": null,
+    "personality": "Bố của Haru, đã tái hôn; cùng vợ ra sân bay đón Haru.",
+    "speech_style": null,
+    "addresses": {
+      "Kaidou Haru": {
+        "self_term": "bố",
+        "other_term": "con",
+        "formality": "neutral",
+        "note": null
+      }
+    },
+    "notes": []
+  },
+  "Rob": {
+    "name": "Rob",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Kaidou Haru": {
+        "self_term": "ông",
+        "other_term": "cháu",
+        "formality": "neutral",
+        "note": null
+      }
+    },
+    "notes": []
+  },
+  "Fumie": {
+    "name": "Fumie",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Kaidou Haru": {
+        "self_term": "bà",
+        "other_term": "cháu",
+        "formality": "neutral",
+        "note": null
+      }
+    },
+    "notes": []
+  },
+  "Kashiwagi Mikiko": {
+    "name": "Kashiwagi Mikiko",
+    "aliases": [],
+    "role": null,
+    "personality": "Luật sư dữ dằn, bạn của Haruko; giao Ren cho Haru.",
+    "speech_style": "Gọi Haru \"cậu\", xưng \"tôi\".",
+    "addresses": {
+      "Kaidou Haru": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "neutral",
+        "note": null
+      }
+    },
+    "notes": []
+  },
+  "Asakura": {
+    "name": "Asakura",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Kaidou Haru": {
+        "self_term": "em",
+        "other_term": "anh",
+        "formality": "polite",
+        "note": "gọi Haru là \"Natsu\""
+      }
+    },
+    "notes": []
+  }
+}

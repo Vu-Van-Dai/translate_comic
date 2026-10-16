@@ -1,0 +1,1946 @@
+# Music for `comic video`. Every track here must be licensed for use in
+# social videos; `credit` (when set) must go into the post caption, and
+# `comic video render` writes it into caption.txt.
+#
+# Kevin MacLeod (incompetech.com), downloaded 2026-10-14, Creative Commons
+# Attribution 4.0 -- free to use in videos, credit required.
+#
+# tt_* tracks are TikTok sounds (scripts/ref_fetch.py, scripts/sound_fetch.py).
+# The operator's call (2026-10-14): the videos are not monetized, songs may be
+# used, and they should vary widely (Taylor Swift, V-pop, K-pop, J-pop, ...).
+tracks:
+  - id: gymnopedie_no_1
+    file: gymnopedie_no_1.mp3
+    title: Gymnopedie No 1
+    artist: Kevin MacLeod
+    source: https://incompetech.com/music/royalty-free/mp3-royaltyfree/Gymnopedie%20No%201.mp3
+    license: CC BY 4.0
+    credit: '"Gymnopedie No 1" Kevin MacLeod (incompetech.com), CC BY 4.0, creativecommons.org/licenses/by/4.0/'
+    moods:
+    - melancholic
+    - emotional
+  - id: sad_trio
+    file: sad_trio.mp3
+    title: Sad Trio
+    artist: Kevin MacLeod
+    source: https://incompetech.com/music/royalty-free/mp3-royaltyfree/Sad%20Trio.mp3
+    license: CC BY 4.0
+    credit: '"Sad Trio" Kevin MacLeod (incompetech.com), CC BY 4.0, creativecommons.org/licenses/by/4.0/'
+    moods:
+    - melancholic
+  - id: at_rest
+    file: at_rest.mp3
+    title: At Rest
+    artist: Kevin MacLeod
+    source: https://incompetech.com/music/royalty-free/mp3-royaltyfree/At%20Rest.mp3
+    license: CC BY 4.0
+    credit: '"At Rest" Kevin MacLeod (incompetech.com), CC BY 4.0, creativecommons.org/licenses/by/4.0/'
+    moods:
+    - melancholic
+    - emotional
+  - id: bittersweet
+    file: bittersweet.mp3
+    title: Bittersweet
+    artist: Kevin MacLeod
+    source: https://incompetech.com/music/royalty-free/mp3-royaltyfree/Bittersweet.mp3
+    license: CC BY 4.0
+    credit: '"Bittersweet" Kevin MacLeod (incompetech.com), CC BY 4.0, creativecommons.org/licenses/by/4.0/'
+    moods:
+    - melancholic
+    - emotional
+  - id: long_note_four
+    file: long_note_four.mp3
+    title: Long Note Four
+    artist: Kevin MacLeod
+    source: https://incompetech.com/music/royalty-free/mp3-royaltyfree/Long%20Note%20Four.mp3
+    license: CC BY 4.0
+    credit: '"Long Note Four" Kevin MacLeod (incompetech.com), CC BY 4.0, creativecommons.org/licenses/by/4.0/'
+    moods:
+    - melancholic
+    - tense
+  - id: heartwarming
+    file: heartwarming.mp3
+    title: Heartwarming
+    artist: Kevin MacLeod
+    source: https://incompetech.com/music/royalty-free/mp3-royaltyfree/Heartwarming.mp3
+    license: CC BY 4.0
+    credit: '"Heartwarming" Kevin MacLeod (incompetech.com), CC BY 4.0, creativecommons.org/licenses/by/4.0/'
+    moods:
+    - emotional
+    - romantic
+  - id: dreamer
+    file: dreamer.mp3
+    title: Dreamer
+    artist: Kevin MacLeod
+    source: https://incompetech.com/music/royalty-free/mp3-royaltyfree/Dreamer.mp3
+    license: CC BY 4.0
+    credit: '"Dreamer" Kevin MacLeod (incompetech.com), CC BY 4.0, creativecommons.org/licenses/by/4.0/'
+    moods:
+    - emotional
+    - romantic
+  - id: clean_soul
+    file: clean_soul.mp3
+    title: Clean Soul
+    artist: Kevin MacLeod
+    source: https://incompetech.com/music/royalty-free/mp3-royaltyfree/Clean%20Soul.mp3
+    license: CC BY 4.0
+    credit: '"Clean Soul" Kevin MacLeod (incompetech.com), CC BY 4.0, creativecommons.org/licenses/by/4.0/'
+    moods:
+    - emotional
+    - melancholic
+  - id: lasting_hope
+    file: lasting_hope.mp3
+    title: Lasting Hope
+    artist: Kevin MacLeod
+    source: https://incompetech.com/music/royalty-free/mp3-royaltyfree/Lasting%20Hope.mp3
+    license: CC BY 4.0
+    credit: '"Lasting Hope" Kevin MacLeod (incompetech.com), CC BY 4.0, creativecommons.org/licenses/by/4.0/'
+    moods:
+    - emotional
+  - id: touching_moments_two_-_higher
+    file: touching_moments_two_-_higher.mp3
+    title: Touching Moments Two - Higher
+    artist: Kevin MacLeod
+    source: https://incompetech.com/music/royalty-free/mp3-royaltyfree/Touching%20Moments%20Two%20-%20Higher.mp3
+    license: CC BY 4.0
+    credit: '"Touching Moments Two - Higher" Kevin MacLeod (incompetech.com), CC BY 4.0, creativecommons.org/licenses/by/4.0/'
+    moods:
+    - emotional
+    - romantic
+  - id: inspired
+    file: inspired.mp3
+    title: Inspired
+    artist: Kevin MacLeod
+    source: https://incompetech.com/music/royalty-free/mp3-royaltyfree/Inspired.mp3
+    license: CC BY 4.0
+    credit: '"Inspired" Kevin MacLeod (incompetech.com), CC BY 4.0, creativecommons.org/licenses/by/4.0/'
+    moods:
+    - emotional
+    - upbeat
+  - id: monkeys_spinning_monkeys
+    file: monkeys_spinning_monkeys.mp3
+    title: Monkeys Spinning Monkeys
+    artist: Kevin MacLeod
+    source: https://incompetech.com/music/royalty-free/mp3-royaltyfree/Monkeys%20Spinning%20Monkeys.mp3
+    license: CC BY 4.0
+    credit: '"Monkeys Spinning Monkeys" Kevin MacLeod (incompetech.com), CC BY 4.0, creativecommons.org/licenses/by/4.0/'
+    moods:
+    - comedy
+  - id: sneaky_snitch
+    file: sneaky_snitch.mp3
+    title: Sneaky Snitch
+    artist: Kevin MacLeod
+    source: https://incompetech.com/music/royalty-free/mp3-royaltyfree/Sneaky%20Snitch.mp3
+    license: CC BY 4.0
+    credit: '"Sneaky Snitch" Kevin MacLeod (incompetech.com), CC BY 4.0, creativecommons.org/licenses/by/4.0/'
+    moods:
+    - comedy
+  - id: fluffing_a_duck
+    file: fluffing_a_duck.mp3
+    title: Fluffing a Duck
+    artist: Kevin MacLeod
+    source: https://incompetech.com/music/royalty-free/mp3-royaltyfree/Fluffing%20a%20Duck.mp3
+    license: CC BY 4.0
+    credit: '"Fluffing a Duck" Kevin MacLeod (incompetech.com), CC BY 4.0, creativecommons.org/licenses/by/4.0/'
+    moods:
+    - comedy
+  - id: pixel_peeker_polka_-_faster
+    file: pixel_peeker_polka_-_faster.mp3
+    title: Pixel Peeker Polka - faster
+    artist: Kevin MacLeod
+    source: https://incompetech.com/music/royalty-free/mp3-royaltyfree/Pixel%20Peeker%20Polka%20-%20faster.mp3
+    license: CC BY 4.0
+    credit: '"Pixel Peeker Polka - faster" Kevin MacLeod (incompetech.com), CC BY 4.0, creativecommons.org/licenses/by/4.0/'
+    moods:
+    - comedy
+    - upbeat
+  - id: local_forecast_-_elevator
+    file: local_forecast_-_elevator.mp3
+    title: Local Forecast - Elevator
+    artist: Kevin MacLeod
+    source: https://incompetech.com/music/royalty-free/mp3-royaltyfree/Local%20Forecast%20-%20Elevator.mp3
+    license: CC BY 4.0
+    credit: '"Local Forecast - Elevator" Kevin MacLeod (incompetech.com), CC BY 4.0, creativecommons.org/licenses/by/4.0/'
+    moods:
+    - comedy
+    - upbeat
+  - id: carefree
+    file: carefree.mp3
+    title: Carefree
+    artist: Kevin MacLeod
+    source: https://incompetech.com/music/royalty-free/mp3-royaltyfree/Carefree.mp3
+    license: CC BY 4.0
+    credit: '"Carefree" Kevin MacLeod (incompetech.com), CC BY 4.0, creativecommons.org/licenses/by/4.0/'
+    moods:
+    - upbeat
+    - comedy
+  - id: wallpaper
+    file: wallpaper.mp3
+    title: Wallpaper
+    artist: Kevin MacLeod
+    source: https://incompetech.com/music/royalty-free/mp3-royaltyfree/Wallpaper.mp3
+    license: CC BY 4.0
+    credit: '"Wallpaper" Kevin MacLeod (incompetech.com), CC BY 4.0, creativecommons.org/licenses/by/4.0/'
+    moods:
+    - upbeat
+  - id: hidden_agenda
+    file: hidden_agenda.mp3
+    title: Hidden Agenda
+    artist: Kevin MacLeod
+    source: https://incompetech.com/music/royalty-free/mp3-royaltyfree/Hidden%20Agenda.mp3
+    license: CC BY 4.0
+    credit: '"Hidden Agenda" Kevin MacLeod (incompetech.com), CC BY 4.0, creativecommons.org/licenses/by/4.0/'
+    moods:
+    - tense
+  - id: darkest_child
+    file: darkest_child.mp3
+    title: Darkest Child
+    artist: Kevin MacLeod
+    source: https://incompetech.com/music/royalty-free/mp3-royaltyfree/Darkest%20Child.mp3
+    license: CC BY 4.0
+    credit: '"Darkest Child" Kevin MacLeod (incompetech.com), CC BY 4.0, creativecommons.org/licenses/by/4.0/'
+    moods:
+    - tense
+    - melancholic
+  - id: hitman
+    file: hitman.mp3
+    title: Hitman
+    artist: Kevin MacLeod
+    source: https://incompetech.com/music/royalty-free/mp3-royaltyfree/Hitman.mp3
+    license: CC BY 4.0
+    credit: '"Hitman" Kevin MacLeod (incompetech.com), CC BY 4.0, creativecommons.org/licenses/by/4.0/'
+    moods:
+    - tense
+    - energetic
+  - id: sovereign_quarter
+    file: sovereign_quarter.mp3
+    title: Sovereign Quarter
+    artist: Kevin MacLeod
+    source: https://incompetech.com/music/royalty-free/mp3-royaltyfree/Sovereign%20Quarter.mp3
+    license: CC BY 4.0
+    credit: '"Sovereign Quarter" Kevin MacLeod (incompetech.com), CC BY 4.0, creativecommons.org/licenses/by/4.0/'
+    moods:
+    - tense
+    - energetic
+  - id: blip_stream
+    file: blip_stream.mp3
+    title: Blip Stream
+    artist: Kevin MacLeod
+    source: https://incompetech.com/music/royalty-free/mp3-royaltyfree/Blip%20Stream.mp3
+    license: CC BY 4.0
+    credit: '"Blip Stream" Kevin MacLeod (incompetech.com), CC BY 4.0, creativecommons.org/licenses/by/4.0/'
+    moods:
+    - energetic
+    - upbeat
+  - id: aitech
+    file: aitech.mp3
+    title: Aitech
+    artist: Kevin MacLeod
+    source: https://incompetech.com/music/royalty-free/mp3-royaltyfree/Aitech.mp3
+    license: CC BY 4.0
+    credit: '"Aitech" Kevin MacLeod (incompetech.com), CC BY 4.0, creativecommons.org/licenses/by/4.0/'
+    moods:
+    - energetic
+    - tense
+  - id: tt_who_says_2080
+    file: trending/tt_who_says_2080.mp3
+    title: Who Says
+    artist: Selena Gomez & The Scene
+    source: https://www.tiktok.com/music/x-248798136817582080
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - upbeat
+    - emotional
+    - comedy
+  - id: tt_one_kiss_9436
+    file: trending/tt_one_kiss_9436.mp3
+    title: One Kiss
+    artist: Calvin Harris & Dua Lipa
+    source: https://www.tiktok.com/music/x-5000000001364709436
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - romantic
+    - upbeat
+  - id: tt_try_7553
+    file: trending/tt_try_7553.mp3
+    title: Try
+    artist: P!NK
+    source: https://www.tiktok.com/music/x-6705880302830487553
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - emotional
+    - drama
+  - id: tt_moments_like_this_1281
+    file: trending/tt_moments_like_this_1281.mp3
+    title: Moments Like This
+    artist: The Afters
+    source: https://www.tiktok.com/music/x-6706220370317281281
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - emotional
+    - romantic
+  - id: tt_burn_3730
+    file: trending/tt_burn_3730.mp3
+    title: Burn
+    artist: Ellie Goulding
+    source: https://www.tiktok.com/music/x-6917273811083593730
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - energetic
+    - emotional
+  - id: tt_summertime_sadness_9714
+    file: trending/tt_summertime_sadness_9714.mp3
+    title: Summertime Sadness
+    artist: Lana Del Rey
+    source: https://www.tiktok.com/music/x-6930696979206899714
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - melancholic
+    - emotional
+  - id: tt_original_sound_8286
+    file: trending/tt_original_sound_8286.mp3
+    title: original sound
+    artist: spedsuho
+    source: https://www.tiktok.com/music/x-7129258720701418286
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - trending
+  - id: tt_jaded_2353
+    file: trending/tt_jaded_2353.mp3
+    title: Jaded
+    artist: Miley Cyrus
+    source: https://www.tiktok.com/music/x-7208731094290532353
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - drama
+    - melancholic
+  - id: tt_how_you_get_the_girl_taylor_s_version_1874
+    file: trending/tt_how_you_get_the_girl_taylor_s_version_1874.mp3
+    title: How You Get The Girl (Taylor's Version)
+    artist: Taylor Swift
+    source: https://www.tiktok.com/music/x-7294449191711311874
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - upbeat
+    - romantic
+    - comedy
+  - id: tt_be_my_baby_by_ariana_grande_8094
+    file: trending/tt_be_my_baby_by_ariana_grande_8094.mp3
+    title: Be my baby by ariana grande
+    artist: Onika
+    source: https://www.tiktok.com/music/x-7300424642152418094
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - trending
+  - id: tt_son_original_2406
+    file: trending/tt_son_original_2406.mp3
+    title: son original
+    artist: ४ jade.todd ४
+    source: https://www.tiktok.com/music/x-7556206161083632406
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - trending
+  - id: tt_sonido_original_6424
+    file: trending/tt_sonido_original_6424.mp3
+    title: sonido original
+    artist: Carlos Bonillo
+    source: https://www.tiktok.com/music/x-7556841948360346424
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - trending
+  - id: tt_nhac_nen_linh_7159
+    file: trending/tt_nhac_nen_linh_7159.mp3
+    title: nhạc nền - linh
+    artist: linh
+    source: https://www.tiktok.com/music/x-7601517519576337159
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - trending
+    - vietnamese
+  - id: tt_original_sound_6959
+    file: trending/tt_original_sound_6959.mp3
+    title: original sound
+    artist: hnmmusic015
+    source: https://www.tiktok.com/music/x-7639183825787996959
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - trending
+  - id: tt_am_thanh_goc_kho_kh_ai_0818
+    file: trending/tt_am_thanh_goc_kho_kh_ai_0818.mp3
+    title: âm thanh gốc - Khổ kh ai =
+    artist: 𝓜𝔂 𝓛𝓲𝓷𝓱*ੈ𑁍༘⋆
+    source: https://www.tiktok.com/music/x-7643482882937260818
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - trending
+    - vietnamese
+  - id: tt_am_thanh_goc_quien_6725
+    file: trending/tt_am_thanh_goc_quien_6725.mp3
+    title: âm thanh gốc - Quien ★♪〆
+    artist: Quien ★♪〆
+    source: https://www.tiktok.com/music/x-7682788374006696725
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - trending
+    - vietnamese
+  - id: tt_am_thanh_goc_basic_shop_thu_uc_0086
+    file: trending/tt_am_thanh_goc_basic_shop_thu_uc_0086.mp3
+    title: âm thanh gốc - Basic Shop Thủ Đức
+    artist: Basic Shop Thủ Đức
+    source: https://www.tiktok.com/music/x-7692818553115790086
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - trending
+    - vietnamese
+  - id: tt_babylon_8902
+    file: trending/tt_babylon_8902.mp3
+    title: Babylon
+    artist: Taylor Swift
+    source: https://www.tiktok.com/music/x-7689287423901648902
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - pop
+    - us
+    - romantic
+  - id: tt_good_morning_sun_instrumental_2705
+    file: trending/tt_good_morning_sun_instrumental_2705.mp3
+    title: Good morning, Sun (Instrumental)
+    artist: Michi & Cheeky Band
+    source: https://www.tiktok.com/music/x-7624142210133362705
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - pop
+    - us
+    - romantic
+  - id: tt_pink_clouding_6358
+    file: trending/tt_pink_clouding_6358.mp3
+    title: Pink Clouding
+    artist: Taylor Swift
+    source: https://www.tiktok.com/music/x-7689287423901796358
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - pop
+    - us
+    - romantic
+  - id: tt_it_s_me_4960
+    file: trending/tt_it_s_me_4960.mp3
+    title: It's Me
+    artist: ILLIT
+    source: https://www.tiktok.com/music/x-7631487835288274960
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - kpop
+    - upbeat
+  - id: tt_moon_4401
+    file: trending/tt_moon_4401.mp3
+    title: MOON
+    artist: BABYMONSTER
+    source: https://www.tiktok.com/music/x-7633323546432784401
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - kpop
+    - upbeat
+  - id: tt_sawadika_7105
+    file: trending/tt_sawadika_7105.mp3
+    title: SaWaDiKa
+    artist: LISA
+    source: https://www.tiktok.com/music/x-7681077868771887105
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - kpop
+    - upbeat
+  - id: tt_made_my_night_feat_ejae_0289
+    file: trending/tt_made_my_night_feat_ejae_0289.mp3
+    title: Made My Night (feat. EJAE)
+    artist: LE SSERAFIM & EJAE
+    source: https://www.tiktok.com/music/x-7683122439941900289
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - kpop
+    - upbeat
+  - id: tt_sun_kiss_5568
+    file: trending/tt_sun_kiss_5568.mp3
+    title: SUN KISS
+    artist: TUIDE
+    source: https://www.tiktok.com/music/x-7675392265087895568
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - kpop
+    - upbeat
+  - id: tt_raya_slowed_0512
+    file: trending/tt_raya_slowed_0512.mp3
+    title: Raya (Slowed)
+    artist: Zericxxn
+    source: https://www.tiktok.com/music/x-7668177737044330512
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - kpop
+    - upbeat
+  - id: tt_track_9153
+    file: trending/tt_track_9153.mp3
+    title: 夜に駆ける
+    artist: YOASOBI
+    source: https://www.tiktok.com/music/x-6769758497987889153
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - jpop
+    - anime
+  - id: tt_track_8913
+    file: trending/tt_track_8913.mp3
+    title: 分かっちゃいないね -
+    artist: monet & 花隈千冬
+    source: https://www.tiktok.com/music/x-7504224652828198913
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - jpop
+    - anime
+  - id: tt_animal_animal_ver_1505
+    file: trending/tt_animal_animal_ver_1505.mp3
+    title: ANIMAL - ANIMAL ver
+    artist: JO1
+    source: https://www.tiktok.com/music/x-7691278291914901505
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - jpop
+    - anime
+  - id: tt_track_3009
+    file: trending/tt_track_3009.mp3
+    title: 東京フラッシュ
+    artist: Vaundy
+    source: https://www.tiktok.com/music/x-6831032583019563009
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - jpop
+    - anime
+  - id: tt_kho_ve_nu_cuoi_9586
+    file: trending/tt_kho_ve_nu_cuoi_9586.mp3
+    title: "Khó Vẽ Nụ Cười\t"
+    artist: "Đạt G, Du Uyên\t"
+    source: https://www.tiktok.com/music/x-6737514594249539586
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - vpop
+    - vietnamese
+  - id: tt_ep_nhat_la_em_between_us_5858
+    file: trending/tt_ep_nhat_la_em_between_us_5858.mp3
+    title: Đẹp Nhất Là Em(Between us)
+    artist: 지연 & Soobin Hoang Son
+    source: https://www.tiktok.com/music/x-6859707908314105858
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - vpop
+    - vietnamese
+  - id: tt_moianh_2070
+    file: trending/tt_moianh_2070.mp3
+    title: moianh
+    artist: IZARA
+    source: https://www.tiktok.com/music/x-7690831341520472070
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - vpop
+    - vietnamese
+  - id: tt_em_2305
+    file: trending/tt_em_2305.mp3
+    title: Đếm
+    artist: Vũ Thanh Vân
+    source: https://www.tiktok.com/music/x-7289768695764322305
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - vpop
+    - vietnamese
+  - id: tt_patient_zero_8054
+    file: trending/tt_patient_zero_8054.mp3
+    title: Patient Zero
+    artist: Taylor Swift
+    source: https://www.tiktok.com/music/x-7689287423901698054
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - pop
+    - us
+  - id: tt_safe_sound_taylor_s_version_2769
+    file: trending/tt_safe_sound_taylor_s_version_2769.mp3
+    title: Safe & Sound (Taylor's Version)
+    artist: Taylor Swift & Joy Williams & John Paul White
+    source: https://www.tiktok.com/music/x-7211368401736992769
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - pop
+    - us
+  - id: tt_van_vuong_chu_sau_e_em_qua_cau_remix_1300
+    file: trending/tt_van_vuong_chu_sau_e_em_qua_cau_remix_1300.mp3
+    title: Vấn Vương Chữ Sầu Để Em Qua Cầu (Remix)
+    artist: Khả Hiệp & Beta Remix
+    source: https://www.tiktok.com/music/x-7690864193219381300
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - vpop
+    - vietnamese
+    - emotional
+  - id: tt_i_want_you_back_radio_edit_2128
+    file: trending/tt_i_want_you_back_radio_edit_2128.mp3
+    title: I Want You Back (Radio Edit)
+    artist: '*NSYNC'
+    source: https://www.tiktok.com/music/x-222448125385392128
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - kpop
+    - upbeat
+  - id: tt_cats_sped_up_3169
+    file: trending/tt_cats_sped_up_3169.mp3
+    title: Cats - Sped Up
+    artist: The Living Tombstone
+    source: https://www.tiktok.com/music/x-7192131474156423169
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - kpop
+    - upbeat
+  - id: tt_ramalama_bang_bang_5489
+    file: trending/tt_ramalama_bang_bang_5489.mp3
+    title: Ramalama (Bang Bang)
+    artist: Róisín Murphy
+    source: https://www.tiktok.com/music/x-6919100601457215489
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - kpop
+    - upbeat
+  - id: tt_swim_9425
+    file: trending/tt_swim_9425.mp3
+    title: SWIM
+    artist: BTS
+    source: https://www.tiktok.com/music/x-7618900230566119425
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - kpop
+    - upbeat
+  - id: tt_porchlight_after_rain_8512
+    file: trending/tt_porchlight_after_rain_8512.mp3
+    title: Porchlight After Rain
+    artist: Nora Vail
+    source: https://www.tiktok.com/music/x-7685295407706048512
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - kpop
+    - energetic
+  - id: tt_come_back_home_1393
+    file: trending/tt_come_back_home_1393.mp3
+    title: Come Back Home
+    artist: Bella-Ra
+    source: https://www.tiktok.com/music/x-7653533130812901393
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - kpop
+    - energetic
+  - id: tt_how_you_like_that_3154
+    file: trending/tt_how_you_like_that_3154.mp3
+    title: How You Like That
+    artist: BLACKPINK
+    source: https://www.tiktok.com/music/x-6842582526297393154
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - kpop
+    - energetic
+  - id: tt_into_the_weeds_7792
+    file: trending/tt_into_the_weeds_7792.mp3
+    title: into the weeds
+    artist: Annika Wells
+    source: https://www.tiktok.com/music/x-7685888712123467792
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - kpop
+    - energetic
+  - id: tt_hay_ngu_cung_cun_instrumental_7585
+    file: trending/tt_hay_ngu_cung_cun_instrumental_7585.mp3
+    title: Hãy Ngủ Cùng Cún (Instrumental)
+    artist: MCV Music
+    source: https://www.tiktok.com/music/x-7506505914016237585
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - kpop
+    - energetic
+  - id: tt_cheri_cheri_lady_special_dance_version_5825
+    file: trending/tt_cheri_cheri_lady_special_dance_version_5825.mp3
+    title: Cheri, Cheri Lady (Special Dance Version)
+    artist: Modern Talking
+    source: https://www.tiktok.com/music/x-6715513233291085825
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - kpop
+    - cute
+  - id: tt_inside_me_9156
+    file: trending/tt_inside_me_9156.mp3
+    title: INSIDE ME
+    artist: BellyJay & KPHK
+    source: https://www.tiktok.com/music/x-7691302834135599156
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - kpop
+    - cute
+  - id: tt_pretty_girl_0625
+    file: trending/tt_pretty_girl_0625.mp3
+    title: Pretty Girl
+    artist: RESCENE
+    source: https://www.tiktok.com/music/x-7657561456494020625
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - kpop
+    - energetic
+  - id: tt_dracula_with_jennie_5169
+    file: trending/tt_dracula_with_jennie_5169.mp3
+    title: Dracula (with JENNIE)
+    artist: Tame Impala
+    source: https://www.tiktok.com/music/x-7603221525400455169
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - kpop
+    - energetic
+  - id: tt_run_it_8577
+    file: trending/tt_run_it_8577.mp3
+    title: RUN IT
+    artist: Stray Kids
+    source: https://www.tiktok.com/music/x-7646727296749848577
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - kpop
+    - energetic
+  - id: tt_montagem_dauntless_slowed_8129
+    file: trending/tt_montagem_dauntless_slowed_8129.mp3
+    title: MONTAGEM DAUNTLESS (Slowed)
+    artist: MarJan & Mxnvra
+    source: https://www.tiktok.com/music/x-7637140256254298129
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - kpop
+    - energetic
+  - id: tt_back_in_my_mode_9387
+    file: trending/tt_back_in_my_mode_9387.mp3
+    title: Back In My Mode
+    artist: Mildred Hoke
+    source: https://www.tiktok.com/music/x-7669009516633999387
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - kpop
+    - energetic
+  - id: tt_montagem_alquimia_slowed_5329
+    file: trending/tt_montagem_alquimia_slowed_5329.mp3
+    title: MONTAGEM ALQUIMIA - SLOWED
+    artist: h6itam & n7san7os & Mc Menor Do Alvorada
+    source: https://www.tiktok.com/music/x-7594563541740685329
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - jpop
+    - anime
+    - energetic
+  - id: tt_sign_6433
+    file: trending/tt_sign_6433.mp3
+    title: Sign
+    artist: DEAMN
+    source: https://www.tiktok.com/music/x-6781063611373586433
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - jpop
+    - anime
+    - energetic
+  - id: tt_montagem_gosta_slowed_3665
+    file: trending/tt_montagem_gosta_slowed_3665.mp3
+    title: MONTAGEM GOSTA - Slowed
+    artist: qaraqshy & prodbydxm
+    source: https://www.tiktok.com/music/x-7680145996542363665
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - jpop
+    - anime
+    - energetic
+  - id: tt_fever_dream_6513
+    file: trending/tt_fever_dream_6513.mp3
+    title: FEVER DREAM
+    artist: MXCCREE & glichery & DJ GL3CHEKY
+    source: https://www.tiktok.com/music/x-7683536130546026513
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - jpop
+    - anime
+    - energetic
+  - id: tt_i_don_t_play_bout_you_jerseyclub_slowed_9665
+    file: trending/tt_i_don_t_play_bout_you_jerseyclub_slowed_9665.mp3
+    title: 'I don''t play ''bout you #JerseyClub (Slowed)'
+    artist: whyslow
+    source: https://www.tiktok.com/music/x-7659841697767409665
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - jpop
+    - anime
+    - energetic
+  - id: tt_feat_5136
+    file: trending/tt_feat_5136.mp3
+    title: 幽霊みたい (feat. 歌愛ユキ)
+    artist: 佐藤乃子
+    source: https://www.tiktok.com/music/x-7485291851026565136
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - jpop
+    - anime
+  - id: tt_track_2705
+    file: trending/tt_track_2705.mp3
+    title: 最近彼氏がさ最近彼女がさ
+    artist: ゆなんなん
+    source: https://www.tiktok.com/music/x-7647115553211762705
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - jpop
+    - anime
+  - id: tt_track_3969
+    file: trending/tt_track_3969.mp3
+    title: 未完成婚姻論
+    artist: Dannie May
+    source: https://www.tiktok.com/music/x-7582840196430333969
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - jpop
+    - anime
+  - id: tt_track_9434
+    file: trending/tt_track_9434.mp3
+    title: 伯虎说 (哈基米版)
+    artist: DJ阿缘缘Mobie
+    source: https://www.tiktok.com/music/x-7567200471755409434
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - cpop
+    - chinese
+  - id: tt_chill_remix_anh_7275
+    file: trending/tt_chill_remix_anh_7275.mp3
+    title: Chill Remix Anh
+    artist: Phạm Đình Thái Ngân
+    source: https://www.tiktok.com/music/x-7668485469690677275
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - cpop
+    - chinese
+  - id: tt_attention_2738
+    file: trending/tt_attention_2738.mp3
+    title: Attention
+    artist: Charlie Puth
+    source: https://www.tiktok.com/music/x-6704957757679732738
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - pop
+    - us
+  - id: tt_no_surprises_1618
+    file: trending/tt_no_surprises_1618.mp3
+    title: No Surprises
+    artist: Radiohead
+    source: https://www.tiktok.com/music/x-6751218393644271618
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - melancholic
+    - emotional
+  - id: tt_je_te_laisserai_des_mots_0514
+    file: trending/tt_je_te_laisserai_des_mots_0514.mp3
+    title: Je te laisserai des mots
+    artist: Patrick Watson
+    source: https://www.tiktok.com/music/x-6757082343317440514
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - melancholic
+    - emotional
+  - id: tt_linda_e_sensual_0689
+    file: trending/tt_linda_e_sensual_0689.mp3
+    title: Linda e Sensual
+    artist: reiian
+    source: https://www.tiktok.com/music/x-7326928858199410689
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - chill
+    - soft
+  - id: tt_great_little_things_original_khaen_versi_6113
+    file: trending/tt_great_little_things_original_khaen_versi_6113.mp3
+    title: Great Little Things - Original Khaen Version
+    artist: Hauxenz
+    source: https://www.tiktok.com/music/x-7654198046696196113
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - chill
+    - soft
+  - id: tt_suara_asli_galuh_6391
+    file: trending/tt_suara_asli_galuh_6391.mp3
+    title: suara asli - Galuh
+    artist: Galuh
+    source: https://www.tiktok.com/music/x-7441398052022766391
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - chill
+    - soft
+  - id: tt_sandwich_story_0273
+    file: trending/tt_sandwich_story_0273.mp3
+    title: Sandwich & Story
+    artist: MONO & EmceeDan
+    source: https://www.tiktok.com/music/x-7659370930669750273
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - chill
+    - soft
+  - id: tt_nguoi_co_thuong_3729
+    file: trending/tt_nguoi_co_thuong_3729.mp3
+    title: Người Có Thương?
+    artist: DatKaa
+    source: https://www.tiktok.com/music/x-7016336752042313729
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - chill
+    - soft
+  - id: tt_raya_ultra_slowed_3280
+    file: trending/tt_raya_ultra_slowed_3280.mp3
+    title: Raya (Ultra Slowed)
+    artist: Zericxxn
+    source: https://www.tiktok.com/music/x-7668177737044363280
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - energetic
+    - tense
+  - id: tt_x_x_slowed_1232
+    file: trending/tt_x_x_slowed_1232.mp3
+    title: X_X (Slowed)
+    artist: ilyhiryu
+    source: https://www.tiktok.com/music/x-7629074456170121232
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - energetic
+    - tense
+  - id: tt_noite_na_praia_2337
+    file: trending/tt_noite_na_praia_2337.mp3
+    title: NOITE NA PRAIA
+    artist: NXGHT! & SEKIMANE
+    source: https://www.tiktok.com/music/x-7530299827102222337
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - energetic
+    - tense
+  - id: tt_skorntekk_slowed_1936
+    file: trending/tt_skorntekk_slowed_1936.mp3
+    title: SKORNTEKK (Slowed)
+    artist: Vincce
+    source: https://www.tiktok.com/music/x-7670712198595921936
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - energetic
+    - tense
+  - id: tt_love_story_taylors_version_5185
+    file: trending/tt_love_story_taylors_version_5185.mp3
+    title: Love Story (Taylor’s Version)
+    artist: Taylor Swift
+    source: https://www.tiktok.com/music/x-6930523644654045185
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - pop
+    - us
+    - romantic
+  - id: tt_the_archer_7986
+    file: trending/tt_the_archer_7986.mp3
+    title: The Archer
+    artist: Taylor Swift
+    source: https://www.tiktok.com/music/x-6719331069662857986
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - pop
+    - us
+    - romantic
+  - id: tt_the_best_day_taylors_version_2098
+    file: trending/tt_the_best_day_taylors_version_2098.mp3
+    title: The Best Day (Taylor’s Version)
+    artist: Taylor Swift
+    source: https://www.tiktok.com/music/x-6949019826115332098
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - pop
+    - us
+    - romantic
+  - id: tt_ruin_the_friendship_0497
+    file: trending/tt_ruin_the_friendship_0497.mp3
+    title: Ruin The Friendship
+    artist: Taylor Swift
+    source: https://www.tiktok.com/music/x-7556812561079060497
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - pop
+    - us
+    - romantic
+  - id: tt_cleveland_7206
+    file: trending/tt_cleveland_7206.mp3
+    title: Cleveland!
+    artist: Taylor Swift
+    source: https://www.tiktok.com/music/x-7689302018134067206
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - pop
+    - us
+  - id: tt_hate_that_i_made_you_love_me_9808
+    file: trending/tt_hate_that_i_made_you_love_me_9808.mp3
+    title: hate that i made you love me
+    artist: Ariana Grande
+    source: https://www.tiktok.com/music/x-7645168637741729808
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - pop
+    - us
+  - id: tt_pink_clouding_4438
+    file: trending/tt_pink_clouding_4438.mp3
+    title: Pink Clouding
+    artist: Taylor Swift
+    source: https://www.tiktok.com/music/x-7689302018134034438
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - pop
+    - us
+  - id: tt_cruel_summer_4754
+    file: trending/tt_cruel_summer_4754.mp3
+    title: Cruel Summer
+    artist: Taylor Swift
+    source: https://www.tiktok.com/music/x-7211414788142794754
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - pop
+    - us
+  - id: tt_love_story_6242
+    file: trending/tt_love_story_6242.mp3
+    title: Love Story
+    artist: Taylor Swift
+    source: https://www.tiktok.com/music/x-6926907833363466242
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - pop
+    - romantic
+  - id: tt_you_re_my_forever_9168
+    file: trending/tt_you_re_my_forever_9168.mp3
+    title: You're My Forever
+    artist: Chris Warwick
+    source: https://www.tiktok.com/music/x-7566139747493169168
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - pop
+    - romantic
+  - id: tt_lalala_2321
+    file: trending/tt_lalala_2321.mp3
+    title: Lalala
+    artist: Sam Cosmo
+    source: https://www.tiktok.com/music/x-6763929487668152321
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - pop
+    - romantic
+  - id: tt_love_story_8305
+    file: trending/tt_love_story_8305.mp3
+    title: Love Story
+    artist: Indila
+    source: https://www.tiktok.com/music/x-249588214712418305
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - pop
+    - romantic
+  - id: tt_cruel_summer_5714
+    file: trending/tt_cruel_summer_5714.mp3
+    title: Cruel Summer
+    artist: Taylor Swift
+    source: https://www.tiktok.com/music/x-6740851367465715714
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - pop
+    - us
+    - upbeat
+  - id: tt_principios_de_um_campeao_9927
+    file: trending/tt_principios_de_um_campeao_9927.mp3
+    title: Princípios de um Campeão
+    artist: Chefin & LB Único & Theuzz011
+    source: https://www.tiktok.com/music/x-7495058487265839927
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - pop
+    - us
+    - upbeat
+  - id: tt_buong_oi_tay_nhau_ra_2977
+    file: trending/tt_buong_oi_tay_nhau_ra_2977.mp3
+    title: Buông Đôi Tay Nhau Ra
+    artist: Sơn Tùng M-TP
+    source: https://www.tiktok.com/music/x-7282013191339902977
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - vpop
+    - vietnamese
+  - id: tt_trang_ram_hoi_su_5072
+    file: trending/tt_trang_ram_hoi_su_5072.mp3
+    title: Trăng Rằm Hội Sư
+    artist: Xệ Xệ
+    source: https://www.tiktok.com/music/x-7686530097432365072
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - vpop
+    - vietnamese
+  - id: tt_hay_trao_cho_anh_9538
+    file: trending/tt_hay_trao_cho_anh_9538.mp3
+    title: Hãy Trao Cho Anh
+    artist: Sơn Tùng M-TP
+    source: https://www.tiktok.com/music/x-6715281121359169538
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - vpop
+    - vietnamese
+  - id: tt_nhu_ngay_hom_qua_4049
+    file: trending/tt_nhu_ngay_hom_qua_4049.mp3
+    title: Như Ngày Hôm Qua
+    artist: Sơn Tùng M-TP
+    source: https://www.tiktok.com/music/x-7282013191340034049
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - vpop
+    - vietnamese
+  - id: tt_jelly_fish_jam_techno_mix_3265
+    file: trending/tt_jelly_fish_jam_techno_mix_3265.mp3
+    title: Jelly Fish Jam - Techno Mix
+    artist: Da Fokin
+    source: https://www.tiktok.com/music/x-7349266765980043265
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - vpop
+    - vietnamese
+    - rap
+  - id: tt_love_is_gone_acoustic_1281
+    file: trending/tt_love_is_gone_acoustic_1281.mp3
+    title: Love Is Gone (Acoustic)
+    artist: SLANDER, Dylan Matthew
+    source: https://www.tiktok.com/music/x-6761759820828641281
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - vpop
+    - vietnamese
+  - id: tt_whisky_oscar_el_ruso_samuel_g_aissa_nick_6064
+    file: trending/tt_whisky_oscar_el_ruso_samuel_g_aissa_nick_6064.mp3
+    title: Whisky (Oscar el Ruso, Samuel G, Aissa, Nickzzy, Juseph, Samueliyo Baby)
+    artist: Oscar el Ruso
+    source: https://www.tiktok.com/music/x-7371941368459266064
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - vpop
+    - vietnamese
+  - id: tt_comedy_scenes_comical_stupid_odd_lovely__5345
+    file: trending/tt_comedy_scenes_comical_stupid_odd_lovely__5345.mp3
+    title: Comedy Scenes - Comical, stupid, odd, lovely (Drumless)(1441321)
+    artist: Ponetto
+    source: https://www.tiktok.com/music/x-7234217459228985345
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - vpop
+    - vietnamese
+  - id: tt_funny_song_7666
+    file: trending/tt_funny_song_7666.mp3
+    title: Funny Song
+    artist: Funny Song Studio & Sounds Reel & Thomas Hewitt Jones
+    source: https://www.tiktok.com/music/x-6732536571318257666
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - vpop
+    - vietnamese
+  - id: tt_secret_short_2_6913
+    file: trending/tt_secret_short_2_6913.mp3
+    title: 'SECRET (Short #2)'
+    artist: TINH HÀ "SAY HI" & Quang Hùng MasterD & CODYNAMVO & CONGB & Wren Evans
+    source: https://www.tiktok.com/music/x-7671316164798416913
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - vpop
+    - vietnamese
+  - id: tt_yeu_voi_vang_2866
+    file: trending/tt_yeu_voi_vang_2866.mp3
+    title: Yeu Voi Vang
+    artist: Le Bao Binh
+    source: https://www.tiktok.com/music/x-6731722599815972866
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - vpop
+    - vietnamese
+  - id: tt_ai_ua_em_ve_cukak_remix_1008
+    file: trending/tt_ai_ua_em_ve_cukak_remix_1008.mp3
+    title: Ai đưa em về (Cukak Remix)
+    artist: TIA & Lê Thiện Hiếu
+    source: https://www.tiktok.com/music/x-7606226775483861008
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - vpop
+    - vietnamese
+  - id: tt_canh_hoa_heo_tan_remix_0032
+    file: trending/tt_canh_hoa_heo_tan_remix_0032.mp3
+    title: Cánh Hoa Héo Tàn - Remix
+    artist: Mochiii
+    source: https://www.tiktok.com/music/x-7413410480952150032
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - vpop
+    - vietnamese
+  - id: tt_bad_4657
+    file: trending/tt_bad_4657.mp3
+    title: BAD
+    artist: ATEEZ
+    source: https://www.tiktok.com/music/x-7641080354007664657
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - kpop
+    - cute
+  - id: tt_i_walk_this_earth_all_by_myself_5138
+    file: trending/tt_i_walk_this_earth_all_by_myself_5138.mp3
+    title: I Walk This Earth All By Myself
+    artist: Ekkstacy
+    source: https://www.tiktok.com/music/x-6927075762659035138
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - kpop
+    - cute
+  - id: tt_montagem_taliba_slowed_6432
+    file: trending/tt_montagem_taliba_slowed_6432.mp3
+    title: MONTAGEM TALIBA (Slowed)
+    artist: VXLTAGE
+    source: https://www.tiktok.com/music/x-7644790487673276432
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - kpop
+    - cute
+  - id: tt_japanese_style_dramatic_piano_song_7234
+    file: trending/tt_japanese_style_dramatic_piano_song_7234.mp3
+    title: Japanese-style dramatic piano song
+    artist: スタジオ　Music Rabbit
+    source: https://www.tiktok.com/music/x-6817207080592607234
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - kpop
+    - cute
+  - id: tt_lemonade_4337
+    file: trending/tt_lemonade_4337.mp3
+    title: LEMONADE
+    artist: aespa
+    source: https://www.tiktok.com/music/x-7635587089284024337
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - kpop
+    - energetic
+  - id: tt_switchblade_feat_ty_dolla_ign_9025
+    file: trending/tt_switchblade_feat_ty_dolla_ign_9025.mp3
+    title: Switchblade (feat. Ty Dolla $ign)
+    artist: aespa & Ty Dolla $ign
+    source: https://www.tiktok.com/music/x-7635587089284139025
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - kpop
+    - energetic
+  - id: tt_kiss_n_tell_7217
+    file: trending/tt_kiss_n_tell_7217.mp3
+    title: KISS N TELL
+    artist: aespa
+    source: https://www.tiktok.com/music/x-7662006746007177217
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - kpop
+    - energetic
+  - id: tt_serenade_karina_winter_2241
+    file: trending/tt_serenade_karina_winter_2241.mp3
+    title: Serenade (KARINA & WINTER)
+    artist: aespa
+    source: https://www.tiktok.com/music/x-7670027636257802241
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - kpop
+    - energetic
+  - id: tt_overdrive_5472
+    file: trending/tt_overdrive_5472.mp3
+    title: OVERDRIVE
+    artist: TWS
+    source: https://www.tiktok.com/music/x-7559540378391955472
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - kpop
+    - pop
+  - id: tt_looks_can_kill_preview_0705
+    file: trending/tt_looks_can_kill_preview_0705.mp3
+    title: Looks Can Kill (Preview)
+    artist: IVE
+    source: https://www.tiktok.com/music/x-7691456064316360705
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - kpop
+    - pop
+  - id: tt_super_icy_leeseo_solo_4768
+    file: trending/tt_super_icy_leeseo_solo_4768.mp3
+    title: Super ICY (LEESEO Solo)
+    artist: IVE
+    source: https://www.tiktok.com/music/x-7603042795515594768
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - kpop
+    - pop
+  - id: tt_iconic_heart_korean_version_6390
+    file: trending/tt_iconic_heart_korean_version_6390.mp3
+    title: ICONIC HEART - Korean Version
+    artist: Hearts2Hearts
+    source: https://www.tiktok.com/music/x-7690499639829776390
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - kpop
+    - pop
+  - id: tt_singasong_3921
+    file: trending/tt_singasong_3921.mp3
+    title: singasong
+    artist: THE 8 & VERNON
+    source: https://www.tiktok.com/music/x-7655194136350033921
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - kpop
+    - upbeat
+  - id: tt_upside_down_original_chic_mix_1601
+    file: trending/tt_upside_down_original_chic_mix_1601.mp3
+    title: Upside Down - Original CHIC Mix
+    artist: Diana Ross
+    source: https://www.tiktok.com/music/x-6927279337717401601
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - kpop
+    - upbeat
+  - id: tt_let_me_know_jerseyclub_slowed_8353
+    file: trending/tt_let_me_know_jerseyclub_slowed_8353.mp3
+    title: 'Let Me Know #JerseyClub - Slowed'
+    artist: Jiandro & Salako
+    source: https://www.tiktok.com/music/x-7609192698479118353
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - kpop
+    - upbeat
+  - id: tt_boyfriend_4420
+    file: trending/tt_boyfriend_4420.mp3
+    title: BOYFRIEND
+    artist: HOSHI
+    source: https://www.tiktok.com/music/x-7693827331245754420
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - kpop
+    - upbeat
+  - id: tt_track_1378
+    file: trending/tt_track_1378.mp3
+    title: アイドル
+    artist: YOASOBI
+    source: https://www.tiktok.com/music/x-7216137897747941378
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - jpop
+    - anime
+  - id: tt_track_0897
+    file: trending/tt_track_0897.mp3
+    title: 百花繚乱
+    artist: 幾田りら
+    source: https://www.tiktok.com/music/x-7457389868491130897
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - jpop
+    - anime
+  - id: tt_track_1201
+    file: trending/tt_track_1201.mp3
+    title: 夜に駆ける
+    artist: YOASOBI
+    source: https://www.tiktok.com/music/x-6902462725314611201
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - jpop
+    - anime
+  - id: tt_track_8898
+    file: trending/tt_track_8898.mp3
+    title: たぶん
+    artist: YOASOBI
+    source: https://www.tiktok.com/music/x-6844194559707088898
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - jpop
+    - anime
+  - id: tt_marigold_6193
+    file: trending/tt_marigold_6193.mp3
+    title: Marigold
+    artist: aimyon
+    source: https://www.tiktok.com/music/x-6704978766692616193
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - jpop
+    - soft
+  - id: tt_almost_lonely_1222
+    file: trending/tt_almost_lonely_1222.mp3
+    title: Almost Lonely
+    artist: aimyon
+    source: https://www.tiktok.com/music/x-7691183469704841222
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - jpop
+    - soft
+  - id: tt_track_0082
+    file: trending/tt_track_0082.mp3
+    title: 愛を伝えたいだとか
+    artist: あいみょん
+    source: https://www.tiktok.com/music/x-6416196187942030082
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - jpop
+    - soft
+  - id: tt_track_1249
+    file: trending/tt_track_1249.mp3
+    title: 貴方解剖純愛歌 ～死ね～
+    artist: あいみょん
+    source: https://www.tiktok.com/music/x-6638821831115541249
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - jpop
+    - soft
+  - id: tt_sayonara_mata_itsuka_sayonara_3169
+    file: trending/tt_sayonara_mata_itsuka_sayonara_3169.mp3
+    title: Sayonara, Mata Itsuka! - Sayonara
+    artist: Kenshi Yonezu
+    source: https://www.tiktok.com/music/x-7348653029305223169
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - jpop
+    - emotional
+  - id: tt_lemon_9218
+    file: trending/tt_lemon_9218.mp3
+    title: Lemon
+    artist: Kenshi Yonezu
+    source: https://www.tiktok.com/music/x-6920606089549449218
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - jpop
+    - emotional
+  - id: tt_iris_out_7712
+    file: trending/tt_iris_out_7712.mp3
+    title: IRIS OUT
+    artist: Kenshi Yonezu
+    source: https://www.tiktok.com/music/x-7546182111022237712
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - jpop
+    - emotional
+  - id: tt_kick_back_5233
+    file: trending/tt_kick_back_5233.mp3
+    title: KICK BACK
+    artist: Kenshi Yonezu
+    source: https://www.tiktok.com/music/x-7150602133753055233
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - jpop
+    - emotional
+  - id: tt_happier_3058
+    file: trending/tt_happier_3058.mp3
+    title: happier
+    artist: Olivia Rodrigo
+    source: https://www.tiktok.com/music/x-6964415219083053058
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - pop
+    - us
+  - id: tt_purple_7408
+    file: trending/tt_purple_7408.mp3
+    title: purple
+    artist: Olivia Rodrigo
+    source: https://www.tiktok.com/music/x-7649983963348027408
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - pop
+    - us
+  - id: tt_training_season_live_from_the_royal_albe_1558
+    file: trending/tt_training_season_live_from_the_royal_albe_1558.mp3
+    title: Training Season (Live from the Royal Albert Hall)
+    artist: Dua Lipa
+    source: https://www.tiktok.com/music/x-7445345666976631558
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - pop
+    - us
+  - id: tt_drivers_license_8321
+    file: trending/tt_drivers_license_8321.mp3
+    title: drivers license
+    artist: Olivia Rodrigo
+    source: https://www.tiktok.com/music/x-6964415885603768321
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - pop
+    - us
+  - id: tt_good_luck_babe_5905
+    file: trending/tt_good_luck_babe_5905.mp3
+    title: Good Luck, Babe!
+    artist: Chappell Roan
+    source: https://www.tiktok.com/music/x-7364498104412325905
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - pop
+    - us
+    - cute
+  - id: tt_emails_i_cant_send_7153
+    file: trending/tt_emails_i_cant_send_7153.mp3
+    title: emails i can’t send
+    artist: Sabrina Carpenter
+    source: https://www.tiktok.com/music/x-7120396475569457153
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - pop
+    - us
+    - cute
+  - id: tt_skin_9793
+    file: trending/tt_skin_9793.mp3
+    title: Skin
+    artist: Sabrina Carpenter
+    source: https://www.tiktok.com/music/x-6920475670594209793
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - pop
+    - us
+    - cute
+  - id: tt_feels_like_loneliness_8672
+    file: trending/tt_feels_like_loneliness_8672.mp3
+    title: Feels Like Loneliness
+    artist: Sabrina Carpenter
+    source: https://www.tiktok.com/music/x-231542125744668672
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - pop
+    - us
+    - cute
+  - id: tt_thuy_chung_ciray_remix_1_7106
+    file: trending/tt_thuy_chung_ciray_remix_1_7106.mp3
+    title: 'Thủy Chung - Ciray Remix #1'
+    artist: Thương Võ & K-ICM & ACV
+    source: https://www.tiktok.com/music/x-7186873105154607106
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - cpop
+    - chinese
+    - trending
+  - id: tt_thuy_chung_remix_1873
+    file: trending/tt_thuy_chung_remix_1873.mp3
+    title: Thủy Chung - Remix
+    artist: Mochiii
+    source: https://www.tiktok.com/music/x-7670812941995001873
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - cpop
+    - chinese
+    - trending
+  - id: tt_giai_ieu_tinh_yeu_love_you_3000_8433
+    file: trending/tt_giai_ieu_tinh_yeu_love_you_3000_8433.mp3
+    title: Giai Điệu Tình Yêu (Love You 3000)
+    artist: Haiyang
+    source: https://www.tiktok.com/music/x-7629243907498428433
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - cpop
+    - chinese
+    - trending
+  - id: tt_16_shots_7729
+    file: trending/tt_16_shots_7729.mp3
+    title: 16 Shots
+    artist: Stefflon Don
+    source: https://www.tiktok.com/music/x-6709367395594537729
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - trending
+    - energetic
+    - us
+  - id: tt_days_like_this_6498
+    file: trending/tt_days_like_this_6498.mp3
+    title: Days Like This
+    artist: Lil Ugly Mane
+    source: https://www.tiktok.com/music/x-6887315983929706498
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - trending
+    - chill
+    - us
+  - id: tt_cool_hardtekk_slowed_9681
+    file: trending/tt_cool_hardtekk_slowed_9681.mp3
+    title: Cool (Hardtekk - Slowed)
+    artist: angelhard
+    source: https://www.tiktok.com/music/x-7660044096112199681
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - trending
+    - energetic
+    - phonk
+  - id: tt_body_on_body_1694
+    file: trending/tt_body_on_body_1694.mp3
+    title: Body On Body
+    artist: Sweatshirt Rhythms
+    source: https://www.tiktok.com/music/x-7649183156838811694
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - trending
+    - energetic
+  - id: tt_yeu_anh_i_me_anh_ban_banh_mi_tiktok_remi_2459
+    file: trending/tt_yeu_anh_i_me_anh_ban_banh_mi_tiktok_remi_2459.mp3
+    title: yêu anh đi mẹ anh bán bánh mì - TikTok Remix
+    artist: Phúc Du
+    source: https://www.tiktok.com/music/x-7204005651050482459
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - trending
+  - id: tt_0_30_theta_6hz_binaural_beats_1904
+    file: trending/tt_0_30_theta_6hz_binaural_beats_1904.mp3
+    title: 0.30 & Theta 6hz (Binaural Beats)
+    artist: Neural Recharge
+    source: https://www.tiktok.com/music/x-7683953512493221904
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - trending
+  - id: tt_a_comical_comedy_orchestra_1610450_9841
+    file: trending/tt_a_comical_comedy_orchestra_1610450_9841.mp3
+    title: A comical comedy orchestra(1610450)
+    artist: LeonardoFujimura
+    source: https://www.tiktok.com/music/x-7460333831951779841
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - trending
+    - upbeat
+  - id: tt_il_ballo_della_sora_assunta_1202
+    file: trending/tt_il_ballo_della_sora_assunta_1202.mp3
+    title: IL Ballo Della Sora Assunta
+    artist: Beautiful Team & Fiammetta
+    source: https://www.tiktok.com/music/x-6849768506787891202
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - trending
+    - upbeat
+  - id: tt_nhe_buong_3796
+    file: trending/tt_nhe_buong_3796.mp3
+    title: Nhẹ Buông
+    artist: Hằng ssi & Aries tis
+    source: https://www.tiktok.com/music/x-7689395535472543796
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - trending
+    - upbeat
+  - id: tt_hey_ya_my_baby_don_t_mess_around_8514
+    file: trending/tt_hey_ya_my_baby_don_t_mess_around_8514.mp3
+    title: Hey Ya! (My baby don't mess around)
+    artist: Outkast
+    source: https://www.tiktok.com/music/x-7172696675796928514
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - halloween
+    - spooky
+    - trending
+  - id: tt_fall_october_halloween_horror_classic_17_5250
+    file: trending/tt_fall_october_halloween_horror_classic_17_5250.mp3
+    title: Fall October Halloween horror classic(177261)
+    artist: rareNote
+    source: https://www.tiktok.com/music/x-6925569841169205250
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - halloween
+    - spooky
+    - trending
+  - id: tt_this_is_halloween_9520
+    file: trending/tt_this_is_halloween_9520.mp3
+    title: This Is Halloween
+    artist: The Party Cats
+    source: https://www.tiktok.com/music/x-285853994298859520
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - halloween
+    - spooky
+    - trending
+  - id: tt_halloween_cute_horror_song_6641
+    file: trending/tt_halloween_cute_horror_song_6641.mp3
+    title: Halloween ・ cute horror song
+    artist: PeriTune
+    source: https://www.tiktok.com/music/x-6817180237894256641
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - halloween
+    - spooky
+    - trending
+  - id: tt_spooky_scary_skeletons_house_vip_remix_9009
+    file: trending/tt_spooky_scary_skeletons_house_vip_remix_9009.mp3
+    title: Spooky, Scary Skeletons (House VIP Remix)
+    artist: Crystal Knives & Lex Allen
+    source: https://www.tiktok.com/music/x-7268430678977579009
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - halloween
+    - spooky
+    - trending
+  - id: tt_halloween_2026_5057
+    file: trending/tt_halloween_2026_5057.mp3
+    title: Halloween 2026
+    artist: The Lyrical Lanterns
+    source: https://www.tiktok.com/music/x-7680505783316695057
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - halloween
+    - spooky
+    - trending
+  - id: tt_happy_halloween_2337
+    file: trending/tt_happy_halloween_2337.mp3
+    title: Happy Halloween
+    artist: Junky
+    source: https://www.tiktok.com/music/x-7024137266201102337
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - halloween
+    - spooky
+  - id: tt_spooky_scary_skeletons_0933
+    file: trending/tt_spooky_scary_skeletons_0933.mp3
+    title: Spooky, Scary Skeletons
+    artist: Andrew Gold
+    source: https://www.tiktok.com/music/x-6602666381370460933
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - halloween
+    - spooky
+  - id: tt_hide_and_seek_sare_remix_3585
+    file: trending/tt_hide_and_seek_sare_remix_3585.mp3
+    title: Hide and Seek - Sare Remix
+    artist: Lizz Robinett
+    source: https://www.tiktok.com/music/x-6884412141428803585
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - halloween
+    - spooky
+  - id: tt_spooky_8881
+    file: trending/tt_spooky_8881.mp3
+    title: Spooky
+    artist: dotori sounds
+    source: https://www.tiktok.com/music/x-7681747206857508881
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - halloween
+    - spooky
+  - id: tt_spooky_7712
+    file: trending/tt_spooky_7712.mp3
+    title: SPOOKY
+    artist: fennecxx & DJ ALEX
+    source: https://www.tiktok.com/music/x-7426354406231197712
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - halloween
+    - spooky
+    - tense
+  - id: tt_spooky_quiet_scary_atmosphere_piano_song_0738
+    file: trending/tt_spooky_quiet_scary_atmosphere_piano_song_0738.mp3
+    title: Spooky, quiet, scary atmosphere piano songs
+    artist: Skittlegirl Sound
+    source: https://www.tiktok.com/music/x-6817208513685620738
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - halloween
+    - spooky
+    - tense
+  - id: tt_spooky_2_9713
+    file: trending/tt_spooky_2_9713.mp3
+    title: SPOOKY 2
+    artist: fennecxx & DJ ALEX & Dj Samir
+    source: https://www.tiktok.com/music/x-7559234936814749713
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - halloween
+    - spooky
+    - tense
+  - id: tt_the_screaming_walls_3376
+    file: trending/tt_the_screaming_walls_3376.mp3
+    title: The Screaming Walls
+    artist: Jhony Blade
+    source: https://www.tiktok.com/music/x-7602313890748303376
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - halloween
+    - spooky
+    - tense
+  - id: tt_nguoi_au_tien_4881
+    file: trending/tt_nguoi_au_tien_4881.mp3
+    title: NGƯỜI ĐẦU TIÊN
+    artist: EM XINH "SAY HI" & Juky San
+    source: https://www.tiktok.com/music/x-7538714034381604881
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - vpop
+    - vietnamese
+    - trending
+  - id: tt_glass_on_the_keys_3050
+    file: trending/tt_glass_on_the_keys_3050.mp3
+    title: Glass on the Keys
+    artist: Marla Van Ark
+    source: https://www.tiktok.com/music/x-7683345001996503050
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - trending
+    - soft
+  - id: tt_bankai_0594
+    file: trending/tt_bankai_0594.mp3
+    title: BANKAI
+    artist: Aega
+    source: https://www.tiktok.com/music/x-7091350765909870594
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - trending
+    - energetic
+    - anime
+  - id: tt_nhac_hoa_tam_trang_ng_thanh_quan_6728
+    file: trending/tt_nhac_hoa_tam_trang_ng_thanh_quan_6728.mp3
+    title: Nhạc Hoa Tâm Trạng (Ng. Thanh Quân 🅥)
+    artist: Ng. Thanh Quân 🅥
+    source: https://www.tiktok.com/music/x-7627001865015806728
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - cpop
+    - chinese
+    - emotional
+  - id: tt_nhac_hoa_tam_trang_dn_entertainment_4241
+    file: trending/tt_nhac_hoa_tam_trang_dn_entertainment_4241.mp3
+    title: Nhạc Hoa Tâm Trạng (DN Entertainment)
+    artist: DN Entertainment
+    source: https://www.tiktok.com/music/x-7563825719844244241
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - cpop
+    - chinese
+    - emotional
+  - id: tt_nhac_hoa_tam_trang_ng_thanh_quan_4120
+    file: trending/tt_nhac_hoa_tam_trang_ng_thanh_quan_4120.mp3
+    title: Nhạc Hoa Tâm Trạng (Ng. Thanh Quân 🅥)
+    artist: Ng. Thanh Quân 🅥
+    source: https://www.tiktok.com/music/x-7625664863590714120
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - cpop
+    - chinese
+    - emotional
+  - id: tt_nhac_hoa_tam_trang_banh_nam_5431
+    file: trending/tt_nhac_hoa_tam_trang_banh_nam_5431.mp3
+    title: Nhạc Hoa Tâm Trạng (Bánh nậm🥱)
+    artist: Bánh nậm🥱
+    source: https://www.tiktok.com/music/x-7680769658781895431
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - cpop
+    - chinese
+    - emotional
+  - id: tt_beat_way_up_3186
+    file: trending/tt_beat_way_up_3186.mp3
+    title: Beat Way Up
+    artist: Type Beats Trap
+    source: https://www.tiktok.com/music/x-7347758257412573186
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - trending
+    - energetic
+  - id: tt_nhac_trung_douyin_remix_hvt_208_8360
+    file: trending/tt_nhac_trung_douyin_remix_hvt_208_8360.mp3
+    title: Nhạc Trung Douyin Remix (HvT.208_)
+    artist: HvT.208_
+    source: https://www.tiktok.com/music/x-7678207213332548360
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - cpop
+    - chinese
+    - remix
+    - energetic
+  - id: tt_nguoi_nhin_thiep_meid_8193
+    file: trending/tt_nguoi_nhin_thiep_meid_8193.mp3
+    title: Người Nhìn Thiếp MEID
+    artist: MEID
+    source: https://www.tiktok.com/music/x-6972856138643688193
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - cpop
+    - chinese
+    - remix
+    - energetic
+  - id: tt_trang_ha_6040
+    file: trending/tt_trang_ha_6040.mp3
+    title: 抖音热歌 (Trang Hạ)
+    artist: Trang Hạ
+    source: https://www.tiktok.com/music/x-7653735457628556040
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - cpop
+    - chinese
+    - trending
+  - id: tt_phan_bao_3815
+    file: trending/tt_phan_bao_3815.mp3
+    title: 抖音热歌 (𝙋𝙃𝘼𝙉 𝘽𝘼𝙊 🌊)
+    artist: 𝙋𝙃𝘼𝙉 𝘽𝘼𝙊 🌊
+    source: https://www.tiktok.com/music/x-7688996447111383815
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - cpop
+    - chinese
+    - trending
+  - id: tt_track_9520
+    file: trending/tt_track_9520.mp3
+    title: 抖音热歌 (『♬⋆青雅⋆♬』)
+    artist: 『♬⋆青雅⋆♬』
+    source: https://www.tiktok.com/music/x-7653428337129589520
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - cpop
+    - chinese
+    - trending
+  - id: tt_track_0850
+    file: trending/tt_track_0850.mp3
+    title: 抖音热歌 (杯)
+    artist: 杯
+    source: https://www.tiktok.com/music/x-7638063832581720850
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - cpop
+    - chinese
+    - trending
+  - id: tt_nhac_trung_co_phong_4679
+    file: trending/tt_nhac_trung_co_phong_4679.mp3
+    title: Nhạc Trung Cổ Phong (『♬⋆青雅⋆♬』)
+    artist: 『♬⋆青雅⋆♬』
+    source: https://www.tiktok.com/music/x-7662384821069564679
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - cpop
+    - chinese
+    - romantic
+    - soft
+  - id: tt_nhac_trung_co_phong_6693
+    file: trending/tt_nhac_trung_co_phong_6693.mp3
+    title: Nhạc Trung Cổ Phong (『♬⋆青雅⋆♬』)
+    artist: 『♬⋆青雅⋆♬』
+    source: https://www.tiktok.com/music/x-7652751880472316693
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - cpop
+    - chinese
+    - romantic
+    - soft
+  - id: tt_nhac_trung_co_phong_y_lac_truyen_phuong_7240
+    file: trending/tt_nhac_trung_co_phong_y_lac_truyen_phuong_7240.mp3
+    title: Nhạc Trung Cổ Phong (Y Lạc Truyện Phương - 伊洛传芳)
+    artist: Y Lạc Truyện Phương - 伊洛传芳
+    source: https://www.tiktok.com/music/x-7640882736639167240
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - cpop
+    - chinese
+    - romantic
+    - soft
+  - id: tt_nhac_trung_co_phong_kxtie_8289
+    file: trending/tt_nhac_trung_co_phong_kxtie_8289.mp3
+    title: Nhạc Trung Cổ Phong (kxtie)
+    artist: kxtie
+    source: https://www.tiktok.com/music/x-7695781363216108289
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - cpop
+    - chinese
+    - romantic
+    - soft
+  - id: tt_nhac_trung_co_phong_tvd_6786
+    file: trending/tt_nhac_trung_co_phong_tvd_6786.mp3
+    title: Nhạc Trung Cổ Phong (TVD)
+    artist: TVD
+    source: https://www.tiktok.com/music/x-7599155257390336786
+    license: TikTok sound (operator's choice, non-monetized)
+    moods:
+    - cpop
+    - chinese
+    - romantic
+    - soft

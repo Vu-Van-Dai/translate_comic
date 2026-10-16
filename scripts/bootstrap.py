@@ -28,7 +28,7 @@ LAYOUT = [
     "assets/fonts", "tests/fixtures", "raw",
 ]
 
-DEPENDENCY_GROUPS = ["browser", "vision", "ocr", "dev"]
+DEPENDENCY_GROUPS = ["browser", "vision", "ocr", "dev", "photoshop"]
 
 
 def run(cmd: list[str], label: str) -> bool:
@@ -68,6 +68,14 @@ def main() -> int:
         if not run([sys.executable, "-m", "pip", "install", "-e", f".[{extras}]"],
                    "python dependencies"):
             failures.append("dependencies")
+        # rapidocr pins the CPU wheel; on Windows swap in the DirectML build,
+        # which provides the same `onnxruntime` module plus the GPU provider.
+        elif sys.platform == "win32":
+            run([sys.executable, "-m", "pip", "uninstall", "-y", "onnxruntime"],
+                "remove CPU-only onnxruntime")
+            if not run([sys.executable, "-m", "pip", "install", "onnxruntime-directml"],
+                       "onnxruntime-directml (GPU)"):
+                failures.append("directml")
 
     if not args.skip_browser:
         if not run([sys.executable, "-m", "playwright", "install", "chromium"],

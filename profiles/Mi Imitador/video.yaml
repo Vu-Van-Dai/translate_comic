@@ -1,0 +1,12 @@
+# Video rules for Mi Imitador (comic video).
+# The operator allowed our finished Vietnamese pages in this series' videos
+# (2026-10-14), so library/ pages are the default source here.
+allow_translated: true
+rtl: false            # Korean webtoon, read top to bottom
+hashtags: ["#MiImitador", "#manhwa", "#manhwabl", "#BL", "#truyentranh", "#webtoon"]
+forbid_styles: []
+minors: {}
+notes: >
+  All leads are adults (webtoon artist Han Kanghyun, his assistant Lee Jiun,
+  Haeyong, Yoonjae, producer Kangjin). Main couple Kanghyun x Jiun; side
+  couple Haeyong x Yoonjae. Antagonist: San Park (Ch.31-56).

@@ -1,0 +1,4 @@
+Length: 32.68s
+Cuts at (s): 2.0, 4.62, 6.66, 9.24, 11.75, 13.72, 15.65, 18.2, 20.48, 23.06, 25.1, 27.54, 29.6
+Music in video.mp4: Burn -- Ellie Goulding, from 0.1s (117.5 BPM)
+For video_silent.mp4: add a TikTok sound in the app; the cuts above follow the beat of the track above.

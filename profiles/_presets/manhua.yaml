@@ -1,0 +1,4 @@
+# Chinese webtoon (manhua). Same shape as manhwa -- full-colour long strip,
+# usually from a caps-lettered scanlation -- so the same faces until a
+# chapter shows a reason to differ. See docs/lettering.md.
+preset: manhwa

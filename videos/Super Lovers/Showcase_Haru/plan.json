@@ -1,0 +1,149 @@
+{
+ "gate": "video_plan",
+ "style": "story",
+ "background": "white",
+ "story": "Haru showcase across Ch.3, 5 and 7: seven photos held 6-8 beats each, gentle zooms, whole face always in frame, one split screen, ending on the vol.7 cover. No on-screen text.",
+ "music": {
+  "track": "tt_one_kiss_9436",
+  "start": 4.412,
+  "beat_sync": true
+ },
+ "caption": "anh trai quốc dân Kaidou Haru, 22 tuổi, nghề host, đẹp trai nhưng mà khổ 🤭 #superlovers",
+ "hashtags": [
+  "superlovers",
+  "kaidouharu",
+  "blmanga",
+  "truyentranh",
+  "fyp"
+ ],
+ "shots": [
+  {
+   "panel": "p001_k0",
+   "chapter": "3",
+   "crop": {
+    "x1": 200,
+    "y1": 0,
+    "x2": 700,
+    "y2": 889
+   },
+   "seconds": 3.902,
+   "motion": "zoom_in",
+   "strength": 0.25,
+   "transition": "cut",
+   "transition_seconds": 0.4,
+   "fit": "cover",
+   "effects": []
+  },
+  {
+   "panel": "p015_k0",
+   "chapter": "3",
+   "crop": {
+    "x1": 250,
+    "y1": 140,
+    "x2": 540,
+    "y2": 660
+   },
+   "seconds": 2.927,
+   "motion": "zoom_in",
+   "strength": 0.25,
+   "transition": "fade",
+   "transition_seconds": 0.35,
+   "fit": "cover",
+   "effects": []
+  },
+  {
+   "panel": "p020_k0",
+   "chapter": "3",
+   "crop": {
+    "x1": 435,
+    "y1": 0,
+    "x2": 735,
+    "y2": 533
+   },
+   "seconds": 2.927,
+   "motion": "zoom_out",
+   "strength": 0.25,
+   "transition": "fade",
+   "transition_seconds": 0.35,
+   "fit": "cover",
+   "effects": []
+  },
+  {
+   "panel": "p008_k0",
+   "chapter": "7",
+   "crop": {
+    "x1": 370,
+    "y1": 150,
+    "x2": 850,
+    "y2": 1003
+   },
+   "seconds": 3.902,
+   "motion": "pan_down",
+   "strength": 0.3,
+   "transition": "zoom_blur",
+   "transition_seconds": 0.35,
+   "fit": "cover",
+   "effects": []
+  },
+  {
+   "panel": "p011_k0",
+   "chapter": "7",
+   "crop": {
+    "x1": 170,
+    "y1": 860,
+    "x2": 770,
+    "y2": 1393
+   },
+   "seconds": 3.902,
+   "motion": "zoom_in",
+   "strength": 0.25,
+   "transition": "dip_white",
+   "transition_seconds": 0.4,
+   "fit": "cover",
+   "effects": [],
+   "panel2": "p020_k0",
+   "chapter2": "5",
+   "crop2": {
+    "x1": 130,
+    "y1": 0,
+    "x2": 760,
+    "y2": 560
+   },
+   "motion2": "zoom_out"
+  },
+  {
+   "panel": "p004_k0",
+   "chapter": "7",
+   "crop": {
+    "x1": 220,
+    "y1": 0,
+    "x2": 780,
+    "y2": 980
+   },
+   "seconds": 3.902,
+   "motion": "zoom_in",
+   "strength": 0.25,
+   "transition": "fade",
+   "transition_seconds": 0.5,
+   "fit": "cover",
+   "effects": []
+  },
+  {
+   "panel": "p004_k0",
+   "chapter": "7",
+   "crop": {
+    "x1": 300,
+    "y1": 120,
+    "x2": 720,
+    "y2": 867
+   },
+   "seconds": 3.902,
+   "motion": "zoom_in",
+   "strength": 0.2,
+   "transition": "cut",
+   "transition_seconds": 0.3,
+   "fit": "cover",
+   "effects": []
+  }
+ ]
+}

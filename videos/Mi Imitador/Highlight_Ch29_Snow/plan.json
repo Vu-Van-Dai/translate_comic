@@ -1,0 +1,216 @@
+{
+ "gate": "video_plan",
+ "style": "story",
+ "background": "white",
+ "story": "Ch.29: the car ride, the fight, Yoonjae: 'waiting doesn't mean being ignored', Haeyong runs after him in the snow and grabs him, the hug, 'Em xin lỗi'.",
+ "music": {
+  "track": "tt_summertime_sadness_9714",
+  "start": 0.23,
+  "beat_sync": true
+ },
+ "caption": "Đợi không có nghĩa là bị lờ đi… Haeyong & Yoonjae dưới tuyết 🥺❄️ Mi Imitador chap 29",
+ "hashtags": [
+  "MiImitador",
+  "FromPakuriToAssistant",
+  "manhwabl",
+  "BL",
+  "truyentranh",
+  "webtoon",
+  "fyp",
+  "HaeyongYoonjae"
+ ],
+ "shots": [
+  {
+   "panel": "p004_k0",
+   "motion": "static",
+   "strength": 0.12,
+   "transition": "cut",
+   "transition_seconds": 0.2,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 0,
+    "y1": 370,
+    "x2": 700,
+    "y2": 1513
+   },
+   "seconds": 2.137
+  },
+  {
+   "panel": "p013_k0",
+   "motion": "zoom_in",
+   "strength": 0.12,
+   "transition": "cut",
+   "transition_seconds": 0.2,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 38,
+    "y1": 338,
+    "x2": 658,
+    "y2": 1224
+   },
+   "seconds": 2.137
+  },
+  {
+   "panel": "p018_k0",
+   "motion": "punch",
+   "strength": 0.2,
+   "transition": "cut",
+   "transition_seconds": 0.2,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 38,
+    "y1": 139,
+    "x2": 700,
+    "y2": 1353
+   },
+   "seconds": 2.137
+  },
+  {
+   "panel": "p019_k0",
+   "motion": "static",
+   "strength": 0.12,
+   "transition": "cut",
+   "transition_seconds": 0.2,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 100,
+    "y1": 40,
+    "x2": 700,
+    "y2": 1100
+   },
+   "seconds": 2.137
+  },
+  {
+   "panel": "p024_k0",
+   "motion": "zoom_in",
+   "strength": 0.12,
+   "transition": "cut",
+   "transition_seconds": 0.2,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 0,
+    "y1": 303,
+    "x2": 700,
+    "y2": 1799
+   },
+   "seconds": 2.137
+  },
+  {
+   "panel": "p025_k0",
+   "motion": "drift",
+   "strength": 0.2,
+   "transition": "cut",
+   "transition_seconds": 0.2,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 0,
+    "y1": 1150,
+    "x2": 700,
+    "y2": 1960
+   },
+   "seconds": 2.137
+  },
+  {
+   "panel": "p028_k0",
+   "motion": "static",
+   "strength": 0.12,
+   "transition": "cut",
+   "transition_seconds": 0.2,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 0,
+    "y1": 0,
+    "x2": 700,
+    "y2": 876
+   },
+   "seconds": 2.137
+  },
+  {
+   "panel": "p032_k0",
+   "motion": "zoom_in",
+   "strength": 0.12,
+   "transition": "cut",
+   "transition_seconds": 0.2,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 0,
+    "y1": 0,
+    "x2": 700,
+    "y2": 1897
+   },
+   "seconds": 2.137
+  },
+  {
+   "panel": "p035_k0",
+   "motion": "static",
+   "strength": 0.12,
+   "transition": "cut",
+   "transition_seconds": 0.2,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 0,
+    "y1": 0,
+    "x2": 700,
+    "y2": 1390
+   },
+   "seconds": 2.137
+  },
+  {
+   "panel": "p036_k0",
+   "motion": "punch",
+   "strength": 0.2,
+   "transition": "flash",
+   "transition_seconds": 0.2,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 0,
+    "y1": 0,
+    "x2": 700,
+    "y2": 1396
+   },
+   "seconds": 2.137
+  },
+  {
+   "panel": "p038_k0",
+   "motion": "zoom_in",
+   "strength": 0.12,
+   "transition": "fade",
+   "transition_seconds": 0.35,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 0,
+    "y1": 0,
+    "x2": 700,
+    "y2": 1399
+   },
+   "seconds": 2.671
+  },
+  {
+   "panel": "p040_k0",
+   "motion": "static",
+   "strength": 0.12,
+   "transition": "fade",
+   "transition_seconds": 0.35,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 0,
+    "y1": 0,
+    "x2": 700,
+    "y2": 1302
+   },
+   "seconds": 2.671
+  }
+ ]
+}

@@ -1,0 +1,12 @@
+# Paged manga, and the one place auto_contrast earns its keep.
+#
+# Inverted panels -- white lettering on black -- are ordinary in manga, and the
+# flat fill correctly restores such a bubble to black. Drawing the usual dark
+# type onto that makes the line vanish: measured on chapter 49, three lines
+# disappeared completely and the QA residue check reported "159% of the source
+# lettering still visible", which was the black fill being counted as ink.
+#
+# Webtoons leave this off -- see profiles/_probe_yaoiscan/fonts.yaml.
+ink: [20, 20, 20]
+stroke: [255, 255, 255]
+auto_contrast: true

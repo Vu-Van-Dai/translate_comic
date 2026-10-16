@@ -3,13 +3,18 @@
 Two tiers do nearly all the work, chosen per region by measuring the background
 rather than by guessing from the region's kind:
 
-* **flat** -- the lettering sat on a bubble interior, which is by construction
-  a light, even area. Filling that area with its own modal colour erases the
-  text and changes nothing else, because everywhere but the glyphs already
-  *was* that colour. This handles the large majority of dialogue, and it keeps
-  the bubble outline perfectly, which an inpainting model will not.
-* **inpaint** -- the lettering sat over artwork. Only the dilated glyph pixels
-  are touched, and the repair is composited back through that mask.
+Both tiers touch **only the dilated glyph pixels** -- never the rest of the
+bubble, whose dots, gradient or colour must survive (see ``clean_page``):
+
+* **flat** -- the band just around the letters is one plain colour: the
+  glyphs are filled with exactly that colour (its median, not a quantised
+  bin). Most white bubbles, and dark caption boxes.
+* **inpaint** -- anything busier behind the letters (screentone, gradient,
+  artwork): the glyphs are repainted by LaMa from their surroundings.
+
+A series can send every region to LaMa instead (``fonts.yaml: clean: lama``,
+see ``series_clean_mode``): the operator's choice for Super Lovers,
+2026-10-12, judging LaMa's erasure cleaner than a flat fill.
 
 A third tier exists but is not code: `visual_qa` returns `expand_mask` /
 `shrink_mask` / `force_inpaint`, and the corrected mask comes back through
@@ -40,6 +45,59 @@ log = logging.getLogger(__name__)
 FLAT_SPREAD = 60
 #: And it has to be light, or we are filling a dark panel with its own grey.
 FLAT_LUMA = 170
+
+#: An area no bigger than this multiple of the text box is the box itself:
+#: ``fit_areas`` found no bubble. Matches ``typesetting/render.py``.
+OWN_BOX_RATIO = 1.25
+
+#: Width of the band around the glyphs that decides what is behind them.
+RING_WIDTH = 4
+#: Below this luma spread in that band the letters sat on one plain colour
+#: and are filled with it; anything busier (dots, gradient, art) is inpainted.
+#: Measured: a white bubble's band through JPEG noise 2-6, dot tone 60+.
+PLAIN_SPREAD = 12
+
+
+def _dilate(mask: np.ndarray, pixels: int) -> np.ndarray:
+    if pixels <= 0:
+        return mask.astype(np.uint8)
+    kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (2 * pixels + 1, 2 * pixels + 1))
+    return cv2.dilate(mask.astype(np.uint8), kernel)
+
+
+def _plain_colour(image: np.ndarray, ring: np.ndarray) -> np.ndarray | None:
+    """The exact colour behind the lettering, or None if it is not plain."""
+    if int(ring.sum()) < 16:
+        return None
+    if float(_gray(image)[ring].std()) > PLAIN_SPREAD:
+        return None
+    pixels = image[ring]
+    return np.median(pixels, axis=0).round().astype(image.dtype)
+
+
+#: Extra dilation for lettering with no bubble around it.
+ART_EXTRA_GROW = 3
+
+
+def _own_box(area: np.ndarray, box) -> bool:
+    box_px = max(1, (box.x2 - box.x1) * (box.y2 - box.y1))
+    return int(np.count_nonzero(area)) <= OWN_BOX_RATIO * box_px
+
+
+def erase_mask(
+    page_mask: np.ndarray, region: TextRegion, area: np.ndarray, grow: int
+) -> np.ndarray:
+    """The pixels cleaning erases for a region: its lettering, dilated."""
+    glyphs = region_glyphs(page_mask, region, grow)
+    inside = ((page_mask > 0) & (area > 0)).astype(np.uint8)
+    return np.maximum(glyphs, _dilate(inside, grow))
+
+
+def plain_behind(image: np.ndarray, glyphs: np.ndarray) -> np.ndarray | None:
+    """The plain colour the lettering sat on, or None if it sat on texture."""
+    ring = (_dilate(glyphs, RING_WIDTH) > 0) & (glyphs == 0)
+    return _plain_colour(image, ring)
+
 
 #: LaMa's fixed input size.
 LAMA_SIZE = 512
@@ -96,11 +154,35 @@ class _Lama:
     """LaMa inpainting over onnxruntime, loaded once and reused."""
 
     def __init__(self, model: Path) -> None:
-        import onnxruntime as ort
+        # The GPU cannot run this model (measured 2026-10-12, Iris Xe):
+        # DirectML rejects its FFT-attention MatMul at any optimisation
+        # level; OpenVINO's GPU plugin fails to build it in f32 and in f16
+        # returns garbage (mean error 30 of 255). OpenVINO on the CPU is
+        # 4x faster than onnxruntime (1.8s vs 7.1s a 512px patch) with the
+        # same output (mean diff 2e-5), so it is preferred; threads are split
+        # across the worker processes so a render does not oversubscribe.
+        self._run = None
+        try:
+            import openvino as ov
 
-        self._session = ort.InferenceSession(
-            str(model), providers=["CPUExecutionProvider"]
-        )
+            from comic.cpu import threads_per_worker
+
+            core = ov.Core()
+            net = core.read_model(str(model))
+            net.reshape({"image": [1, 3, LAMA_SIZE, LAMA_SIZE],
+                         "mask": [1, 1, LAMA_SIZE, LAMA_SIZE]})
+            threads = threads_per_worker()
+            compiled = core.compile_model(net, "CPU", {"INFERENCE_NUM_THREADS": threads})
+            self._run = lambda feed: next(iter(compiled(feed).values()))
+        except Exception:  # noqa: BLE001 - openvino absent or unhappy: use ORT
+            import onnxruntime as ort
+
+            from comic.cpu import ort_options
+
+            session = ort.InferenceSession(
+                str(model), ort_options(), providers=["CPUExecutionProvider"]
+            )
+            self._run = lambda feed: session.run(None, feed)[0]
 
     def repair(self, patch: np.ndarray, hole: np.ndarray) -> np.ndarray:
         height, width = patch.shape[:2]
@@ -111,9 +193,7 @@ class _Lama:
         )
         image_in = small.transpose(2, 0, 1)[None].astype(np.float32) / 255.0
         mask_in = (small_hole > 0)[None, None].astype(np.float32)
-        out = self._session.run(
-            None, {"image": image_in, "mask": mask_in}
-        )[0]
+        out = self._run({"image": image_in, "mask": mask_in})
         painted = out[0].transpose(1, 2, 0)
         if painted.max() <= 1.5:
             painted = painted * 255.0
@@ -149,7 +229,27 @@ def _inpaint(
     engine = _lama(model)
     if engine is None:
         return cv2.inpaint(image, (hole > 0).astype(np.uint8), 3, cv2.INPAINT_TELEA)
-    return engine.repair(image, hole)
+    repaired = engine.repair(image, hole)
+    # LaMa paints in colour whatever it is given. On black-and-white manga
+    # it left green/red specks (Super Lovers ch.1 p.31, 2026-10-13), so a
+    # patch whose surroundings carry no colour gets grey back.
+    if image.ndim == 3 and _is_grey(image, hole):
+        grey = cv2.cvtColor(repaired, cv2.COLOR_BGR2GRAY)
+        repaired = cv2.cvtColor(grey, cv2.COLOR_GRAY2BGR)
+    return repaired
+
+
+#: Channel spread below which a pixel counts as grey (JPEG/WebP chroma noise).
+GREY_SPREAD = 12
+
+
+def _is_grey(image: np.ndarray, hole: np.ndarray) -> bool:
+    """Whether the pixels around a hole are (nearly) all grey."""
+    around = image[hole == 0]
+    if around.size == 0:
+        return False
+    spread = around.max(axis=-1).astype(np.int16) - around.min(axis=-1)
+    return float((spread > GREY_SPREAD).mean()) < 0.01
 
 
 def clean_page(
@@ -160,6 +260,7 @@ def clean_page(
     model: Path | None = None,
     dilation: int = GLYPH_DILATION,
     overrides: dict[str, RegionOverride] | None = None,
+    inpaint_all: bool = False,
 ) -> tuple[np.ndarray, np.ndarray, CleanReport]:
     """Erase the source lettering.
 
@@ -180,16 +281,29 @@ def clean_page(
 
         override = (overrides or {}).get(region.id) or RegionOverride()
         box = region.bbox
-        glyphs = region_glyphs(
-            page_mask, region, max(0, dilation + override.mask_grow)
-        )
+        grow = max(0, dilation + override.mask_grow)
+        if _own_box(area, box):
+            # Lettering on open art: the detector's mask often covers only
+            # part of a small hand-lettered aside, and what it misses stays
+            # as ghost letters beside the new line (ch.0 p.12). Erase wider.
+            grow += ART_EXTRA_GROW
+        # Erase the lettering only -- never repaint the bubble. Filling the
+        # whole interior with one colour wiped dot screentone, gradients and
+        # coloured shading, and its quantised colour never quite matched: the
+        # operator saw "a white frame ... sometimes it even has polka dots"
+        # (Super Lovers ch.0). The region's lettering is the detector mask in
+        # its own box plus any it marked inside the region's own area -- a
+        # stray "!" -- and the areas are disjoint, so no neighbour's text.
+        glyphs = erase_mask(page_mask, region, area, grow)
+        if not glyphs.any():
+            report.notes.append(f"{region.id}: nothing to erase")
+            continue
 
-        luma, spread = background_of(image, area, glyphs)
-        if not override.force_inpaint and luma >= FLAT_LUMA and spread <= FLAT_SPREAD:
-            # Fill the whole interior: it was already one flat colour, so this
-            # erases the lettering and is a no-op everywhere else.
-            fill = _modal_colour(image, (area > 0) & (glyphs == 0))
-            spot = area > 0
+        fill = None if inpaint_all else plain_behind(image, glyphs)
+        if not override.force_inpaint and fill is not None:
+            # The letters sat on one plain colour: put exactly that colour
+            # back where they were, and nothing else changes.
+            spot = glyphs > 0
             cleaned[spot] = fill
             touched |= spot.astype(np.uint8)
             report.tiers[region.id] = "flat"
@@ -202,9 +316,6 @@ def clean_page(
         right = min(image.shape[1], box.x2 + INPAINT_CONTEXT)
         patch = image[top:bottom, left:right]
         hole = glyphs[top:bottom, left:right]
-        if not hole.any():
-            report.notes.append(f"{region.id}: nothing to erase")
-            continue
 
         repaired = _inpaint(patch, hole, model)
         spot = hole > 0
@@ -215,3 +326,14 @@ def clean_page(
         report.tiers[region.id] = "inpaint"
 
     return cleaned, touched, report
+
+
+def series_clean_mode(fonts_file: Path) -> str:
+    """``lama`` when the series' fonts.yaml says ``clean: lama``, else ``auto``."""
+    import yaml
+
+    if not fonts_file.exists():
+        return "auto"
+    raw = yaml.safe_load(fonts_file.read_text(encoding="utf-8")) or {}
+    mode = str(raw.get("clean", "auto")).strip().lower()
+    return mode if mode in ("auto", "lama") else "auto"

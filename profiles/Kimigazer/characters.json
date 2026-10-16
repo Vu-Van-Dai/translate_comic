@@ -1,0 +1,214 @@
+{
+  "Konno Arata": {
+    "name": "Konno Arata",
+    "aliases": [],
+    "role": null,
+    "personality": "Đổi dây chuyền cho Shun; được Shun gọi về làm nhân viên kế nhiệm Miiro (tên mới Isshiki). Hồi nhỏ rất nhạy cảm, sau đó tự đóng cảm xúc lại.",
+    "speech_style": "Với Shun: tôi/anh.",
+    "addresses": {
+      "Asagi Shun": {
+        "self_term": "tôi",
+        "other_term": "anh",
+        "formality": "polite",
+        "note": "khách quen ở tiệm; trong độc thoại gọi Shun là 'anh ta'/'anh ấy'"
+      },
+      "Nishiki": {
+        "self_term": "tôi",
+        "other_term": "anh",
+        "formality": "neutral",
+        "note": null
+      },
+      "Ông chủ": {
+        "self_term": "tôi",
+        "other_term": "anh",
+        "formality": "neutral",
+        "note": null
+      },
+      "Suzuki": {
+        "self_term": "cháu",
+        "other_term": "ông",
+        "formality": "polite",
+        "note": null
+      }
+    },
+    "notes": []
+  },
+  "Asagi Shun": {
+    "name": "Asagi Shun",
+    "aliases": [],
+    "role": null,
+    "personality": "Quay lại khách sạn, nhận làm nhân viên mười năm (tên mới Toiro) để được ở bên Arata; tỏ tình, hai người thích nhau. Hồi nhỏ được bà nuôi.",
+    "speech_style": "Với Arata: tôi/cậu (giữ nguyên dù đã yêu nhau); với Nishiki: tôi/anh.",
+    "addresses": {
+      "Konno Arata": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "casual",
+        "note": null
+      },
+      "Nishiki": {
+        "self_term": "tôi",
+        "other_term": "anh",
+        "formality": "casual",
+        "note": "gọi đùa 'Rapunzel'"
+      },
+      "Miiro": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "neutral",
+        "note": null
+      },
+      "Ông chủ": {
+        "self_term": "tôi",
+        "other_term": "ông",
+        "formality": "casual",
+        "note": null
+      }
+    },
+    "notes": []
+  },
+  "Nishiki": {
+    "name": "Nishiki",
+    "aliases": [],
+    "role": null,
+    "personality": "Đi theo Arata và Shun, nói đứng về phía Shun; đang tìm cây cầu cầu vồng; sợ độ cao, không hợp với chó.",
+    "speech_style": "Với Shun: tôi/cậu, gọi 'Shun-kun'.",
+    "addresses": {
+      "Konno Arata": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "polite",
+        "note": "gọi 'Konno-kun'"
+      },
+      "Asagi Shun": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "neutral",
+        "note": "gọi 'Shun-kun'"
+      },
+      "Ông chủ": {
+        "self_term": "tôi",
+        "other_term": "ông chủ",
+        "formality": "polite",
+        "note": null
+      },
+      "Miiro": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "casual",
+        "note": null
+      }
+    },
+    "notes": []
+  },
+  "Miiro": {
+    "name": "Miiro",
+    "aliases": [],
+    "role": null,
+    "personality": "Nhân viên khách sạn tóc dựng, thực tế, muốn giữ bí mật với Shun; sắp tròn mười năm ở khách sạn cùng Nishiki.",
+    "speech_style": "Với Nishiki: tôi/anh, gọi 'Nishiki-san'.",
+    "addresses": {
+      "Asagi Shun": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "neutral",
+        "note": null
+      },
+      "Erika": {
+        "self_term": "tôi",
+        "other_term": "chị",
+        "formality": "polite",
+        "note": "gọi 'Erika-san'"
+      },
+      "Konno Arata": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "casual",
+        "note": null
+      },
+      "Nishiki": {
+        "self_term": "tôi",
+        "other_term": "anh",
+        "formality": "neutral",
+        "note": "gọi 'Nishiki-san'"
+      }
+    },
+    "notes": []
+  },
+  "Erika": {
+    "name": "Erika",
+    "aliases": [],
+    "role": null,
+    "personality": "Nhân viên khách sạn, kéo Miiro đi, bênh Shun.",
+    "speech_style": "Với Miiro: tôi/cậu, gọi 'Miiro-kun'.",
+    "addresses": {
+      "Miiro": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "casual",
+        "note": "gọi 'Miiro-kun'"
+      }
+    },
+    "notes": []
+  },
+  "Ông chủ": {
+    "name": "Ông chủ",
+    "aliases": [],
+    "role": null,
+    "personality": "Sếp của khách sạn thế giới bên kia, tóc đen, nóng tính, mắng Nishiki; giải thích dây chuyền là vật chứa dữ liệu linh hồn.",
+    "speech_style": "Với Arata và Nishiki: tôi/cậu, gọi Arata 'đồ đầu đất'.",
+    "addresses": {
+      "Konno Arata": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "casual",
+        "note": null
+      },
+      "Nishiki": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "casual",
+        "note": "cấp trên mắng cấp dưới"
+      },
+      "Asagi Shun": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "casual",
+        "note": "gọi 'Toiro'"
+      }
+    },
+    "notes": []
+  },
+  "Suzuki": {
+    "name": "Suzuki",
+    "aliases": [],
+    "role": null,
+    "personality": "Ông lão bị ung thư, chủ của chú chó Jiro mà Arata đã cứu trong lũ; được gặp lại Jiro nhờ Arata.",
+    "speech_style": "Với Arata: ông/cháu.",
+    "addresses": {
+      "Konno Arata": {
+        "self_term": "ông",
+        "other_term": "cháu",
+        "formality": "warm",
+        "note": "gọi 'Konno-kun'"
+      }
+    },
+    "notes": []
+  },
+  "Bố Arata": {
+    "name": "Bố Arata",
+    "aliases": [],
+    "role": null,
+    "personality": "Nằm viện mổ ruột thừa trong hồi ức.",
+    "speech_style": "Với Arata: bố/con.",
+    "addresses": {
+      "Konno Arata": {
+        "self_term": "bố",
+        "other_term": "con",
+        "formality": "warm",
+        "note": null
+      }
+    },
+    "notes": []
+  }
+}

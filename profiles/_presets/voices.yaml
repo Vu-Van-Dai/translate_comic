@@ -1,0 +1,62 @@
+# The mood library: one face per delivery, shared by every format preset.
+#
+# The agent picks a voice per bubble at the translate gate (`voice:`) by
+# reading the character's face and the line: the same words read differently
+# set calm, giddy, furious or shaking. A bubble whose delivery is ordinary
+# speech takes no voice and is set in its kind's face. (editmanga's first
+# rule: a cheerful line in a shaky face, or a stammer in a firm commanding
+# one, contradicts the author.)
+#
+# Kept deliberately small -- one face per mood, chosen from the TeddyBear
+# Vietnamese set by eye and by measurement (docs/lettering.md). Every face
+# passes the coverage and tone-mark checks; a line needing a letter one
+# lacks falls back to its kind's face on its own. Each voice inherits the
+# series' dialogue style (case, spacing) unless it says otherwise.
+#
+# Case is part of the voice. Vietnamese groups letter ordinary speech in
+# caps but set the soft cloud bubble in a rounded hand and phone messages in
+# a plain sans, both in sentence case (the operator's examples, Thuc Uong
+# Tinh Yeu Cua Flynn ch.83). Those voices say `uppercase: false`; the rest
+# inherit the series' caps.
+#
+# Measured accent span, tallest stacked accent over lowest dot below: most
+# of these need more than 1.22 em of leading, which `leading: auto` gives.
+# Loud voices carry a white outline: they are the ones lettered straight onto
+# art (a shout over screentone), where a bare black face disappears (Piekos
+# ch. 7: lettering that crosses inked lines needs an outline). In a white
+# bubble the outline is invisible.
+voices:
+  cheerful:
+    font: 000CCAdamKubert-TB.ttf
+    use: "happy, playful, teasing, warm banter; slice-of-life and comedy chatter"
+  excited:
+    stroke_em: 0.08
+    font: 000Marvin-TB.ttf
+    use: "delighted or eager exclamations, loud but happy (\"Thật á?!\", cheering); comedy"
+  angry:
+    stroke_em: 0.08
+    font: 000ImaginaryFriendBB-Bold-TB.ttf
+    use: "furious yelling, scolding, heated argument; action and drama"
+  menacing:
+    stroke_em: 0.08
+    font: 000EntrailsBB-TB.ttf
+    use: "threats, cold fury, something creepy or wrong; horror, thriller, villains"
+  hesitant:
+    font: 000ClairvoyantBB-TB.ttf
+    use: "stammering, nervous, flustered, unsure, trailing off (\"Ừ... thì...\")"
+  soft:
+    font: 000AugieVN-TB.ttf
+    uppercase: false
+    use: "gentle, tender, shy, sad, cute or dreamy -- the fluffy cloud bubble; quiet romance moments (sentence case)"
+  whisper:
+    font: 000AnimeAce3-TeddyBear.ttf
+    size_scale: 0.68
+    use: "whispering, an aside under the breath (small text in a roomy bubble)"
+  scrawl:
+    font: 000Felt-TB.ttf
+    uppercase: false
+    use: "handwritten notes and letters shown to the reader, muttering to oneself"
+  phone:
+    font: BeVietnamPro-Regular.ttf
+    uppercase: false
+    use: "text messages, chat apps, screens and typed notes (plain sans, sentence case)"

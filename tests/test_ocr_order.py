@@ -231,3 +231,41 @@ def test_tiny_type_is_floored():
     loose = suggested_chars(100, 100, 1)
     assert packed >= loose
     assert packed < 100000
+
+
+# ------------------------------------------------- joining runs back together
+
+
+def test_latin_runs_are_joined_with_spaces():
+    """An engine returns runs, not sentences, and Latin runs are words.
+
+    Joining them with "" is correct for CJK and was never revisited, so on a
+    real English scanlation a whole line came back as one unbroken token --
+    untranslatable, unwrappable, and read by the length checks as a single
+    enormous word.
+    """
+    from comic.ocr.registry import join_runs
+
+    assert join_runs(["SINCE", "WHEN", "DO", "WE"]) == "SINCE WHEN DO WE"
+
+
+def test_cjk_runs_are_still_joined_tight():
+    """The behaviour the Chinese path was measured on must not change."""
+    from comic.ocr.registry import join_runs
+
+    assert join_runs(["死心吧", "你的主治医"]) == "死心吧你的主治医"
+    assert join_runs(["안녕", "하세요"]) == "안녕하세요"
+
+
+def test_the_separator_follows_the_text_not_the_declared_language():
+    """So a Latin caption inside a Chinese page still reads correctly."""
+    from comic.ocr.registry import join_runs
+
+    assert join_runs(["HELLO", "THERE"]) == "HELLO THERE"
+
+
+def test_blank_and_empty_runs_are_dropped():
+    from comic.ocr.registry import join_runs
+
+    assert join_runs([]) == ""
+    assert join_runs(["   ", "x"]) == "x"

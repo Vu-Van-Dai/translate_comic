@@ -13,9 +13,10 @@ so a row containing any part of a glyph has a peak-to-peak spread far above
 ``FLAT_SPREAD`` and can never be chosen. The same holds for panel art. What
 survives the test is gutter.
 
-Nothing here decodes the whole strip at once. A chapter is routinely 800 x
-60000 px, which is 144 MB in colour; seam analysis needs only one number per
-row, so slices are measured one at a time and re-read when pages are emitted.
+Nothing here decodes the whole strip at once. Measured on a real chapter:
+720 x 97325 px, which is 210 MB decoded in colour. Seam analysis needs only one
+number per row, so slices are measured one at a time and re-read when pages are
+emitted.
 """
 
 from __future__ import annotations
@@ -40,10 +41,21 @@ log = logging.getLogger(__name__)
 #: gradients -- at 16 a blurred panel measuring 13-22 was chosen as a seam.
 FLAT_SPREAD = 6
 
-#: How far a band's own level may sit from the chapter's gutter colour.
-#: Webtoon gutters are one consistent fill for a whole chapter, so a flat band
-#: of some other colour is a flat piece of *artwork* -- a tinted caption box,
-#: a night sky -- and cutting there splits something rather than nothing.
+#: Share of flat rows a level must hold to count as one of the chapter's
+#: gutter colours. Low, because a scene that occupies a fifth of a chapter is
+#: entirely normal and its gutters are as real as the majority's.
+MIN_GUTTER_SHARE = 0.05
+
+#: Stop after this many. A strip with more distinct flat levels than this is
+#: not letterboxed, it is flat artwork, and filtering on colour is not telling
+#: us anything.
+MAX_GUTTER_LEVELS = 4
+
+#: How far a band's own level may sit from one of the chapter's gutter colours.
+#: A flat band matching none of them is a flat piece of *artwork* -- a tinted
+#: caption box, a night sky -- where cutting splits something rather than
+#: nothing. It also absorbs the codec: the same white gutter was measured at
+#: both 255 and 254 in one JPEG chapter.
 GUTTER_TOLERANCE = 24
 
 #: A gutter is thick. A flat row or two inside a large pale shape is not, so
@@ -88,9 +100,10 @@ class SliceReport:
     #: ``(top, bottom)`` row ranges in the concatenated strip, in order.
     spans: list[tuple[int, int]] = field(default_factory=list)
     seams: list[Seam] = field(default_factory=list)
-    #: The gutter colour measured from the strip, or None if it had too little
-    #: flat material to tell -- in which case seams were not filtered by colour.
-    gutter: float | None = None
+    #: Gutter colours measured from the strip. A chapter routinely has more
+    #: than one -- black for a night scene, white elsewhere. Empty means there
+    #: was too little flat material to judge, so colour was not filtered on.
+    gutters: list[float] = field(default_factory=list)
     resized: int = 0
     notes: list[str] = field(default_factory=list)
 
@@ -152,21 +165,45 @@ def row_level(image: np.ndarray) -> np.ndarray:
     return image.reshape(image.shape[0], -1).mean(axis=1)
 
 
-def gutter_level(spread: np.ndarray, level: np.ndarray) -> float | None:
-    """The colour this chapter's gutters are, measured from the strip itself.
+def gutter_levels(spread: np.ndarray, level: np.ndarray) -> list[float]:
+    """Every colour this chapter's gutters come in, measured from the strip.
 
-    Taken as the most common level among flat rows rather than assumed white:
-    plenty of webtoons letterbox on black, and a few on a brand colour. Returns
-    None when there is not enough flat material to be confident, in which case
-    the caller should not filter on colour at all.
+    **A chapter has more than one.** Taking only the most common level was a
+    real defect, found on a real chapter: it letterboxed on black for its
+    opening scene and on white thereafter, and the 71000 white rows outvoted
+    the 4911 black ones, so every black gutter was discarded as "flat artwork"
+    and 20 of 53 seams fell back to a blind cut at the target height. Measured
+    there, the flat rows sat at three levels -- 255 (39%), 254 (34%, the same
+    white one JPEG shifted by one) and 0 (24%).
+
+    So peaks are taken greedily, each claiming its neighbourhood, and every
+    level holding a real share of the flat rows is accepted. Returns an empty
+    list when there is too little flat material to judge, which means "do not
+    filter on colour at all" rather than "reject everything".
     """
     flat = spread <= FLAT_SPREAD
     if int(flat.sum()) < MIN_BAND * 4:
-        return None
+        return []
+
     counts = np.bincount(
         np.clip(level[flat], 0, 255).astype(np.uint8), minlength=256
-    )
-    return float(counts.argmax())
+    ).astype(float)
+    total = counts.sum()
+    peaks: list[float] = []
+    while len(peaks) < MAX_GUTTER_LEVELS:
+        top = int(counts.argmax())
+        low = max(0, top - GUTTER_TOLERANCE)
+        high = min(256, top + GUTTER_TOLERANCE + 1)
+        if counts[low:high].sum() < total * MIN_GUTTER_SHARE:
+            break
+        peaks.append(float(top))
+        counts[low:high] = 0.0
+    return peaks
+
+
+def _near_a_gutter(value: float, peaks: list[float]) -> bool:
+    """Whether a band's own colour matches any of the chapter's gutters."""
+    return not peaks or any(abs(value - p) <= GUTTER_TOLERANCE for p in peaks)
 
 
 def flat_bands(spread: np.ndarray, threshold: int = FLAT_SPREAD) -> list[tuple[int, int]]:
@@ -194,10 +231,13 @@ def plan_cuts(
     matter: a thin band may not be a gutter at all, and a cut far from the
     target makes a page that reads as the wrong length.
 
-    A page with no qualifying band is cut anyway, at the target, and the seam
-    records ``band=0`` so the caller can report it. Refusing to cut would leave
-    a 60000px "page" that no later stage can handle; cutting silently would
-    hide that a bubble may have been split.
+    A page with no qualifying band is cut anyway -- at the quietest row in
+    range, not at the target -- and the seam records ``band=0`` so the caller
+    can report it. Refusing to cut would leave a 60000px "page" that no later
+    stage can handle; cutting silently would hide that a bubble may have been
+    split. Measured on a real chapter, cutting at the target put every one of
+    8 forced seams through maximum-contrast content (median spread 255);
+    choosing the quietest row instead brought the median to 29.
     """
     total = int(spread.shape[0])
     if total <= 0:
@@ -205,13 +245,11 @@ def plan_cuts(
 
     bands = [b for b in flat_bands(spread) if b[1] - b[0] >= MIN_BAND]
     if level is not None and bands:
-        gutter = gutter_level(spread, level)
-        if gutter is not None:
-            bands = [
-                b
-                for b in bands
-                if abs(float(level[b[0] : b[1]].mean()) - gutter) <= GUTTER_TOLERANCE
-            ]
+        peaks = gutter_levels(spread, level)
+        bands = [
+            b for b in bands
+            if _near_a_gutter(float(level[b[0] : b[1]].mean()), peaks)
+        ]
 
     spans: list[tuple[int, int]] = []
     seams: list[Seam] = []
@@ -237,7 +275,12 @@ def plan_cuts(
                 best = (score, cut, stop - start)
 
         if best is None:
-            cut, band = min(ideal, hi), 0
+            # No gutter anywhere in range: a long full-bleed stretch, which
+            # webtoons genuinely have. Cut at the *quietest* row rather than
+            # blindly at the target -- the row that varies least across its
+            # width is the one least likely to run through lettering, and it
+            # costs one argmin over a window we have already measured.
+            cut, band = lo + int(spread[lo : hi + 1].argmin()), 0
         else:
             _, cut, band = best
 
@@ -399,7 +442,7 @@ def slice_strip(
     spread = np.concatenate(spreads)
     level = np.concatenate(levels)
     report.total_height = int(spread.shape[0])
-    report.gutter = gutter_level(spread, level)
+    report.gutters = gutter_levels(spread, level)
     report.spans, report.seams = plan_cuts(
         spread, level, target, min_height, max_height
     )
@@ -415,8 +458,8 @@ def slice_strip(
 
     if report.forced:
         report.note(
-            f"{report.forced} of {len(report.seams)} seam(s) had no flat band in "
-            f"range and were cut at the target height -- check those page joins"
+            f"{report.forced} of {len(report.seams)} seam(s) found no gutter in "
+            f"range and were cut at the quietest row instead -- check those joins"
         )
     if report.resized:
         report.note(f"{report.resized} slice(s) rescaled to {report.width}px wide")

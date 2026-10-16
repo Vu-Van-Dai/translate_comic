@@ -1,0 +1,90 @@
+{
+  "Orihara Takaomi": {
+    "name": "Orihara Takaomi",
+    "aliases": [],
+    "role": null,
+    "personality": "Sợ côn trùng; tặng Jin cà vạt cảm ơn, nói muốn ở bên cậu nhiều hơn và đỡ đần nhau.",
+    "speech_style": "Với Jin: tôi/cậu.",
+    "addresses": {
+      "Nomura Jin": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "casual",
+        "note": "gọi 'Nomura'"
+      },
+      "Orihara Haruomi": {
+        "self_term": "bố",
+        "other_term": "con",
+        "formality": "warm",
+        "note": null
+      },
+      "Saitou": {
+        "self_term": "tôi",
+        "other_term": "cô",
+        "formality": "neutral",
+        "note": null
+      }
+    },
+    "notes": []
+  },
+  "Orihara Haruomi": {
+    "name": "Orihara Haruomi",
+    "aliases": [],
+    "role": null,
+    "personality": "Con trai 5 tuổi của Takaomi, mê xe, quý Jin.",
+    "speech_style": "Với bố: con/bố; với Jin: con/chú, gọi 'chú Jin'.",
+    "addresses": {
+      "Orihara Takaomi": {
+        "self_term": "con",
+        "other_term": "bố",
+        "formality": "warm",
+        "note": null
+      },
+      "Nomura Jin": {
+        "self_term": "con",
+        "other_term": "chú",
+        "formality": "warm",
+        "note": "gọi 'chú Jin'"
+      }
+    },
+    "notes": []
+  },
+  "Nomura Jin": {
+    "name": "Nomura Jin",
+    "aliases": [],
+    "role": null,
+    "personality": "Bị trật chân phải chống nạng, tạm làm việc văn phòng; Takaomi mời ở lại nhà tới khi lành; hiểu lời mời thành lời tỏ tình.",
+    "speech_style": "Với bạn mình: tôi/cậu; với Takaomi: tôi/anh.",
+    "addresses": {
+      "Orihara Takaomi": {
+        "self_term": "tôi",
+        "other_term": "anh",
+        "formality": "polite",
+        "note": "gọi 'Takaomi-san'"
+      },
+      "Orihara Haruomi": {
+        "self_term": "chú",
+        "other_term": "con",
+        "formality": "warm",
+        "note": "gọi 'Haruomi-kun'"
+      }
+    },
+    "notes": []
+  },
+  "Saitou": {
+    "name": "Saitou",
+    "aliases": [],
+    "role": null,
+    "personality": "Nữ đồng nghiệp của Takaomi.",
+    "speech_style": "Với Takaomi: em/anh, gọi 'anh Orihara'.",
+    "addresses": {
+      "Orihara Takaomi": {
+        "self_term": "em",
+        "other_term": "anh",
+        "formality": "polite",
+        "note": "gọi 'anh Orihara'"
+      }
+    },
+    "notes": []
+  }
+}

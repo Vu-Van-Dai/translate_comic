@@ -39,6 +39,15 @@ MANIFEST: list[tuple[str, str, str]] = [
     ("anton/Anton-Regular.ttf", "Anton-Regular.ttf", "shout display"),
     ("lora/Lora%5Bwght%5D.ttf", "Lora-Variable.ttf", "narration serif"),
     ("nunito/Nunito%5Bwght%5D.ttf", "Nunito-Variable.ttf", "caption"),
+    # Comic lettering. Every one of these was checked against the Vietnamese
+    # repertoire before being listed -- Comic Neue, the obvious choice, fails
+    # with 98 missing glyphs, and Fredoka and Titan One fail too. A display
+    # face that looks right and renders tofu is worse than a plain one.
+    ("bangers/Bangers-Regular.ttf", "Bangers-Regular.ttf", "narration / shout caps"),
+    ("mali/Mali-Regular.ttf", "Mali-Regular.ttf", "dialogue handwriting"),
+    ("mali/Mali-Italic.ttf", "Mali-Italic.ttf", "thought handwriting"),
+    ("patrickhand/PatrickHand-Regular.ttf", "PatrickHand-Regular.ttf", "dialogue alt"),
+    ("baloo2/Baloo2%5Bwght%5D.ttf", "Baloo2-Variable.ttf", "caption rounded"),
 ]
 
 USER_AGENT = "comic-translator/0.1 (+font bootstrap)"

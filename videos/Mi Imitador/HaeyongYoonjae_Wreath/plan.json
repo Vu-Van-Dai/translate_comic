@@ -1,0 +1,183 @@
+{
+ "gate": "video_plan",
+ "style": "comedy",
+ "background": "white",
+ "story": "Ch.48: Haeyong drags Yoonjae outside to a giant funeral-style flower wreath reading 'YOONJAE! I AM SORRY / I LOVE YOU!' -- $200, discounted, too heavy to carry -- his apology and real date proposal. Yoonjae: 'Em nhận.' Side couple, both adults.",
+ "music": {
+  "track": "tt_who_says_2080",
+  "start": 0.232,
+  "beat_sync": true
+ },
+ "caption": "Xin lỗi kiểu Haeyong: tặng nguyên lẵng hoa khổng lồ 'I LOVE YOU' giữa phố 💐😭 (200 đô, đã giảm giá) — Mi Imitador",
+ "hashtags": [
+  "MiImitador",
+  "HaeyongYoonjae",
+  "manhwabl",
+  "BL",
+  "truyentranh",
+  "webtoon",
+  "fyp"
+ ],
+ "shots": [
+  {
+   "panel": "p004_k0",
+   "seconds": 2.414,
+   "motion": "static",
+   "strength": 0.15,
+   "transition": "cut",
+   "transition_seconds": 0.2,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 0,
+    "y1": 0,
+    "x2": 700,
+    "y2": 880
+   }
+  },
+  {
+   "panel": "p006_k0",
+   "seconds": 2.414,
+   "motion": "punch",
+   "strength": 0.2,
+   "transition": "whip",
+   "transition_seconds": 0.25,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 0,
+    "y1": 640,
+    "x2": 700,
+    "y2": 2100
+   }
+  },
+  {
+   "panel": "p008_k0",
+   "seconds": 3.018,
+   "motion": "zoom_in",
+   "strength": 0.15,
+   "transition": "flash",
+   "transition_seconds": 0.2,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 0,
+    "y1": 480,
+    "x2": 700,
+    "y2": 1807
+   }
+  },
+  {
+   "panel": "p007_k0",
+   "seconds": 2.414,
+   "motion": "static",
+   "strength": 0.1,
+   "transition": "cut",
+   "transition_seconds": 0.2,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 90,
+    "y1": 390,
+    "x2": 610,
+    "y2": 1110
+   }
+  },
+  {
+   "panel": "p009_k0",
+   "seconds": 2.414,
+   "motion": "zoom_in",
+   "strength": 0.12,
+   "transition": "whip",
+   "transition_seconds": 0.25,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 0,
+    "y1": 60,
+    "x2": 700,
+    "y2": 700
+   }
+  },
+  {
+   "panel": "p010_k0",
+   "seconds": 3.018,
+   "motion": "static",
+   "strength": 0.1,
+   "transition": "cut",
+   "transition_seconds": 0.2,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 30,
+    "y1": 880,
+    "x2": 700,
+    "y2": 1490
+   }
+  },
+  {
+   "panel": "p014_k0",
+   "seconds": 3.018,
+   "motion": "punch",
+   "strength": 0.2,
+   "transition": "whip",
+   "transition_seconds": 0.25,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 0,
+    "y1": 1000,
+    "x2": 700,
+    "y2": 1850
+   }
+  },
+  {
+   "panel": "p011_k0",
+   "seconds": 3.018,
+   "motion": "static",
+   "strength": 0.1,
+   "transition": "cut",
+   "transition_seconds": 0.2,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 0,
+    "y1": 620,
+    "x2": 700,
+    "y2": 1560
+   }
+  },
+  {
+   "panel": "p018_k0",
+   "seconds": 3.018,
+   "motion": "zoom_in",
+   "strength": 0.12,
+   "transition": "cut",
+   "transition_seconds": 0.2,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 0,
+    "y1": 0,
+    "x2": 700,
+    "y2": 960
+   }
+  },
+  {
+   "panel": "p019_k0",
+   "seconds": 3.622,
+   "motion": "zoom_in",
+   "strength": 0.12,
+   "transition": "dip_white",
+   "transition_seconds": 0.4,
+   "fit": "contain",
+   "effects": [],
+   "crop": {
+    "x1": 0,
+    "y1": 150,
+    "x2": 700,
+    "y2": 1940
+   }
+  }
+ ]
+}

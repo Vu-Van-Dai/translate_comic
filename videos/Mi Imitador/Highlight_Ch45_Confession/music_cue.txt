@@ -1,0 +1,4 @@
+Length: 27.85s
+Cuts at (s): 2.42, 4.83, 7.18, 9.45, 11.82, 14.68, 17.0, 20.43, 23.92
+Music in video.mp4: âm thanh gốc - Quien ★♪〆 -- Quien ★♪〆, from 0.1s (103.4 BPM)
+For video_silent.mp4: add a TikTok sound in the app; the cuts above follow the beat of the track above.

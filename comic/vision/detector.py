@@ -65,6 +65,53 @@ def model_path() -> Path:
     return models_dir() / MODEL_NAME
 
 
+#: Execution providers to try, most preferred first.
+#:
+#: Prefers DirectML, falls back to CPU when that build is absent -- which is
+#: safe, because a provider that is not installed is simply dropped from the
+#: list rather than raising.
+#:
+#: Measured on Intel Iris Xe integrated graphics: whole-page text detection
+#: went from 30.11s to 0.79s a page, a 38x speedup, with every derived region
+#: identical (boxes, kinds, reading order, polygons; the segmentation mask
+#: differed by 1-2 pixels in 13 million, which nothing downstream can see).
+#:
+#: This applies only to models that run one large inference per page. It is
+#: emphatically wrong for RapidOCR, which is fed small crops: the same GPU
+#: made a single crop 51x *slower*. See ``RapidOcrProvider.__init__``.
+#:
+#:     set COMIC_ONNX_PROVIDER=dml     -> DmlExecutionProvider, then CPU
+#:     set COMIC_ONNX_PROVIDER=cpu     -> CPU only (the default)
+#:
+#: CPU is always appended as the last resort, so an unsupported operator falls
+#: back per-node instead of failing the whole session.
+PROVIDER_ALIASES = {
+    "dml": "DmlExecutionProvider",
+    "directml": "DmlExecutionProvider",
+    "cuda": "CUDAExecutionProvider",
+    "openvino": "OpenVINOExecutionProvider",
+    "cpu": "CPUExecutionProvider",
+}
+
+
+def onnx_providers() -> list[str]:
+    """The provider list for a session, honouring COMIC_ONNX_PROVIDER."""
+    import os
+
+    import onnxruntime as ort
+
+    available = set(ort.get_available_providers())
+    wanted = os.environ.get("COMIC_ONNX_PROVIDER", "dml").strip().lower()
+    chosen: list[str] = []
+    for token in (t for t in wanted.replace(",", " ").split() if t):
+        name = PROVIDER_ALIASES.get(token, token)
+        if name in available and name not in chosen:
+            chosen.append(name)
+    if "CPUExecutionProvider" not in chosen:
+        chosen.append("CPUExecutionProvider")
+    return chosen
+
+
 @lru_cache(maxsize=1)
 def _session():
     """Load the ONNX session once; it is ~90 MB and slow to initialise."""
@@ -78,11 +125,11 @@ def _session():
     except ImportError as exc:  # pragma: no cover - covered by doctor
         raise DetectorError("onnxruntime is not installed") from exc
 
-    options = ort.SessionOptions()
+    from comic.cpu import ort_options
+
+    options = ort_options()
     options.log_severity_level = 3
-    return ort.InferenceSession(
-        str(path), options, providers=["CPUExecutionProvider"]
-    )
+    return ort.InferenceSession(str(path), options, providers=onnx_providers())
 
 
 def letterbox(image: np.ndarray, size: int = INPUT_SIZE) -> tuple[np.ndarray, float, int, int]:

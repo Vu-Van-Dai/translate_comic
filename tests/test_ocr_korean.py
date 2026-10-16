@@ -158,3 +158,52 @@ def test_an_empty_crop_is_reported_as_unread_not_invented():
     outcome = provider_for("ko").read(np.full((80, 300, 3), 255, np.uint8))
     assert outcome.text == ""
     assert outcome.suspicious
+
+
+# ---------------------------------------------- the wrong-language fallback
+
+
+def test_korean_never_falls_back_to_the_japanese_engine():
+    """manga-ocr has no Hangul, so its output for Korean is noise, not a guess.
+
+    Found on the first real webtoon chapter: `read_region` retries a vertical
+    region with manga-ocr when the primary engine reads it as empty, which is
+    defensible for Chinese -- shared script, measured 0.62 -- and wrong for
+    Korean. One region of 152 came back with 3 characters, none of them
+    Hangul, all of them kana or Han: a confident-looking reading of a language
+    that is not on the page.
+    """
+    assert KoreanOcrProvider.accepts_vertical_fallback is False
+
+
+def test_chinese_still_accepts_it():
+    """The fallback is worth keeping where the script is shared."""
+    from comic.ocr.registry import RapidOcrProvider
+
+    assert RapidOcrProvider.accepts_vertical_fallback is True
+
+
+@needs_models
+def test_an_unreadable_vertical_korean_region_returns_empty(monkeypatch):
+    """Rather than a substituted reading in the wrong script.
+
+    The fallback is intercepted by name, not by breaking ``_load`` outright --
+    the primary provider is loaded through the same function, so patching it
+    wholesale tests nothing.
+    """
+    from comic.ocr import registry
+
+    real = registry._load
+
+    def guarded(name):
+        if name == registry.MangaOcrProvider.name:
+            raise AssertionError("consulted manga-ocr as a fallback for Korean")
+        return real(name)
+
+    monkeypatch.setattr(registry, "_load", guarded)
+    # A blank crop reads as empty, which is the trigger for the fallback.
+    outcome = registry.read_region(
+        np.full((120, 300, 3), 255, np.uint8), "ko", vertical=True
+    )
+    assert outcome.text == ""
+    assert "fallback" not in outcome.provider

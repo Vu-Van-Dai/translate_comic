@@ -21,7 +21,7 @@ from comic.vision.strip import (
     MAX_HEIGHT,
     MIN_HEIGHT,
     flat_bands,
-    gutter_level,
+    gutter_levels,
     needs_slicing,
     plan_cuts,
     row_level,
@@ -121,8 +121,38 @@ def test_gutter_level_is_measured_not_assumed_white():
     """A chapter letterboxed on black must not be told its gutters are white."""
     strip, _, _ = build_strip()
     dark = 255 - strip
-    spread, level = row_spread(dark), row_level(dark)
-    assert gutter_level(spread, level) == pytest.approx(0.0, abs=2)
+    peaks = gutter_levels(row_spread(dark), row_level(dark))
+    assert peaks and peaks[0] == pytest.approx(0.0, abs=2)
+
+
+def test_a_chapter_with_two_gutter_colours_keeps_both():
+    """Found on a real chapter: black for one scene, white for the rest.
+
+    Taking only the modal level discarded every black gutter as artwork and
+    forced 20 of 53 seams into blind cuts.
+    """
+    light, _, _ = build_strip(panels=10)
+    dark = 255 - build_strip(seed=3, panels=10)[0]
+    strip = np.vstack([dark, light])
+    peaks = sorted(gutter_levels(row_spread(strip), row_level(strip)))
+    assert len(peaks) >= 2
+    assert peaks[0] == pytest.approx(0.0, abs=4)
+    assert peaks[-1] == pytest.approx(255.0, abs=4)
+
+
+def test_a_forced_cut_lands_on_the_quietest_row_available():
+    """With no gutter anywhere, cut where the page varies least.
+
+    Cutting at the target instead put every forced seam of a real chapter
+    through maximum-contrast content -- median spread 255 against 29 here.
+    """
+    rng = np.random.default_rng(5)
+    noisy = rng.integers(0, 255, (9000, WIDTH, 3), dtype=np.uint8)
+    # One near-uniform row, off-target, is the only quiet place to cut.
+    noisy[2500] = 128
+    spans, seams = plan_cuts(row_spread(noisy), row_level(noisy))
+    assert seams[0].y == 2500
+    assert not seams[0].safe
 
 
 # -------------------------------------------------------------------- cutting
@@ -236,3 +266,113 @@ def test_an_odd_width_slice_is_rescaled_not_rejected(tmp_path):
     assert report.width == WIDTH
     assert report.resized == 1
     assert report.page_count >= 1
+
+
+# ------------------------------------------------------------------ resuming
+
+
+def chapter_state(tmp_path, pages):
+    """A longstrip chapter whose state matches what is on disk."""
+    from comic.schemas import ChapterState, PageKind, PageRecord
+
+    return ChapterState(
+        series="s", chapter="Chapter_001", page_kind=PageKind.LONGSTRIP,
+        source_language="ko",
+        page_count=len(pages),
+        pages=[PageRecord(page=n, filename=f"{n:03d}.png")
+               for n in range(1, len(pages) + 1)],
+    )
+
+
+def test_an_already_sliced_chapter_is_not_re_cut(tmp_path, monkeypatch):
+    """Re-slicing resets every per-page stage status.
+
+    ``comic analyze`` calls this every run, so without the guard a second
+    analyze rewrites ``state.pages`` and silently discards the chapter's
+    detection and OCR -- and breaks resumability for every later stage.
+    """
+    from comic.paths import ChapterPaths
+    from comic.schemas import Stage, StageStatus
+    from comic.stages import run_slice
+
+    monkeypatch.setenv("COMIC_HOME", str(tmp_path))
+    paths = ChapterPaths("s", 1, root=tmp_path)
+    paths.ensure()
+
+    strip, _, _ = build_strip(panels=8)
+    export(strip, paths.original)
+    first = run_slice(paths, chapter_state(tmp_path, []))
+    assert first is not None and first.page_count > 1
+
+    state = chapter_state(tmp_path, list(paths.pages.glob("*.png")))
+    for record in state.pages:
+        record.stages[Stage.DETECT] = StageStatus.DONE
+    before = [p.filename for p in state.pages]
+
+    assert run_slice(paths, state) is None
+    assert [p.filename for p in state.pages] == before
+    assert all(p.status_of(Stage.DETECT) is StageStatus.DONE for p in state.pages)
+
+
+def test_force_re_cuts_even_when_already_sliced(tmp_path, monkeypatch):
+    from comic.paths import ChapterPaths
+    from comic.stages import run_slice
+
+    monkeypatch.setenv("COMIC_HOME", str(tmp_path))
+    paths = ChapterPaths("s", 1, root=tmp_path)
+    paths.ensure()
+    strip, _, _ = build_strip(panels=8)
+    export(strip, paths.original)
+    run_slice(paths, chapter_state(tmp_path, []))
+
+    state = chapter_state(tmp_path, list(paths.pages.glob("*.png")))
+    assert run_slice(paths, state, force=True) is not None
+
+
+# ------------------------------------------------- the gate's outstanding list
+
+
+def test_a_page_scoped_rerun_still_reports_the_whole_chapter(tmp_path, monkeypatch):
+    """``--page`` limits what is read; it must not limit what the gate reports.
+
+    The gate is the chapter's outstanding-work list, and answering it lets the
+    pipeline move on. Measured on a real chapter: after `analyze -p 12
+    --force` the request listed 3 regions while 56 were still unreviewed, so
+    resuming would have carried 53 unchecked readings into translation.
+    """
+    from comic.paths import ChapterPaths
+    from comic.schemas import (
+        BBox, ChapterState, PageAnalysis, PageRecord, ReadingDirection,
+        Stage, StageStatus, TextKind, TextRegion, region_id,
+    )
+    from comic.stages import run_ocr
+    from comic.state.store import write_json
+
+    monkeypatch.setenv("COMIC_HOME", str(tmp_path))
+    paths = ChapterPaths("s", 1, root=tmp_path)
+    paths.ensure()
+
+    pages = []
+    for page in (1, 2):
+        pages.append(PageRecord(page=page, filename=f"{page:03d}.png"))
+        # One unreadable region per page: low confidence, never reviewed.
+        write_json(paths.analysis_file(page), PageAnalysis(
+            page=page, width=400, height=400,
+            reading_direction=ReadingDirection.TTB, panels=[],
+            regions=[TextRegion(
+                id=region_id(page, 1), page=page,
+                bbox=BBox(x1=10, y1=10, x2=100, y2=60),
+                kind=TextKind.DIALOGUE,
+                polygon=[], bubble_polygon=[], reading_order=1,
+                source_text="", ocr_confidence=0.0, ocr_provider="x",
+            )],
+        ))
+    state = ChapterState(series="s", chapter="Chapter_001", pages=pages,
+                         page_count=2, source_language="ko")
+    for record in state.pages:
+        record.stages[Stage.OCR] = StageStatus.DONE
+
+    # Scope the run to page 2; the gate must still name page 1's region.
+    _outcome, suspicious = run_ocr(paths, state, only=[2])
+    flagged = {region.id for _analysis, region in suspicious}
+    assert flagged == {region_id(1, 1), region_id(2, 1)}

@@ -1,0 +1,197 @@
+{
+ "gate": "video_plan",
+ "style": "story",
+ "background": "white",
+ "story": "Series intro from Ch.1-2: Jiun learns his entry is a copy of his crush Kanghyun's style, goes to apologise, confesses, and Kanghyun drags him off and names him his new assistant; flash-forward to Ch.46's 'Em thích anh.' Whole panels with our Vietnamese dialogue (allowed for this series).",
+ "music": {
+  "track": "tt_how_you_get_the_girl_taylor_s_version_1874",
+  "start": 1.81,
+  "beat_sync": true
+ },
+ "caption": "Lỡ đạo nhái nét vẽ của chính người mình thầm thích… rồi bị anh ấy bắt về làm trợ lý 😳 Truyện: Mi Imitador (From Pakuri to Assistant?!) — full Vietsub",
+ "hashtags": [
+  "MiImitador",
+  "FromPakuriToAssistant",
+  "manhwabl",
+  "BL",
+  "truyentranh",
+  "webtoon",
+  "fyp"
+ ],
+ "shots": [
+  {
+   "panel": "p004_k0",
+   "seconds": 2.042,
+   "motion": "zoom_in",
+   "strength": 0.12,
+   "transition": "cut",
+   "transition_seconds": 0.2,
+   "fit": "contain",
+   "crop": {
+    "x1": 0,
+    "y1": 14,
+    "x2": 700,
+    "y2": 1000
+   }
+  },
+  {
+   "panel": "p019_k0",
+   "seconds": 3.064,
+   "motion": "static",
+   "strength": 0.12,
+   "transition": "cut",
+   "transition_seconds": 0.2,
+   "fit": "contain",
+   "crop": {
+    "x1": 0,
+    "y1": 0,
+    "x2": 700,
+    "y2": 1196
+   }
+  },
+  {
+   "panel": "p025_k0",
+   "seconds": 2.042,
+   "motion": "zoom_in",
+   "strength": 0.12,
+   "transition": "cut",
+   "transition_seconds": 0.2,
+   "fit": "contain",
+   "crop": {
+    "x1": 0,
+    "y1": 0,
+    "x2": 700,
+    "y2": 1010
+   }
+  },
+  {
+   "panel": "p030_k0",
+   "seconds": 2.553,
+   "motion": "static",
+   "strength": 0.12,
+   "transition": "cut",
+   "transition_seconds": 0.2,
+   "fit": "contain",
+   "crop": {
+    "x1": 0,
+    "y1": 0,
+    "x2": 700,
+    "y2": 955
+   }
+  },
+  {
+   "panel": "p046_k0",
+   "seconds": 3.064,
+   "motion": "zoom_in",
+   "strength": 0.12,
+   "transition": "cut",
+   "transition_seconds": 0.2,
+   "fit": "contain",
+   "crop": {
+    "x1": 0,
+    "y1": 0,
+    "x2": 700,
+    "y2": 1197
+   }
+  },
+  {
+   "panel": "p052_k0",
+   "seconds": 2.042,
+   "motion": "static",
+   "strength": 0.12,
+   "transition": "cut",
+   "transition_seconds": 0.2,
+   "fit": "contain",
+   "crop": {
+    "x1": 0,
+    "y1": 0,
+    "x2": 700,
+    "y2": 1193
+   }
+  },
+  {
+   "panel": "p002_k0",
+   "chapter": "2",
+   "seconds": 2.553,
+   "motion": "zoom_in",
+   "strength": 0.12,
+   "transition": "cut",
+   "transition_seconds": 0.2,
+   "fit": "contain",
+   "crop": {
+    "x1": 0,
+    "y1": 440,
+    "x2": 700,
+    "y2": 1060
+   }
+  },
+  {
+   "panel": "p011_k1",
+   "chapter": "2",
+   "seconds": 2.042,
+   "motion": "static",
+   "strength": 0.12,
+   "transition": "cut",
+   "transition_seconds": 0.2,
+   "fit": "contain"
+  },
+  {
+   "panel": "p052_k1",
+   "chapter": "2",
+   "seconds": 2.553,
+   "motion": "zoom_in",
+   "strength": 0.12,
+   "transition": "cut",
+   "transition_seconds": 0.2,
+   "fit": "contain"
+  },
+  {
+   "panel": "p053_k0",
+   "chapter": "2",
+   "seconds": 3.064,
+   "motion": "static",
+   "strength": 0.12,
+   "transition": "cut",
+   "transition_seconds": 0.2,
+   "fit": "contain",
+   "crop": {
+    "x1": 0,
+    "y1": 110,
+    "x2": 700,
+    "y2": 800
+   }
+  },
+  {
+   "panel": "p054_k0",
+   "chapter": "2",
+   "seconds": 2.042,
+   "motion": "punch",
+   "strength": 0.25,
+   "transition": "cut",
+   "transition_seconds": 0.2,
+   "fit": "contain",
+   "crop": {
+    "x1": 90,
+    "y1": 280,
+    "x2": 660,
+    "y2": 1110
+   }
+  },
+  {
+   "panel": "p011_k0",
+   "chapter": "46",
+   "seconds": 3.064,
+   "motion": "zoom_in",
+   "strength": 0.15,
+   "transition": "dip_white",
+   "transition_seconds": 0.4,
+   "fit": "contain",
+   "crop": {
+    "x1": 0,
+    "y1": 0,
+    "x2": 700,
+    "y2": 1320
+   }
+  }
+ ]
+}
