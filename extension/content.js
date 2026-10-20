@@ -4,7 +4,7 @@
  *
  * Deliberately does NOT read pixels out of any <canvas>. Where a reader paints
  * its pages, they are captured with the browser's own screenshot API, the same
- * way a person would capture them. See CLAUDE.md.
+ * way a person would capture them. See docs/acquisition.md.
  */
 
 (() => {

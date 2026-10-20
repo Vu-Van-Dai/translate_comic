@@ -99,6 +99,11 @@ reporting a page that *should* have rendered and did not.
 Check before dropping: page 4 of this chapter holds two regions and looks like
 front matter, but one of them is the splash line `她丈夫，也就是你！！`.
 
+**What stays in English:** logos, the scanlator's notes, and in-world
+signage (shop signs, a wreath's ribbons, a book cover). Phone messages, notes
+shown to the reader and floating spoken lines carry the plot and are
+translated, with the series' pinned pronouns.
+
 ## Agent memory lives in the project
 
 Claude's memory for this project is `.claude/memory/` (index: `MEMORY.md`),
@@ -155,7 +160,7 @@ comic analyze --series NAME -c N     # slice + detect + OCR, stops at ocr_review
 comic review --series NAME -c N -r p010_r12   # look at a reading anyway
 comic translate --series NAME -c N   # open the translate gate
 comic render --series NAME -c N      # clean + typeset + centre/spill checks, stops at visual_qa
-                                     # (after a QA round: only pages waiting for it; --all = every page)
+                                     # (mid-QA: only pages not already approved; --all = every page)
 comic resume --series NAME --chapter N   # apply a gate response, carry on
 pytest                               # unit + fixture tests, no network
 python scripts/ocr_bench.py --series NAME --chapter N   # score OCR vs verified text
@@ -163,6 +168,10 @@ python scripts/ocr_bench.py --series NAME --chapter N   # score OCR vs verified 
 
 `comic slice` runs inside `comic analyze`; call it alone only to look at the
 seams before paying for detection.
+
+The pipeline's own publish writes PNG. Running `comic render`/`resume` again
+on a chapter already published by `comic ps publish` (WebP) puts PNGs back
+beside the WebP files -- see `docs/photoshop.md`.
 
 For a source that is not bilibili, state what it is at import time:
 
@@ -367,21 +376,29 @@ fix can be reverted and the page comes back exactly as if it had never been
 applied. Rounds are capped at `MAX_QA_ROUNDS`; past that the chapter escalates
 rather than looping.
 
-**Round 2 onward shows only the pages a fix touched.** Because a page is
-rebuilt from the original plus the plan, a page no fix touched comes out
-pixel-identical to the one already approved, so `comic resume` re-renders only
-the fixed pages (the whole page, since captions on a page share one size
-ceiling) and the request names the rest in `unchanged_pages`: approved, not
-re-rendered, not to be read again. `passed=true` still publishes every page.
-An answer that touches no page (accepts only, or only `blocked`) falls back to
-re-rendering and showing the whole chapter, so the gate is never empty. The
-gate folder holds only this round's pages.
+**Round 2 onward shows only pages that are not already approved.** A page
+counts as approved when it was shown, the answer did not fix it or name it in
+`blocked`, and none of its error-level pre-checks (overflow, leftover ink) went
+unanswered -- an overlooked error comes back instead of vanishing. A render is
+a pure function of its inputs, so each page shown is fingerprinted
+(`qa.visual.page_fingerprints`: source, mask, analysis, its Vietnamese and
+voices, its overrides, the series' fonts profile, the font files, the LaMa
+model and the rendering code) and an approved page whose fingerprint still
+matches would come out pixel-identical. `comic resume` re-renders everything
+else -- fixed, blocked and error-carrying pages, pages never shown in this QA
+cycle, pages whose translation or profile changed -- and the request names the
+rest in `unchanged_pages`: approved, not re-rendered, not to be read again.
+The whole page is the unit, since captions on a page share one size ceiling.
+`passed=true` publishes every page and clears the approvals, so the next
+render of the chapter starts a fresh cycle that shows everything. An answer of
+accepts only re-renders and shows the whole chapter, so the gate is never
+empty. The gate folder holds only this round's pages.
 
 `retranslate_shorter` reopens the *translate* gate for those regions, because
-shortening a line is a translation decision, not a rendering one. The pages
-that round changed are kept in `render_plan.json` (`rerender_pages`), so the
-next `comic render` renders only those and reports the rest as unchanged;
-`comic render --all` renders every page regardless.
+shortening a line is a translation decision, not a rendering one. The
+approvals stay in `render_plan.json`, so the next `comic render` renders only
+the pages that are not approved (the retranslated ones included, since their
+Vietnamese changed); `comic render --all` renders every page regardless.
 
 Only rendered pages are published, and a chapter published incomplete is marked
 `partial` -- a half chapter in `library/` would otherwise look finished.

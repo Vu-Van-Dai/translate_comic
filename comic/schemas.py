@@ -10,7 +10,7 @@ from __future__ import annotations
 from datetime import datetime, timezone
 from enum import Enum
 
-from pydantic import BaseModel, ConfigDict, Field, field_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
 
 def utcnow() -> datetime:
@@ -286,11 +286,23 @@ class RenderPlan(Base):
     #: How many QA rounds have been applied. Capped so a loop cannot run away.
     round: int = 1
     overrides: dict[str, RegionOverride] = Field(default_factory=dict)
-    #: Pages a visual_qa round changed that still wait for a re-render, because
-    #: the round sent some of its lines back to the translate gate first. The
-    #: next ``comic render`` without ``--page`` renders only these (and the
-    #: rest are reported as unchanged); any render clears the pages it did.
-    rerender_pages: list[int] = Field(default_factory=list)
+    #: Page -> digest of every input of the render last shown at visual_qa
+    #: (``qa.visual.page_fingerprints``).
+    shown: dict[int, str] = Field(default_factory=dict)
+    #: Page -> digest of the render the agent approved: shown, not fixed, not
+    #: blocked, and no error-level pre-check left unanswered. A page whose
+    #: inputs still hash the same renders pixel-identical, so later rounds do
+    #: not render or show it again. Cleared when the chapter is published.
+    approved: dict[int, str] = Field(default_factory=dict)
+
+    @model_validator(mode="before")
+    @classmethod
+    def _drop_retired(cls, data):
+        # ``rerender_pages`` (2026-10-20, replaced the same day by ``approved``)
+        # may sit in a plan written in between; it carries nothing still used.
+        if isinstance(data, dict):
+            data = {k: v for k, v in data.items() if k != "rerender_pages"}
+        return data
 
     def for_region(self, region_id: str) -> RegionOverride:
         return self.overrides.get(region_id) or RegionOverride()

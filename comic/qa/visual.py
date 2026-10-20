@@ -379,10 +379,10 @@ def open_visual_qa(
 ) -> Path:
     """Write the rendered pages and the findings for the agent to judge.
 
-    ``unchanged`` names pages a later round did not re-render because no fix
-    touched them. Every round renders from the original plus the stored plan,
-    so such a page is pixel-identical to the one already approved, and the
-    request says so instead of showing it again.
+    ``unchanged`` names pages approved at an earlier round whose every render
+    input still hashes the same (``page_fingerprints``). A render is a pure
+    function of those inputs, so such a page is pixel-identical to the one
+    approved, and the request says so instead of showing it again.
     """
     gate_dir = paths.gate_dir(Gate.VISUAL_QA.value)
     gate_dir.mkdir(parents=True, exist_ok=True)
@@ -441,11 +441,12 @@ def open_visual_qa(
             "actionable fix. Then run `comic resume`."
         ) + (
             (
-                " Only the pages listed were re-rendered this round. The "
-                "pages in `unchanged_pages` were approved in an earlier "
-                "round and no fix touched them, so they are pixel-identical "
-                "to what was approved: do not read them again. passed=true "
-                "publishes the whole chapter, those pages included."
+                " Only the pages listed were rendered this round. The pages "
+                "in `unchanged_pages` were approved in an earlier round and "
+                "every input of their render is unchanged, so they are "
+                "pixel-identical to what was approved: do not read them "
+                "again. passed=true publishes the whole chapter, those pages "
+                "included."
             )
             if unchanged
             else ""
@@ -483,6 +484,169 @@ def touched_pages(paths: ChapterPaths, state: ChapterState, fixes: list[QaFix]) 
     return pages_of(
         paths, state, [f.region_id for f in fixes if f.action is not FixAction.ACCEPT]
     )
+
+
+def _render_environment(paths: ChapterPaths) -> str:
+    """A digest of everything outside a page that decides its pixels.
+
+    The code that cleans, fits and draws; the series' lettering profile with
+    its preset chain; the font files and the inpainting model. Any change to
+    one of them makes every page render anew rather than being trusted as
+    unchanged.
+    """
+    import hashlib
+    import json
+
+    digest = hashlib.sha256()
+    package = Path(__file__).resolve().parent.parent
+    code = [*sorted((package / "typesetting").glob("*.py")),
+            *sorted((package / "image_processing").glob("*.py")),
+            package / "qa" / "visual.py", package / "qa" / "placement.py"]
+    for source in code:
+        digest.update(source.name.encode())
+        digest.update(source.read_bytes())
+    try:
+        from comic.typesetting.render import read_profile
+
+        profile = read_profile(SeriesPaths(paths.series).fonts_file)
+        digest.update(json.dumps(profile, sort_keys=True, default=str).encode())
+    except (OSError, ValueError) as exc:
+        digest.update(f"profile error: {exc}".encode())
+    fonts = paths.root / "assets" / "fonts"
+    model = paths.root / "models" / "inpainting_lama.onnx"
+    for item in [*(sorted(fonts.iterdir()) if fonts.is_dir() else []), model]:
+        if item.is_file():
+            stat = item.stat()
+            digest.update(f"{item.name}:{stat.st_size}:{stat.st_mtime_ns}".encode())
+    return digest.hexdigest()
+
+
+def page_fingerprints(
+    paths: ChapterPaths, state: ChapterState, plan: RenderPlan
+) -> dict[int, str]:
+    """For every page that renders, a digest of every input of its render.
+
+    The page's source, mask and analysis, the Vietnamese and voice of each of
+    its regions, the plan's overrides for them, and ``_render_environment``.
+    Two renders with the same digest are pixel-identical, because a render is
+    a pure function of these. Pages with nothing translated never render and
+    are left out.
+    """
+    import hashlib
+    import json
+
+    if not paths.translation_file.exists():
+        return {}
+    translation = read_json(paths.translation_file, ChapterTranslation)
+    entries = translation.by_region()  # type: ignore[union-attr]
+    common = _render_environment(paths)
+
+    prints: dict[int, str] = {}
+    for record in state.pages:
+        if record.excluded:
+            continue
+        analysis = analysis_for(paths, record.page)
+        if analysis is None:
+            continue
+        ids = [r.id for r in analysis.regions]
+        if not any(entries.get(i) and entries[i].target_text.strip() for i in ids):
+            continue
+        digest = hashlib.sha256(common.encode())
+        for item in (paths.analysis_file(record.page),
+                     paths.source_pages / record.filename,
+                     paths.mask_file(record.page)):
+            digest.update(item.read_bytes() if item.exists() else b"missing")
+        for region_id in ids:
+            entry = entries.get(region_id)
+            if entry is not None:
+                digest.update(json.dumps(
+                    [region_id, entry.target_text, entry.voice]).encode())
+            override = plan.overrides.get(region_id)
+            if override is not None:
+                digest.update(region_id.encode())
+                digest.update(override.model_dump_json().encode())
+        prints[record.page] = digest.hexdigest()
+    return prints
+
+
+def pages_to_render(
+    paths: ChapterPaths, state: ChapterState, plan: RenderPlan
+) -> list[int] | None:
+    """The pages a render must produce, or None for every page.
+
+    Every page except those approved at an earlier round whose inputs still
+    hash the same. None -- the whole chapter -- when nothing is approved yet
+    (a first render) or when nothing would be left to render.
+    """
+    if not plan.approved:
+        return None
+    prints = page_fingerprints(paths, state, plan)
+    todo = sorted(p for p, digest in prints.items() if plan.approved.get(p) != digest)
+    return todo or None
+
+
+def blocked_pages(
+    paths: ChapterPaths, state: ChapterState, blocked: list[str]
+) -> tuple[set[int], bool]:
+    """The pages named in a visual_qa answer's ``blocked`` list.
+
+    Entries are free text; a region id, ``page N`` or a bare number is read.
+    Returns (pages, whether any entry could not be placed on a page).
+    """
+    import re
+
+    pages: set[int] = set()
+    unplaced = False
+    for entry in blocked:
+        ids = re.findall(r"p\d{3}_r\d+", entry)
+        numbers = {int(n) for n in re.findall(r"(?i)\bpages?\s*(\d+)", entry)}
+        numbers |= {int(n) for n in re.findall(r"\bp(\d{3})\b", entry)}
+        if entry.strip().isdigit():
+            numbers.add(int(entry.strip()))
+        found = pages_of(paths, state, ids) | numbers
+        if not found:
+            unplaced = True
+        pages |= found
+    return pages, unplaced
+
+
+def record_approvals(
+    paths: ChapterPaths, state: ChapterState, plan: RenderPlan, answer
+) -> None:
+    """Fold a visual_qa answer into ``plan.approved``.
+
+    A page shown in the request being answered is approved when the answer
+    did not fix it, did not name it blocked, and left none of its error-level
+    pre-checks (overflow, leftover ink) unanswered -- an error the agent
+    overlooked must come back, not vanish. Anything uncertain approves
+    nothing: no readable request, or a blocked entry that names no page.
+    """
+    from comic.state.store import StateError
+
+    try:
+        request = read_json(paths.gate_request(Gate.VISUAL_QA.value), VisualQaRequest)
+    except StateError:
+        return
+    blocked, unplaced = blocked_pages(paths, state, answer.blocked)
+    if unplaced:
+        # A blocked entry that names no page could mean any of them.
+        plan.approved.clear()
+        return
+    touched = touched_pages(paths, state, answer.fixes)
+    answered = {fix.region_id for fix in answer.fixes}
+    for item in request.pages:  # type: ignore[union-attr]
+        open_errors = [
+            c for c in item.pre_checks
+            if c.severity == "error" and c.region_id not in answered
+        ]
+        if (item.page in touched or item.page in blocked
+                or open_errors or item.page not in plan.shown):
+            plan.approved.pop(item.page, None)
+        else:
+            plan.approved[item.page] = plan.shown[item.page]
+    # A page fixed or blocked now loses an approval from an earlier round too.
+    for page in touched | blocked:
+        plan.approved.pop(page, None)
 
 
 def apply_fixes(plan: RenderPlan, fixes: list[QaFix]) -> tuple[int, list[str]]:

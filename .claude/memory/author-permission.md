@@ -10,4 +10,4 @@ metadata:
 
 On 2026-10-12 the user said they have obtained permission from the authors for every series they bring to this project, and that they had told Claude this before (that earlier record was lost in the machine reset, see [[environment-after-reinstall]]).
 
-**How to apply:** proceed with translating series the user provides. This does not change the project's own rules in CLAUDE.md: front matter (cover, contents, credits, logos) stays untranslated, and the site-access rules still hold (no paywall/DRM/bot-challenge circumvention).
+**How to apply:** proceed with translating series the user provides. This does not change the project's own rules in CLAUDE.md: front matter (cover, contents, credits, logos) stays untranslated, and the site-access rules still hold (no paywall/DRM/bot-challenge circumvention; CLAUDE.md invariants and `docs/acquisition.md`).

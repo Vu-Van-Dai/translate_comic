@@ -917,18 +917,24 @@ def review(
     raise typer.Exit(GATE_EXIT_CODE)
 
 
-def _open_render_gate(paths, store, state, outcome, plan, series, chapter, error=None,
-                      unchanged=None):
+def _open_render_gate(paths, store, state, outcome, plan, series, chapter, error=None):
     """Write the visual_qa gate and print what the agent must read.
 
-    ``unchanged``: pages left out of this round because no fix touched them
-    (see ``open_visual_qa``).
+    Records what this round shows (``plan.shown``), and names as unchanged
+    the pages approved earlier whose inputs still hash the same -- they were
+    not rendered or shown again (see ``open_visual_qa``).
     """
-    from comic.qa.visual import open_visual_qa, save_plan
+    from comic.qa.visual import open_visual_qa, page_fingerprints, save_plan
     from comic.state.store import open_gate
 
-    # Pages this render produced no longer wait for one.
-    plan.rerender_pages = [p for p in plan.rerender_pages if p not in outcome.pages]
+    prints = page_fingerprints(paths, state, plan)
+    for page in outcome.pages:
+        if page in prints:
+            plan.shown[page] = prints[page]
+    unchanged = sorted(
+        p for p, digest in prints.items()
+        if p not in outcome.pages and plan.approved.get(p) == digest
+    )
     save_plan(paths, plan)
     request = open_visual_qa(paths, state, outcome, plan, previous_error=error,
                              unchanged=unchanged)
@@ -945,11 +951,9 @@ def _open_render_gate(paths, store, state, outcome, plan, series, chapter, error
         f"{len(errors)} error(s), {len(warnings)} warning(s) "
         f"({off_centre} off-centre, {spills} spill)."
     )
-    shown = set(outcome.pages)
-    skipped = sorted(set(unchanged or []) - shown)
-    if skipped:
+    if unchanged:
         console.print(
-            f"  [path]{len(skipped)} page(s) unchanged since they were approved, "
+            f"  [path]{len(unchanged)} page(s) unchanged since they were approved, "
             "not shown again[/path]"
         )
     for check in errors[:8]:
@@ -975,7 +979,7 @@ def render(
 ) -> None:
     """Clean the source lettering, set the Vietnamese, and open visual QA."""
     setup_console()
-    from comic.qa.visual import load_plan, render_chapter
+    from comic.qa.visual import load_plan, pages_to_render, render_chapter
 
     paths = ChapterPaths(series, chapter)
     store = ChapterStore(paths)
@@ -988,23 +992,19 @@ def render(
     console.rule(f"[stage]{escape(paths.series)} / {escape(paths.chapter)}[/stage]")
     plan = load_plan(paths, state)
 
-    # A QA round that sent lines back to the translate gate left its other
-    # fixes waiting too. Render just those pages: every other page was approved
-    # and is pixel-identical to a fresh render, because each render starts
-    # from the original plus the stored plan.
+    # Mid-QA (after a round sent lines back to the translate gate, say),
+    # render only what is not already approved: a page approved earlier whose
+    # inputs still hash the same would come out pixel-identical.
     only = list(page or []) or None
-    unchanged = None
-    if only is None and not all_pages and plan.rerender_pages:
-        only = sorted(plan.rerender_pages)
-        unchanged = sorted(
-            r.page for r in state.pages
-            if not r.excluded and r.page not in only
-            and (paths.translated / r.filename).exists()
-        )
-        console.print(
-            f"  [path]rendering only the {len(only)} page(s) the last QA round "
-            f"changed: {', '.join(str(p) for p in only)} (--all renders every page)[/path]"
-        )
+    narrowed = False
+    if only is None and not all_pages:
+        only = pages_to_render(paths, state, plan)
+        narrowed = only is not None
+        if narrowed:
+            console.print(
+                f"  [path]rendering only the {len(only)} page(s) not already approved: "
+                f"{', '.join(str(p) for p in only)} (--all renders every page)[/path]"
+            )
 
     console.print("[stage]clean + typeset[/stage]")
     outcome = render_chapter(
@@ -1014,6 +1014,14 @@ def render(
     )
     for note in outcome.notes:
         console.print(f"  [warn]![/warn] {escape(note)}")
+    if narrowed and not outcome.pages:
+        # Those pages cannot render (an excluded page, a missing mask...):
+        # fall back to the whole chapter rather than stopping on it.
+        outcome = render_chapter(
+            paths, state, plan, workers=workers,
+            model=paths.root / "models" / "inpainting_lama.onnx",
+            progress=lambda pg, n: console.print(f"  page {pg:03d}: {n} line(s) set"),
+        )
 
     if not outcome.pages:
         console.print("[fail]x[/fail] Nothing rendered. Is the chapter translated?")
@@ -1031,8 +1039,7 @@ def render(
     state.stage(Stage.CLEAN).status = StageStatus.DONE
     state.stage(Stage.TYPESET).status = StageStatus.DONE
     store.save(state)
-    _open_render_gate(paths, store, state, outcome, plan, series, chapter,
-                      unchanged=unchanged)
+    _open_render_gate(paths, store, state, outcome, plan, series, chapter)
 
 
 def _resume_visual_qa(paths, store, state, series, chapter) -> None:
@@ -1045,10 +1052,11 @@ def _resume_visual_qa(paths, store, state, series, chapter) -> None:
         apply_fixes,
         load_plan,
         pages_of,
+        pages_to_render,
         publish,
+        record_approvals,
         render_chapter,
         save_plan,
-        touched_pages,
     )
     from comic.state.store import close_gate
 
@@ -1098,6 +1106,11 @@ def _resume_visual_qa(paths, store, state, series, chapter) -> None:
     if answer.passed:
         close_gate(state)
         state.stage(Stage.QA).status = StageStatus.DONE
+        # The QA cycle is over: the next render of this chapter starts fresh
+        # and shows every page.
+        plan.shown.clear()
+        plan.approved.clear()
+        save_plan(paths, plan)
         count, problems = publish(paths, state)
         for problem in problems:
             console.print(f"  [warn]![/warn] {escape(problem)}")
@@ -1111,14 +1124,10 @@ def _resume_visual_qa(paths, store, state, series, chapter) -> None:
         console.print(f"  [path]{escape(str(paths.library))}[/path]")
         return
 
+    # Pages this answer approved are not rendered or shown again while their
+    # inputs stay the same; fixed, blocked and error-carrying pages are.
+    record_approvals(paths, state, plan, answer)
     applied, retranslate = apply_fixes(plan, answer.fixes)
-    # The pages this answer changes. Only these are re-rendered and shown
-    # again; every other page was approved and no fix touched it.
-    touched = touched_pages(paths, state, answer.fixes)
-    if retranslate:
-        # The re-render waits for the shorter lines; remember every page this
-        # round changed so the next `comic render` does just those.
-        plan.rerender_pages = sorted(set(plan.rerender_pages) | touched)
     save_plan(paths, plan)
     console.print(f"[ok]+[/ok] {applied} fix(es) applied (round {plan.round}).")
 
@@ -1148,16 +1157,19 @@ def _resume_visual_qa(paths, store, state, series, chapter) -> None:
             console.print(f"  {escape(rid)}: at most {limit} characters")
         console.print(f"  read   [path]{escape(str(request))}[/path]")
         console.print(f"  write  [path]{escape(str(paths.gate_response('translate')))}[/path]")
-        if plan.rerender_pages:
+        if plan.approved:
             console.print(
-                f"  then   [bold]comic resume[/bold], then [bold]comic render[/bold] "
-                f"(it renders only the {len(plan.rerender_pages)} page(s) this round changed)"
+                "  then   [bold]comic resume[/bold], then [bold]comic render[/bold] "
+                "(it renders only the pages not already approved)"
             )
         raise typer.Exit(GATE_EXIT_CODE)
 
     if plan.round > MAX_QA_ROUNDS:
         close_gate(state)
         store.save(state)
+        plan.shown.clear()
+        plan.approved.clear()
+        save_plan(paths, plan)
         console.print(
             f"[warn]![/warn] {MAX_QA_ROUNDS} rounds of fixes did not settle this "
             "chapter. Stopping rather than looping; the rendered pages are in "
@@ -1165,21 +1177,15 @@ def _resume_visual_qa(paths, store, state, series, chapter) -> None:
         )
         raise typer.Exit(1)
 
-    # Re-render only the pages a fix touched. When none did (an answer of
-    # accepts, or only blocked pages), fall back to the whole chapter so the
-    # gate is never empty.
-    # Pages still waiting from an earlier round are rendered too.
-    only = sorted(touched | set(plan.rerender_pages)) or None
-    unchanged = None
+    # Re-render everything not approved at this or an earlier round: fixed,
+    # blocked and error-carrying pages, pages never shown, and pages whose
+    # inputs changed since their approval. When that leaves nothing (an answer
+    # of accepts only), the whole chapter is rendered and shown again.
+    only = pages_to_render(paths, state, plan)
     console.print("\n[stage]re-render[/stage]")
     if only:
-        unchanged = sorted(
-            r.page for r in state.pages
-            if not r.excluded and r.page not in only
-            and (paths.translated / r.filename).exists()
-        )
         console.print(
-            f"  [path]only the {len(only)} page(s) with a fix: "
+            f"  [path]only the {len(only)} page(s) not already approved: "
             f"{', '.join(str(p) for p in only)}[/path]"
         )
     outcome = render_chapter(
@@ -1187,10 +1193,15 @@ def _resume_visual_qa(paths, store, state, series, chapter) -> None:
         model=paths.root / "models" / "inpainting_lama.onnx",
         progress=lambda pg, n: console.print(f"  page {pg:03d}: {n} line(s) set"),
     )
+    if only and not outcome.pages:
+        outcome = render_chapter(
+            paths, state, plan,
+            model=paths.root / "models" / "inpainting_lama.onnx",
+            progress=lambda pg, n: console.print(f"  page {pg:03d}: {n} line(s) set"),
+        )
     for note in outcome.notes:
         console.print(f"  [warn]![/warn] {escape(note)}")
-    _open_render_gate(paths, store, state, outcome, plan, series, chapter,
-                      unchanged=unchanged)
+    _open_render_gate(paths, store, state, outcome, plan, series, chapter)
 
 
 @app.command()
@@ -1290,11 +1301,9 @@ def resume(
                       f"\"{escape(series)}\" --chapter {escape(str(chapter))}[/bold]")
         from comic.qa.visual import load_plan
 
-        waiting = load_plan(paths, state).rerender_pages
-        if waiting:
+        if load_plan(paths, state).approved:
             console.print(
-                f"  [path]it renders only the {len(waiting)} page(s) the last QA "
-                f"round changed ({', '.join(str(p) for p in waiting)}); "
+                "  [path]mid-QA: it renders only the pages not already approved; "
                 "--all renders every page[/path]"
             )
         return

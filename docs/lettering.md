@@ -127,7 +127,7 @@ a bubble's outline was the first complaint from a reader.
   and narration are italic; location/time captions are styled distinctly.
 - Text messages: sans face, light text on a coloured rounded box (p. 155).
   In-world screens and signs stay as drawn unless they carry the plot (see
-  CLAUDE.md, Photoshop route, "What stays in English").
+  CLAUDE.md, "What stays in English").
 
 ## 8. Sound effects (ch. 7) -- Photoshop route only
 
@@ -136,7 +136,7 @@ a bubble's outline was the first complaint from a reader.
 - Condensed letters where space is tight, extended where it is short and
   wide (p. 170).
 - An SFX crossing inked lines needs an outline (offset path, p. 173); match
-  the original's fill, outline and angle (CLAUDE.md, "Sound effects").
+  the original's fill, outline and angle (`docs/photoshop.md`, "Sound effects").
 
 ## 9. Case guideline (from Vietnamese groups, studied 2026-10-08)
 

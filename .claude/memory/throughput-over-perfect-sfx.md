@@ -18,4 +18,4 @@ The user (2026-10-15, clarified the same day): do not spend a chapter's worth of
 
 **Why:** with a Pro plan, one chapter per session is too slow; most of the value is in the dialogue.
 
-**How to apply:** per chapter: translate -> render -> check centring (the `off_centre` pre-checks `comic render` now lists) -> SFX pass (every easy one replaced; difficult ones as notes in empty space, 50-70% of them where a page is crowded with them) -> build -> leftover_scan -> publish, then next chapter. Related: [[super-lovers-finish]], [[mistakes-log]], [[work-autonomously]].
+**How to apply:** per chapter: translate -> render -> check centring (the `off_centre` pre-checks `comic render` now lists) -> SFX pass (every easy one replaced; difficult ones as notes in empty space, 50-70% of them where a page is crowded with them) -> build -> leftover_scan -> publish, then next chapter. For a NEW series the operator's 2026-10-20 workflow overrides the order: the first 2-3 chapters at Opus High skip SFX, then stop for the switch to Medium, then the rest plus every chapter's SFX pass ([[token-savings]]). Related: [[super-lovers-finish]], [[mistakes-log]], [[work-autonomously]].

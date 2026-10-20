@@ -147,10 +147,10 @@ erases those with Content-Aware Fill and sets the replacement in a group
   MEOMEOTEAM.SITE ..."). Detection misses most watermarks -- OCR the whole
   page for group names and site URLs before building. Whole credit pages
   are the operator's call.
-- **What stays in English:** logos, the scanlator's notes, and
-  in-world signage (shop signs, a wreath's ribbons, a book cover). Phone
-  messages, notes shown to the reader and floating spoken lines carry the
-  plot and are translated, with the series' pinned pronouns.
+- **What stays in English** (logos, the scanlator's notes, in-world signage;
+  phone messages, notes to the reader and floating spoken lines are
+  translated) is an everyday gate rule, so it lives in CLAUDE.md, "Front
+  matter is not story content".
 - **Lettering the detector never marked** (a scanlator's handwritten aside,
   the "AY?" of an "OKAY?" it cut short) has no mask to erase. Give the item
   a `bbox` with `letters: colour` -- for a `kind:` item too: the letters found
