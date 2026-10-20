@@ -7,7 +7,7 @@ person would: photograph what the browser has already drawn on screen.
 This deliberately does **not** read pixels out of a canvas via ``toDataURL`` and
 does not touch any decoding the page performs. It screenshots rendered elements,
 at screen fidelity, in a browser the operator is already viewing. Where a site
-protects its content, that protection is left intact; see CLAUDE.md.
+protects its content, that protection is left intact; see docs/acquisition.md.
 
 Each visual element becomes one page, so no stitching or seam-guessing is needed.
 """

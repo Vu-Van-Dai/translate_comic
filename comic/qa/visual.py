@@ -246,9 +246,43 @@ def render_one(
     result["layouts"] = layouts
     result["checks"] = _page_checks(
         analysis, layouts, image, cleaned, areas, page_mask
-    )
+    ) + _placement_checks(analysis, text, image, page_mask, rendered, cleaned, areas)
     result["rendered"] = True
     return result
+
+
+def _placement_checks(
+    analysis: PageAnalysis,
+    text: dict,
+    image: np.ndarray,
+    page_mask: np.ndarray,
+    rendered: np.ndarray,
+    cleaned: np.ndarray,
+    areas: dict[str, np.ndarray],
+) -> list[QaPreCheck]:
+    """The centre and spill checks, on the pixels this render just produced.
+
+    They used to be two scripts run by hand after every render; the findings
+    are the same (``comic/qa/placement.py``). Warnings, not errors: dot-tone
+    captions, SFX areas and shared bubbles raise false alarms, so each one is
+    for the eye to judge.
+    """
+    from comic.qa.placement import check_page
+
+    off, spills = check_page(
+        image, page_mask, rendered, cleaned, analysis.regions, text, areas=areas
+    )
+    checks = [
+        QaPreCheck(region_id=f.region_id, code="off_centre", detail=f.detail(),
+                   severity="warning")
+        for f in off
+    ]
+    checks += [
+        QaPreCheck(region_id=s.region_id, code="spill", detail=s.detail(),
+                   severity="warning")
+        for s in spills
+    ]
+    return checks
 
 
 def _job(payload: tuple) -> dict:
@@ -341,12 +375,27 @@ def open_visual_qa(
     outcome: RenderOutcome,
     plan: RenderPlan,
     previous_error: str | None = None,
+    unchanged: list[int] | None = None,
 ) -> Path:
-    """Write the rendered pages and the findings for the agent to judge."""
+    """Write the rendered pages and the findings for the agent to judge.
+
+    ``unchanged`` names pages a later round did not re-render because no fix
+    touched them. Every round renders from the original plus the stored plan,
+    so such a page is pixel-identical to the one already approved, and the
+    request says so instead of showing it again.
+    """
     gate_dir = paths.gate_dir(Gate.VISUAL_QA.value)
     gate_dir.mkdir(parents=True, exist_ok=True)
 
-    by_region = {check.region_id: check for check in outcome.checks}
+    # A page shown in an earlier round and not re-rendered in this one must not
+    # sit in the gate folder looking like part of this round.
+    for stale in gate_dir.glob("page_*_rendered.png"):
+        number = stale.stem.split("_")[1]
+        if number.isdigit() and int(number) not in outcome.pages:
+            stale.unlink()
+
+    # Every check, not one per region: a region can have several findings (an
+    # overflow and a spill), and keying them by region kept only the last.
     items: list[VisualQaPageItem] = []
     for page in outcome.pages:
         record = next((p for p in state.pages if p.page == page), None)
@@ -362,32 +411,78 @@ def open_visual_qa(
                 page=page,
                 rendered_path=str(target),
                 original_path=str(paths.source_pages / record.filename),
-                pre_checks=[c for rid, c in by_region.items() if rid in ids],
+                pre_checks=[c for c in outcome.checks if c.region_id in ids],
             )
         )
 
+    shown = {item.page for item in items}
+    unchanged = sorted(set(unchanged or []) - shown)
     request = VisualQaRequest(
         series=state.series,
         chapter=state.chapter,
         round=plan.round,
         max_rounds=MAX_QA_ROUNDS,
         pages=items,
+        unchanged_pages=unchanged,
         previous_error=previous_error,
         instructions=(
             "Read each rendered page next to its original. Judge whether it "
             "reads correctly: no source lettering left behind, no line "
             "overflowing or covering a face, type large enough to read and "
-            "consistent across the page, and the artwork intact. Answer with "
-            "fixes from the closed vocabulary only -- accept, font_delta, "
-            "nudge, force_wrap, expand_mask, shrink_mask, force_inpaint, "
-            "retranslate_shorter, restyle. Set passed=true only when every "
-            "page is right, and never alongside an actionable fix. Then run "
-            "`comic resume`."
+            "consistent across the page, and the artwork intact. The "
+            "off_centre and spill pre-checks are the centre and spill checks "
+            "(formerly run by hand with scripts/centre_check.py and "
+            "scripts/spill_check.py); they raise false alarms on dot-tone "
+            "captions, SFX and shared bubbles, so judge each by eye. Answer "
+            "with fixes from the closed vocabulary only -- accept, "
+            "font_delta, nudge, force_wrap, expand_mask, shrink_mask, "
+            "force_inpaint, retranslate_shorter, restyle. Set passed=true "
+            "only when every page is right, and never alongside an "
+            "actionable fix. Then run `comic resume`."
+        ) + (
+            (
+                " Only the pages listed were re-rendered this round. The "
+                "pages in `unchanged_pages` were approved in an earlier "
+                "round and no fix touched them, so they are pixel-identical "
+                "to what was approved: do not read them again. passed=true "
+                "publishes the whole chapter, those pages included."
+            )
+            if unchanged
+            else ""
         ),
     )
     request_path = paths.gate_request(Gate.VISUAL_QA.value)
     write_json(request_path, request)
     return request_path
+
+
+def pages_of(paths: ChapterPaths, state: ChapterState, region_ids) -> set[int]:
+    """The pages these regions sit on, read from each page's analysis.
+
+    From the analysis rather than from the digits of the id, which only
+    happen to encode the page.
+    """
+    wanted = set(region_ids)
+    pages: set[int] = set()
+    if not wanted:
+        return pages
+    for record in state.pages:
+        analysis = analysis_for(paths, record.page)
+        if analysis is not None and any(r.id in wanted for r in analysis.regions):
+            pages.add(record.page)
+    return pages
+
+
+def touched_pages(paths: ChapterPaths, state: ChapterState, fixes: list[QaFix]) -> set[int]:
+    """Pages a visual_qa answer changes: every fix but ``accept``.
+
+    A fix to one region can move others on its page -- a page's captions share
+    one size ceiling (``render.layout_page``) -- so the unit that is
+    re-rendered and shown again is the whole page.
+    """
+    return pages_of(
+        paths, state, [f.region_id for f in fixes if f.action is not FixAction.ACCEPT]
+    )
 
 
 def apply_fixes(plan: RenderPlan, fixes: list[QaFix]) -> tuple[int, list[str]]:

@@ -15,6 +15,14 @@ video_app = typer.Typer(
 )
 
 
+@video_app.callback()
+def _rules() -> None:
+    # The video rules moved from CLAUDE.md to docs/video.md; one line on every
+    # `comic video` command keeps them from being skipped.
+    setup_console()
+    console.print("[path]rules for videos: docs/video.md[/path]")
+
+
 @video_app.command("plan")
 def plan_cmd(
     series: str = typer.Option(..., "--series", help="Series name."),

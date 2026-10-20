@@ -218,6 +218,10 @@ class VisualQaRequest(GateRequest):
     round: int = 1
     max_rounds: int = 3
     pages: list[VisualQaPageItem] = Field(default_factory=list)
+    #: Pages approved in an earlier round that no fix touched since. They were
+    #: not re-rendered -- each round renders from the original plus the plan,
+    #: so they are pixel-identical -- and are not shown again.
+    unchanged_pages: list[int] = Field(default_factory=list)
 
 
 class QaFix(Base):

@@ -13,4 +13,5 @@
 - [Current work](current-work.md) — 2026-10-14: Dasadanan + Destined to Meet on the Trends, analyse all chapters first; Super Lovers on hold
 - [Channel videos](channel-videos.md) — D:\Kênh\Kênh tiktokl: one video per image folder, saved in place; scheduled posting to TikTok + FB page Rồng Nhỏ -- 124 left each side, re-run channel_post.py every 2-4 weeks
 - [Throughput over perfect SFX](throughput-over-perfect-sfx.md) — 2026-10-15: many chapters > perfect SFX (50-70% ok, note hard ones); dialogue centred is #1; no pale ink
+- [Token savings](token-savings.md) — 2026-10-20: QA rounds 2+ show only fixed pages, centre/spill checks inside comic render, CLAUDE.md split into docs/; operator's workflow: first 2-3 chapters at Opus High without SFX, stop for the switch to Medium, then finish everything incl. SFX; planned/dropped list
 - [Reply in English](reply-in-english.md) — always answer in English (fewest tokens), whatever language the user writes in

@@ -286,6 +286,11 @@ class RenderPlan(Base):
     #: How many QA rounds have been applied. Capped so a loop cannot run away.
     round: int = 1
     overrides: dict[str, RegionOverride] = Field(default_factory=dict)
+    #: Pages a visual_qa round changed that still wait for a re-render, because
+    #: the round sent some of its lines back to the translate gate first. The
+    #: next ``comic render`` without ``--page`` renders only these (and the
+    #: rest are reported as unchanged); any render clears the pages it did.
+    rerender_pages: list[int] = Field(default_factory=list)
 
     def for_region(self, region_id: str) -> RegionOverride:
         return self.overrides.get(region_id) or RegionOverride()

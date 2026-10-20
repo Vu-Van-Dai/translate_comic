@@ -26,6 +26,14 @@ ps_app = typer.Typer(
 CLEAN_MODES = ("pipeline", "hybrid", "content-aware")
 
 
+@ps_app.callback()
+def _rules() -> None:
+    # The route's rules moved from CLAUDE.md to docs/photoshop.md; one line on
+    # every `comic ps` command keeps them from being skipped.
+    setup_console()
+    console.print("[path]rules for this route: docs/photoshop.md[/path]")
+
+
 def _series_fonts(series: str | None) -> list[Path]:
     """Font files the series' styles use (all of assets/fonts with no series)."""
     fonts_dir = project_root() / "assets" / "fonts"

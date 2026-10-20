@@ -8,7 +8,7 @@ Writes three artifacts per page:
                             step in the pipeline, ~10s a page on CPU)
 
 Regions come from the mask rather than the detector's box proposals; see
-CLAUDE.md for why that distinction matters.
+docs/ocr-and-detection.md ("Detection notes") for why that distinction matters.
 """
 
 from __future__ import annotations
