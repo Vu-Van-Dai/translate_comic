@@ -27,6 +27,8 @@ Also: Opus High for code changes to `comic/`. When the operator drives the gates
 - Optional, only on the operator's yes: report the bubble's real room (bubble minus the series' margin, from `layout_region`) as `fit_width`/`fit_height` at the translate gate -- today they are the English text box, so budgets understate the room; allow 3-digit region numbers in SFX ids (`^p\d{3}_r\d{2}$` in `photoshop/sfx.py` rejects r100+).
 - Open checks: the API's stricter per-image size limit once a conversation holds >20 images (pages up to 2600 px tall from the slicer); whether translating fewer pages per conversation (`comic translate -p`) helps -- test on a finished chapter first.
 
+- Research report with 21 further ideas and 7 suspected bugs (unverified, nothing decided): `docs/research/token-savings-2026-10-20.md`.
+
 ## Dropped -- do not re-propose
 
 Compact table instead of the translate JSON (little saving, format risk); TSV translate answers (a column shift fails silently and could swap speaker/addressee into the pinned pronoun table); contact sheets for dialogue or SFX crops, or telling Claude to open many crops at once (legibility, id mix-ups, no measured basis); showing the original page at visual_qa only when flagged (smudges and missed lines get through -- the operator catches those); merging ocr_review into translate; Photoshop Generative Fill / Adobe AI (cracked Photoshop, cloud upload). Removing the "per-region crops show the text itself" instruction -- crops are where confident OCR mistakes and cut-off phrases are caught.
