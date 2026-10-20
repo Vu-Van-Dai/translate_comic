@@ -394,6 +394,17 @@ render of the chapter starts a fresh cycle that shows everything. An answer of
 accepts only re-renders and shows the whole chapter, so the gate is never
 empty. The gate folder holds only this round's pages.
 
+Safeguards, each from a review that broke an earlier version: a page is
+skipped only when its inputs *and* the rendered file on disk still match the
+approval (a trial render that was later reverted does not pass); the inputs
+are fingerprinted before a render starts, so an edit made during it is not
+mistaken for shown; a fix naming an unknown region is refused like the
+translate gate refuses one; `blocked` entries count every page they name
+("pages 3 and 4", "pages 3-5"); the answer file is renamed to
+`visual_qa_response.applied.json` once used, so a second `comic resume`
+cannot apply it again; and `passed=true` publishes nothing while any page has
+not been shown as it now stands -- those pages are rendered and shown first.
+
 `retranslate_shorter` reopens the *translate* gate for those regions, because
 shortening a line is a translation decision, not a rendering one. The
 approvals stay in `render_plan.json`, so the next `comic render` renders only

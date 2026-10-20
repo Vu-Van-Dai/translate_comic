@@ -917,23 +917,33 @@ def review(
     raise typer.Exit(GATE_EXIT_CODE)
 
 
-def _open_render_gate(paths, store, state, outcome, plan, series, chapter, error=None):
+def _open_render_gate(paths, store, state, outcome, plan, series, chapter, error=None,
+                      inputs=None):
     """Write the visual_qa gate and print what the agent must read.
 
     Records what this round shows (``plan.shown``), and names as unchanged
     the pages approved earlier whose inputs still hash the same -- they were
     not rendered or shown again (see ``open_visual_qa``).
     """
-    from comic.qa.visual import open_visual_qa, page_fingerprints, save_plan
+    from comic.qa.visual import open_visual_qa, page_states, save_plan
     from comic.state.store import open_gate
 
-    prints = page_fingerprints(paths, state, plan)
+    # What this round shows: the inputs the render used (fingerprinted before
+    # it started, so an edit made during a long render is not mistaken for
+    # shown) and the file it wrote. A page rendered anew is no longer the one
+    # approved, even if its inputs are later put back.
+    rendered = page_states(paths, state, plan, inputs) if inputs is not None else {}
+    current = page_states(paths, state, plan)
     for page in outcome.pages:
-        if page in prints:
-            plan.shown[page] = prints[page]
+        state_now = rendered.get(page) or current.get(page)
+        if state_now is None:
+            continue
+        plan.shown[page] = state_now
+        if plan.approved.get(page) != state_now:
+            plan.approved.pop(page, None)
     unchanged = sorted(
-        p for p, digest in prints.items()
-        if p not in outcome.pages and plan.approved.get(p) == digest
+        p for p, now in current.items()
+        if p not in outcome.pages and plan.approved.get(p) == now
     )
     save_plan(paths, plan)
     request = open_visual_qa(paths, state, outcome, plan, previous_error=error,
@@ -979,7 +989,7 @@ def render(
 ) -> None:
     """Clean the source lettering, set the Vietnamese, and open visual QA."""
     setup_console()
-    from comic.qa.visual import load_plan, pages_to_render, render_chapter
+    from comic.qa.visual import load_plan, page_fingerprints, pages_to_render, render_chapter
 
     paths = ChapterPaths(series, chapter)
     store = ChapterStore(paths)
@@ -1006,6 +1016,7 @@ def render(
                 f"{', '.join(str(p) for p in only)} (--all renders every page)[/path]"
             )
 
+    inputs = page_fingerprints(paths, state, plan)
     console.print("[stage]clean + typeset[/stage]")
     outcome = render_chapter(
         paths, state, plan, only=only, workers=workers,
@@ -1039,7 +1050,7 @@ def render(
     state.stage(Stage.CLEAN).status = StageStatus.DONE
     state.stage(Stage.TYPESET).status = StageStatus.DONE
     store.save(state)
-    _open_render_gate(paths, store, state, outcome, plan, series, chapter)
+    _open_render_gate(paths, store, state, outcome, plan, series, chapter, inputs=inputs)
 
 
 def _resume_visual_qa(paths, store, state, series, chapter) -> None:
@@ -1051,8 +1062,10 @@ def _resume_visual_qa(paths, store, state, series, chapter) -> None:
         MAX_QA_ROUNDS,
         apply_fixes,
         load_plan,
+        page_fingerprints,
         pages_of,
         pages_to_render,
+        pending_pages,
         publish,
         record_approvals,
         render_chapter,
@@ -1096,7 +1109,37 @@ def _resume_visual_qa(paths, store, state, series, chapter) -> None:
         console.print(f"[fail]x[/fail] {escape(state.gate_error)}")
         raise typer.Exit(1)
 
+    # A fix naming no region would be "applied" to nothing while the page it
+    # meant stayed approved; refuse it, as the translate gate refuses ids.
+    from comic.stages import analysis_for
+
+    known: set[str] = set()
+    for rec in state.pages:
+        page_analysis = analysis_for(paths, rec.page)
+        if page_analysis is not None:
+            known |= {r.id for r in page_analysis.regions}
+    unknown = sorted({f.region_id for f in answer.fixes} - known)
+    if unknown:
+        state.gate_error = f"unknown region(s): {', '.join(unknown[:6])}"
+        store.save(state)
+        console.print(f"[fail]x[/fail] {escape(state.gate_error)}")
+        console.print("\n  Fix the response and run resume again.")
+        raise typer.Exit(1)
+
+    from comic.handoff.schemas import VisualQaRequest
+    from comic.state.store import StateError, read_json
+
+    try:
+        answered = read_json(paths.gate_request(Gate.VISUAL_QA.value), VisualQaRequest)
+        shown_now = [item.page for item in answered.pages]
+    except StateError:
+        shown_now = []
+
     plan = load_plan(paths, state)
+    # The answer is used once. Left in place, a second `comic resume` would
+    # apply it again to the next round's request and approve pages it never
+    # looked at.
+    path.replace(path.with_name(path.stem + ".applied.json"))
 
     if answer.blocked:
         console.print(f"[warn]![/warn] blocked: {escape(', '.join(answer.blocked))}")
@@ -1104,6 +1147,25 @@ def _resume_visual_qa(paths, store, state, series, chapter) -> None:
         console.print(f"  [path]{escape(answer.note)}[/path]")
 
     if answer.passed:
+        pending = pending_pages(paths, state, plan, shown_now)
+        if pending:
+            # A fix never rendered (after a -p preview, say) or a page that
+            # failed to render would be published as it stands. Show them.
+            console.print(
+                f"[warn]![/warn] not published: {len(pending)} page(s) were never "
+                f"shown as they now stand ({', '.join(str(p) for p in pending)})"
+            )
+            inputs = page_fingerprints(paths, state, plan)
+            outcome = render_chapter(
+                paths, state, plan, only=pending,
+                model=paths.root / "models" / "inpainting_lama.onnx",
+                progress=lambda pg, n: console.print(f"  page {pg:03d}: {n} line(s) set"),
+            )
+            for note in outcome.notes:
+                console.print(f"  [warn]![/warn] {escape(note)}")
+            _open_render_gate(paths, store, state, outcome, plan, series, chapter,
+                              inputs=inputs)
+            return
         close_gate(state)
         state.stage(Stage.QA).status = StageStatus.DONE
         # The QA cycle is over: the next render of this chapter starts fresh
@@ -1182,6 +1244,7 @@ def _resume_visual_qa(paths, store, state, series, chapter) -> None:
     # inputs changed since their approval. When that leaves nothing (an answer
     # of accepts only), the whole chapter is rendered and shown again.
     only = pages_to_render(paths, state, plan)
+    inputs = page_fingerprints(paths, state, plan)
     console.print("\n[stage]re-render[/stage]")
     if only:
         console.print(
@@ -1201,7 +1264,7 @@ def _resume_visual_qa(paths, store, state, series, chapter) -> None:
         )
     for note in outcome.notes:
         console.print(f"  [warn]![/warn] {escape(note)}")
-    _open_render_gate(paths, store, state, outcome, plan, series, chapter)
+    _open_render_gate(paths, store, state, outcome, plan, series, chapter, inputs=inputs)
 
 
 @app.command()

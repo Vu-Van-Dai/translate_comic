@@ -489,21 +489,19 @@ def touched_pages(paths: ChapterPaths, state: ChapterState, fixes: list[QaFix]) 
 def _render_environment(paths: ChapterPaths) -> str:
     """A digest of everything outside a page that decides its pixels.
 
-    The code that cleans, fits and draws; the series' lettering profile with
-    its preset chain; the font files and the inpainting model. Any change to
-    one of them makes every page render anew rather than being trusted as
-    unchanged.
+    All of the package's code (a render reaches well beyond typesetting --
+    OCR line bands size the type, schemas fold in voices); the series'
+    lettering profile with its preset chain; the font files and the
+    inpainting model. Any change to one of them makes every page render anew
+    rather than being trusted as unchanged.
     """
     import hashlib
     import json
 
     digest = hashlib.sha256()
     package = Path(__file__).resolve().parent.parent
-    code = [*sorted((package / "typesetting").glob("*.py")),
-            *sorted((package / "image_processing").glob("*.py")),
-            package / "qa" / "visual.py", package / "qa" / "placement.py"]
-    for source in code:
-        digest.update(source.name.encode())
+    for source in sorted(package.rglob("*.py")):
+        digest.update(source.relative_to(package).as_posix().encode())
         digest.update(source.read_bytes())
     try:
         from comic.typesetting.render import read_profile
@@ -569,20 +567,67 @@ def page_fingerprints(
     return prints
 
 
+def _output_digest(paths: ChapterPaths, state: ChapterState, page: int) -> str:
+    """The rendered file on disk for a page, hashed ("none" when absent)."""
+    import hashlib
+
+    record = next((r for r in state.pages if r.page == page), None)
+    target = paths.translated / record.filename if record else None
+    if target is None or not target.exists():
+        return "none"
+    return hashlib.sha256(target.read_bytes()).hexdigest()
+
+
+def page_states(
+    paths: ChapterPaths,
+    state: ChapterState,
+    plan: RenderPlan,
+    inputs: dict[int, str] | None = None,
+) -> dict[int, str]:
+    """Page -> "<input digest>:<rendered file digest>".
+
+    What ``plan.shown`` and ``plan.approved`` record. A page may be skipped
+    only when both halves match the approval: the same inputs *and* the very
+    file the agent approved still on disk -- a trial render that was later
+    reverted, or a file edited by hand, does not pass. ``inputs`` are the
+    fingerprints taken before a render, which are what that render used.
+    """
+    prints = inputs if inputs is not None else page_fingerprints(paths, state, plan)
+    return {p: f"{d}:{_output_digest(paths, state, p)}" for p, d in prints.items()}
+
+
 def pages_to_render(
     paths: ChapterPaths, state: ChapterState, plan: RenderPlan
 ) -> list[int] | None:
     """The pages a render must produce, or None for every page.
 
-    Every page except those approved at an earlier round whose inputs still
-    hash the same. None -- the whole chapter -- when nothing is approved yet
-    (a first render) or when nothing would be left to render.
+    Every page except those approved at an earlier round whose inputs and
+    rendered file still match the approval. None -- the whole chapter --
+    when nothing is approved yet (a first render) or nothing would be left.
     """
     if not plan.approved:
         return None
-    prints = page_fingerprints(paths, state, plan)
-    todo = sorted(p for p, digest in prints.items() if plan.approved.get(p) != digest)
+    current = page_states(paths, state, plan)
+    todo = sorted(p for p, now in current.items() if plan.approved.get(p) != now)
     return todo or None
+
+
+def pending_pages(
+    paths: ChapterPaths, state: ChapterState, plan: RenderPlan, shown_now: list[int]
+) -> list[int]:
+    """Pages a ``passed=true`` must not publish yet.
+
+    Every rendering page must be either in the request just answered, still
+    exactly as shown, or approved and unchanged. Anything else -- a fix never
+    rendered after a ``-p`` preview, a page that failed to render -- is
+    pending.
+    """
+    current = page_states(paths, state, plan)
+    return sorted(
+        p for p, now in current.items()
+        if not (p in shown_now and plan.shown.get(p) == now)
+        and plan.approved.get(p) != now
+    )
 
 
 def blocked_pages(
@@ -599,10 +644,16 @@ def blocked_pages(
     unplaced = False
     for entry in blocked:
         ids = re.findall(r"p\d{3}_r\d+", entry)
-        numbers = {int(n) for n in re.findall(r"(?i)\bpages?\s*(\d+)", entry)}
-        numbers |= {int(n) for n in re.findall(r"\bp(\d{3})\b", entry)}
-        if entry.strip().isdigit():
-            numbers.add(int(entry.strip()))
+        rest = re.sub(r"p\d{3}_r\d+", " ", entry)
+        numbers = {int(n) for n in re.findall(r"\bp(\d{3})\b", rest)}
+        if re.search(r"(?i)\bpages?\b", rest) or rest.strip().isdigit():
+            # "pages 2 and 4", "pages 2-4", "page 3": every number counts.
+            # Over-reading only shows a page again, never hides one.
+            found_numbers = [int(n) for n in re.findall(r"\d+", rest)]
+            for a, b in re.findall(r"(\d+)\s*[-\u2013]\s*(\d+)", rest):
+                if int(a) <= int(b) <= int(a) + 200:
+                    found_numbers += range(int(a), int(b) + 1)
+            numbers |= set(found_numbers)
         found = pages_of(paths, state, ids) | numbers
         if not found:
             unplaced = True
