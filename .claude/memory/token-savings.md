@@ -19,7 +19,7 @@ The operator (2026-10-16..20) asked to cut Claude's token cost per chapter **wit
 2. Then **stop and ask the operator to switch to Opus Medium**; do not continue until they confirm. (Claude cannot change its own model/effort.)
 3. At Medium, **finish the whole series**: translate every remaining chapter, then the SFX pass and the Photoshop route (`comic ps sfx` -> `comic ps build` -> `scripts/leftover_scan.py` -> `comic ps publish`) for **every** chapter, including the first 2-3 -- the entire project finished.
 
-Also: Opus High for code changes to `comic/`; never switch model/effort in the middle of a conversation (it breaks the prompt cache). When the operator drives the gates by hand, one gate per conversation (`/clear` after each `comic resume`).
+Also: Opus High for code changes to `comic/`. When the operator drives the gates by hand, one gate per conversation (`/clear` after each `comic resume`).
 
 ## Planned, not built yet
 
