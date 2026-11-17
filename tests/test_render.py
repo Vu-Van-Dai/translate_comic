@@ -164,6 +164,47 @@ def test_inpainting_a_grey_page_adds_no_colour(monkeypatch):
     assert spread.max() == 0
 
 
+def _column_page(field: int = 250):
+    """A column of vertical 'lettering' on a plain field, hatching at x>=130."""
+    image = np.full((200, 200, 3), field, dtype=np.uint8)
+    image[:, 130::2] = 255 - field          # artwork to the right
+    mask = np.zeros((200, 200), dtype=np.uint8)
+    for row in range(50, 150, 12):          # one glyph per row, a column
+        mask[row : row + 8, 92:108] = 255
+        image[row : row + 8, 92:108] = 255 - field
+    return image, mask
+
+
+def test_vertical_lettering_on_open_field_widens_over_the_field():
+    from comic.image_processing.mask import OPEN_CLEARANCE, widen_open_box
+
+    image, mask = _column_page()
+    box = BBox(x1=90, y1=48, x2=110, y2=150)
+    wide = widen_open_box(image, mask, box, [])
+    assert wide.x2 - wide.x1 > 2 * (box.x2 - box.x1)
+    assert wide.x2 <= 130 - OPEN_CLEARANCE          # stops short of the hatching
+    assert (wide.y1, wide.y2) == (box.y1, box.y2)
+
+
+def test_open_widening_works_on_a_dark_field_and_spares_neighbours():
+    from comic.image_processing.mask import widen_open_box
+
+    image, mask = _column_page(field=10)
+    box = BBox(x1=90, y1=48, x2=110, y2=150)
+    neighbour = BBox(x1=40, y1=60, x2=60, y2=140)
+    wide = widen_open_box(image, mask, box, [neighbour])
+    assert wide.x1 >= neighbour.x2
+    assert wide.x2 > box.x2
+
+
+def test_a_wide_box_is_not_widened():
+    from comic.image_processing.mask import widen_open_box
+
+    image, mask = _column_page()
+    box = BBox(x1=60, y1=90, x2=140, y2=110)
+    assert widen_open_box(image, mask, box, []) == box
+
+
 def test_fit_areas_never_overlap():
     image, mask = bubble_page()
     regions = [region("a", (60, 66, 140, 82)), region("b", (60, 106, 140, 122))]
@@ -572,6 +613,26 @@ def test_a_page_with_nothing_to_translate_is_still_published(home):
     ]
 
 
+def test_the_group_poster_opens_every_published_chapter(home):
+    """The operator (2026-10-26): every chapter opens with the QR poster.
+
+    It is page 000, so the story pages keep the source's numbers.
+    """
+    import cv2
+    import numpy as np
+
+    from comic.poster import poster_path
+    from comic.qa.visual import publish
+
+    cv2.imwrite(str(poster_path()), np.full((60, 40, 3), 30, np.uint8))
+    paths, state = _chapter_with_pages("poster-test", 2)
+
+    publish(paths, state)
+    assert sorted(p.name for p in paths.library.iterdir()) == [
+        "000.png", "001.png", "002.png"
+    ]
+
+
 def test_an_excluded_page_is_not_published(home):
     """An uploader's insert is not a page of the comic.
 
@@ -589,6 +650,213 @@ def test_an_excluded_page_is_not_published(home):
     assert count == 2
     assert problems == []
     assert sorted(p.name for p in paths.library.iterdir()) == ["002.png", "003.png"]
+
+
+def test_a_held_page_keeps_its_number_in_the_webp_route(home):
+    """The operator (2026-10-27): a page held back for its content is still
+    a page of the comic, so the pages after it keep the source's numbers.
+
+    An excluded insert closes up; a held page leaves its number, and the file
+    the operator puts there survives a republish.
+    """
+    from comic.photoshop.publish import publish_chapter
+    from comic.state.store import ChapterStore
+
+    paths, state = _chapter_with_pages("held-test", 4)
+    state.pages[0].excluded = True                       # insert: closes up
+    state.pages[2].excluded = state.pages[2].held = True  # held: keeps a number
+    ChapterStore(paths).save(state)
+    paths.library.mkdir(parents=True, exist_ok=True)
+    (paths.library / "002.webp").write_bytes(b"operator's own page")
+
+    report = publish_chapter(paths)
+    assert report.pages == 2 and report.held == 1
+    assert sorted(p.name for p in paths.library.iterdir()) == [
+        "001.webp", "002.webp", "003.webp"
+    ]
+    assert (paths.library / "002.webp").read_bytes() == b"operator's own page"
+
+
+def test_a_page_whose_only_text_is_a_group_mark_is_never_published_raw(home):
+    """The operator (2026-11-12): a wordless page carrying another group's
+    watermark had no PSD, so publishing fell back to the original and the
+    mark reached the library. Such a page needs its build like any other."""
+    import pytest
+
+    from comic.photoshop.publish import publish_chapter
+    from comic.schemas import PageAnalysis, ReadingDirection
+    from comic.state.store import ChapterStore, write_json
+
+    paths, state = _chapter_with_pages("mark-test", 2)
+    ChapterStore(paths).save(state)
+    mark = TextRegion(id="p001_r01", page=1, bbox=BBox(x1=0, y1=60, x2=40, y2=78),
+                      kind=TextKind.ERASE, tag="watermark")
+    write_json(paths.analysis_file(1), PageAnalysis(
+        page=1, width=80, height=80, reading_direction=ReadingDirection.RTL, regions=[mark]))
+    with pytest.raises(ValueError, match="1"):
+        publish_chapter(paths)
+
+
+def test_keep_published_keeps_lettered_pages_an_sfx_pass_did_not_rebuild(home):
+    """The operator (2026-11-10): an old-route chapter gets an SFX-only pass.
+    Its dialogue pages are already lettered in library/; only pages with an
+    SFX get a new Photoshop build. Without the flag such a chapter is refused;
+    with it, every other translated page keeps the page already published."""
+    import cv2
+    import pytest
+
+    from comic.photoshop.publish import publish_chapter
+    from comic.schemas import ChapterTranslation, PageAnalysis, ReadingDirection, TranslationEntry
+    from comic.state.store import ChapterStore, write_json
+
+    paths, state = _chapter_with_pages("keep-test", 3)
+    ChapterStore(paths).save(state)
+    for n in (1, 2):
+        write_json(paths.analysis_file(n), PageAnalysis(
+            page=n, width=80, height=80, reading_direction=ReadingDirection.RTL,
+            regions=[region(f"p{n:03d}_r01", (10, 10, 60, 30))]))
+    write_json(paths.translation_file, ChapterTranslation(
+        series="keep-test", chapter="Chapter_001",
+        entries=[TranslationEntry(region_id=f"p{n:03d}_r01", source_text="HI", target_text="CHÀO")
+                 for n in (1, 2)]))
+    paths.library.mkdir(parents=True, exist_ok=True)
+    for n in (1, 2, 3):
+        cv2.imwrite(str(paths.library / f"{n:03d}.png"), np.full((80, 80, 3), 10 * n, np.uint8))
+    ps = paths.workspace / "photoshop"
+    ps.mkdir(parents=True, exist_ok=True)
+    cv2.imwrite(str(ps / "002.png"), np.full((80, 80, 3), 200, np.uint8))  # the SFX page
+
+    with pytest.raises(ValueError):
+        publish_chapter(paths)
+    report = publish_chapter(paths, keep_published=True)
+    assert report.from_photoshop == 1 and report.pages == 3
+    names = sorted(p.name for p in paths.library.iterdir() if p.name[:3] != "000")
+    assert names == ["001.webp", "002.webp", "003.webp"]
+    from PIL import Image
+    assert abs(int(np.asarray(Image.open(paths.library / "001.webp"))[40, 40, 0]) - 10) <= 3
+    assert abs(int(np.asarray(Image.open(paths.library / "002.webp"))[40, 40, 0]) - 200) <= 3
+
+
+def test_an_erase_only_region_is_cleaned_and_never_translated():
+    """The operator (2026-10-28): logos and watermarks are erased without the
+    Photoshop pass. Kind "erase" is cleaned like lettering, gets no bubble,
+    is never sent to the translate gate, and makes its page render even when
+    nothing on it is translated."""
+    from types import SimpleNamespace
+
+    from comic.qa.visual import page_renders
+
+    image = np.full((120, 200, 3), 230, np.uint8)
+    image[95:110, 120:190] = 20                      # the watermark's letters
+    page_mask = np.zeros((120, 200), np.uint8)
+    page_mask[95:110, 120:190] = 255
+    mark = TextRegion(id="p001_r01", page=1, bbox=BBox(x1=115, y1=90, x2=195, y2=115),
+                      kind=TextKind.ERASE, source_text="[erase]")
+    assert not mark.translatable and mark.erasable
+
+    areas = fit_areas(image, page_mask, [mark])
+    assert areas["p001_r01"].sum() == 80 * 25        # its own box, nothing more
+    cleaned, touched, _ = clean_page(image, page_mask, [mark], areas)
+    assert (cleaned[95:110, 120:190] > 200).all()    # letters gone
+    assert (cleaned[touched == 0] == image[touched == 0]).all()
+
+    assert page_renders(SimpleNamespace(regions=[mark]), {})
+    plain = mark.model_copy(update={"kind": TextKind.DIALOGUE})
+    assert not page_renders(SimpleNamespace(regions=[plain]), {})
+
+
+def test_content_status_tells_a_block_from_held_pages():
+    """The operator (2026-10-28): a chapter-level problem is not a series
+    shutdown, and one held page is not a chapter block."""
+    from comic.schemas import ChapterState, PageRecord
+
+    state = ChapterState(series="s", chapter="Chapter_001",
+                         pages=[PageRecord(page=n, filename=f"{n:03d}.png") for n in (1, 2)])
+    assert state.content_status == "ok"
+    state.pages[1].excluded = state.pages[1].held = True
+    assert state.content_status == "partial"
+    assert [p.page for p in state.held_pages] == [2]
+    state.blocked = "whole chapter"
+    assert state.content_status == "blocked"
+
+
+def test_a_blocked_chapter_is_skipped_and_its_neighbour_is_not(home):
+    """`comic block` stops that chapter alone (exit 3); the next chapter's
+    commands still run."""
+    from typer.testing import CliRunner
+
+    from comic.cli.app import app
+    from comic.state.store import ChapterStore
+
+    from comic.paths import ChapterPaths
+
+    blocked, _ = _chapter_with_pages("queue-test", 2)
+    ChapterStore(blocked).save(_)
+    other_paths = ChapterPaths("queue-test", 2)
+    other_paths.ensure()
+    other = _.model_copy(update={"chapter": "Chapter_002"})
+    ChapterStore(other_paths).save(other)
+
+    runner = CliRunner()
+    r = runner.invoke(app, ["block", "--series", "queue-test", "-c", "1", "--reason", "test"])
+    assert r.exit_code == 0
+    again = runner.invoke(app, ["block", "--series", "queue-test", "-c", "1", "--reason", "test"])
+    assert again.exit_code == 0 and "already" in again.output       # idempotent
+
+    assert runner.invoke(app, ["ps", "publish", "--series", "queue-test", "-c", "1"]).exit_code == 3
+    assert runner.invoke(app, ["render", "--series", "queue-test", "-c", "1"]).exit_code == 3
+    # The block does not spread: the neighbour is not refused as blocked (it
+    # fails here only because this fixture gave it no page files).
+    assert runner.invoke(app, ["ps", "publish", "--series", "queue-test", "-c", "2"]).exit_code != 3
+    assert runner.invoke(app, ["render", "--series", "queue-test", "-c", "2"]).exit_code != 3
+
+    report = runner.invoke(app, ["holds", "--series", "queue-test"])
+    assert "blocked" in report.output and "Chapter_002" in report.output
+
+    assert runner.invoke(app, ["block", "--series", "queue-test", "-c", "1", "--release"]).exit_code == 0
+    assert ChapterStore(blocked).load().blocked is None
+
+
+def test_a_held_page_needs_a_reason_and_is_reported(home):
+    from typer.testing import CliRunner
+
+    from comic.cli.app import app
+    from comic.state.store import ChapterStore
+
+    paths, state = _chapter_with_pages("hold-test", 3)
+    ChapterStore(paths).save(state)
+    runner = CliRunner()
+    bad = runner.invoke(app, ["exclude", "--series", "hold-test", "-c", "1", "-p", "2", "--held"])
+    assert bad.exit_code == 1
+    ok = runner.invoke(app, ["exclude", "--series", "hold-test", "-c", "1", "-p", "2",
+                             "--held", "--reason", "romantic scene, characters are minors"])
+    assert ok.exit_code == 0
+    record = ChapterStore(paths).load().page(2)
+    assert record.held and record.excluded and record.hold_reason.startswith("romantic")
+    report = runner.invoke(app, ["holds", "--series", "hold-test"])
+    assert "partial" in report.output and "page 2" in report.output
+
+    runner.invoke(app, ["exclude", "--series", "hold-test", "-c", "1", "-p", "2", "--restore"])
+    record = ChapterStore(paths).load().page(2)
+    assert not record.held and record.hold_reason is None
+
+
+def test_the_analyze_queue_skips_a_blocked_chapter(tmp_path):
+    import importlib.util
+    import json
+
+    spec = importlib.util.spec_from_file_location(
+        "analyze_all", Path(__file__).resolve().parents[1] / "scripts" / "analyze_all.py")
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    d = tmp_path / "Chapter_001"
+    d.mkdir()
+    (d / "chapter.json").write_text(json.dumps(
+        {"blocked": "test", "pages": [{"page": 1, "stages": {}}]}), encoding="utf-8")
+    assert mod.blocked(d) == "test" and mod.done(d)
+    (d / "chapter.json").write_text(json.dumps({"pages": [{"page": 1, "stages": {}}]}),
+                                    encoding="utf-8")
+    assert mod.blocked(d) is None and not mod.done(d)
 
 
 def test_an_excluded_page_stays_in_the_archive(home):
@@ -1412,3 +1680,259 @@ def test_a_short_line_in_a_roomy_balloon_grows_but_keeps_its_margin():
     small, _ = layout_region(region, "được rồi", area, Path("assets/fonts"), None, styles, max_size=20)
     assert small.font_size > 20                                   # grew with the room
     assert small.width * small.height <= MAX_FILL * area.sum()    # but not to the outline
+
+
+def test_a_model_bubble_limits_a_leaked_fill_and_replaces_a_failed_one():
+    """Kimi ch.1, the operator 2026-10-28: dashed thought bubbles leaked
+    (p.8 r07: 280x363 px for a ~130 px bubble) or found nothing (r04, r05:
+    squeezed into the text box). The segmentation model's bubble clips the
+    leak and stands in for the failed fill; a clean fill is left alone."""
+    from comic.image_processing.mask import _limit_by_bubble
+
+    shape = (200, 200)
+    box = BBox(x1=90, y1=90, x2=110, y2=110)
+    bubble = np.zeros(shape, bool)
+    bubble[60:140, 60:140] = True
+    leaked = np.zeros(shape, np.uint8)
+    leaked[20:180, 20:180] = 1
+    clipped = _limit_by_bubble(leaked, False, bubble, box)
+    assert clipped[100, 100] and not clipped[25, 25]
+
+    own_box = np.zeros(shape, np.uint8)
+    own_box[90:110, 90:110] = 1
+    filled = _limit_by_bubble(own_box, True, bubble, box)
+    assert filled.sum() > own_box.sum() * 5 and not filled[61, 61]   # shrunk off the outline
+
+    exact = np.zeros(shape, np.uint8)
+    exact[62:138, 62:138] = 1
+    assert _limit_by_bubble(exact, False, bubble, box) is exact
+
+
+def test_an_erase_region_clears_its_whole_box():
+    """A group's picture logo has no glyphs for the detector to mark."""
+    from comic.image_processing.mask import with_erase_boxes
+
+    page_mask = np.zeros((50, 50), np.uint8)
+    logo = TextRegion(id="p001_r90", page=1, bbox=BBox(x1=5, y1=5, x2=25, y2=20),
+                      kind=TextKind.ERASE, source_text="[erase]")
+    line = TextRegion(id="p001_r01", page=1, bbox=BBox(x1=30, y1=30, x2=45, y2=45),
+                      kind=TextKind.DIALOGUE, source_text="x")
+    out = with_erase_boxes(page_mask, [logo, line])
+    assert out[5:20, 5:25].min() == 255 and out[30:45, 30:45].max() == 0
+    assert page_mask.max() == 0                      # the original is not modified
+
+
+def test_a_studio_watermark_with_no_reading_is_still_erased():
+    """Kawaii ch.4 p.2 (the operator, 2026-11-12): watermark boxes drawn in
+    Studio carry no OCR text, and cleaning skipped every one of them -- the
+    jmcomic and mw123.cc marks survived. The label is what says erase."""
+    from comic.image_processing.clean import clean_page
+    from comic.image_processing.mask import fit_areas, with_erase_boxes
+
+    image = np.full((60, 80, 3), 255, np.uint8)
+    image[40:50, 10:40] = 90                         # faint grey site line
+    page_mask = np.zeros((60, 80), np.uint8)         # the detector saw nothing
+    mark = TextRegion(id="p001_r11", page=1, bbox=BBox(x1=8, y1=38, x2=42, y2=52),
+                      kind=TextKind.ERASE, tag="watermark", source_text="", edited=True)
+    page_mask = with_erase_boxes(page_mask, [mark])
+    areas = fit_areas(image, page_mask, [mark])
+    cleaned, touched, _ = clean_page(image, page_mask, [mark], areas)
+    assert touched[40:50, 10:40].all()
+    assert cleaned[40:50, 10:40].min() > 200
+
+
+def test_an_sfx_marked_for_lama_is_erased_whole_and_never_flat_filled():
+    """Studio key L (the operator, 2026-11-14): the box goes to LaMa like a
+    group mark -- whole, a little wider -- even on a plain background where a
+    translated line would get a flat fill."""
+    from comic.image_processing.clean import clean_page
+    from comic.image_processing.mask import fit_areas, with_erase_boxes
+
+    image = np.full((60, 80, 3), 255, np.uint8)
+    image[20:40, 15:60] = 30                          # a heavy drawn SFX
+    page_mask = np.zeros((60, 80), np.uint8)
+    sfx = TextRegion(id="p001_r05", page=1, bbox=BBox(x1=12, y1=18, x2=62, y2=42),
+                     kind=TextKind.SFX, tag="lama", source_text="BAM")
+    plain = sfx.model_copy(update={"id": "p001_r06", "tag": None,
+                                   "bbox": BBox(x1=0, y1=50, x2=20, y2=58)})
+    page_mask = with_erase_boxes(page_mask, [sfx, plain])
+    assert not page_mask.any()                        # the mask keeps the letters' own shape
+    areas = fit_areas(image, page_mask, [sfx, plain])
+    cleaned, touched, report = clean_page(image, page_mask, [sfx, plain], areas)
+    assert touched[18:42, 12:62].all()                # the whole box, not the strokes
+    assert cleaned[20:40, 15:60].min() > 200
+    assert report.tiers.get("p001_r05") != "flat"      # LaMa, never a flat fill
+    assert "p001_r06" not in report.tiers             # a plain SFX is still Photoshop's
+
+
+def test_a_coloured_logo_does_not_make_a_grey_page_colour():
+    """Ku Ku ch.1.1 p.2 (the operator, 2026-11-12): a blue group logo on a
+    black-and-white page made the per-spot test see colour, so LaMa's colour
+    repair was kept and the logo came back as a blue smear."""
+    from comic.image_processing.clean import page_is_grey
+
+    page = np.full((200, 200, 3), 128, np.uint8)
+    page[40:120, 120:180] = (90, 160, 230)              # the glowing logo
+    logo = TextRegion(id="p002_r09", page=2, bbox=BBox(x1=125, y1=45, x2=175, y2=115),
+                      kind=TextKind.ERASE, tag="logo")
+    assert page_is_grey(page, [logo])
+    assert not page_is_grey(page, [])
+
+
+def test_a_mark_hole_takes_its_glow_and_edge_holes_get_mirrored_context():
+    """Ku Ku ch.1.1 p.2: the glow reached past the drawn box and came back as a
+    blue rim. Kawaii ch.4 p.2: a watermark at the page edge left LaMa no
+    context on that side, and it streaked."""
+    from comic.image_processing.clean import mark_hole, pad_edges, unpad
+
+    page = np.full((200, 200, 3), 128, np.uint8)
+    page[30:130, 110:190] = (90, 160, 230)                  # glow, wider than the box
+    logo = TextRegion(id="p002_r09", page=2, bbox=BBox(x1=130, y1=50, x2=170, y2=110),
+                      kind=TextKind.ERASE, tag="logo")
+    hole = mark_hole(page, logo, grey=True)
+    assert hole[30:130, 110:190].all()                      # the whole glow
+    assert not hole[150:, :100].any()                       # nothing else
+    assert mark_hole(page, logo, grey=False)[30:45, 110:125].sum() == 0
+
+    patch = np.arange(60 * 80 * 3, dtype=np.uint8).reshape(60, 80, 3)
+    hidden = np.zeros((60, 80), np.uint8)
+    hidden[40:, 10:30] = 1                                  # touches the bottom edge
+    padded, mask, pads = pad_edges(patch, hidden)
+    assert pads[1] > 0 and pads[0] == pads[2] == pads[3] == 0
+    assert padded.shape[0] == 60 + pads[1] and mask.shape == padded.shape[:2]
+    assert (unpad(padded, pads) == patch).all()
+
+
+def test_an_empty_reading_still_means_leave_it_unless_the_operator_drew_it():
+    """"" at ocr_review drops a detector box (front matter stays as drawn);
+    a box drawn in Studio was drawn because there is lettering in it."""
+    dropped = TextRegion(id="p001_r01", page=1, bbox=BBox(x1=0, y1=0, x2=9, y2=9),
+                         kind=TextKind.DIALOGUE, source_text="")
+    drawn = dropped.model_copy(update={"id": "p001_r02", "edited": True})
+    kept = dropped.model_copy(update={"id": "p001_r03", "kind": TextKind.KEEP, "edited": True})
+    assert not dropped.cleanable and drawn.cleanable and not kept.cleanable
+
+
+def test_a_column_of_lettering_is_not_taken_for_an_outline():
+    """Kimi ch.1 p.20: '当然可以' was one large mask component beside small
+    '!' specks and was dropped as an 'outline', so the line stayed under tiny
+    type. An outline is a thin ring around its hull; lettering fills it."""
+    import cv2
+
+    from comic.image_processing.mask import _ring_like
+
+    ring = np.zeros((100, 100), np.uint8)
+    cv2.rectangle(ring, (5, 5), (94, 94), 1, 2)
+    hull = np.zeros_like(ring)
+    hull[5:95, 5:95] = 1
+    assert _ring_like(ring, hull)
+
+    column = np.zeros_like(ring)
+    column[10:90, 40:60] = 1
+    col_hull = np.zeros_like(ring)
+    col_hull[10:90, 40:60] = 1
+    assert not _ring_like(column, col_hull)
+
+
+def test_an_erase_region_is_never_typeset_even_with_a_translation():
+    from comic.typesetting.render import layout_page
+
+    image, mask = bubble_page()
+    regions = [region("a", (60, 66, 140, 82)),
+               region("b", (60, 106, 140, 122), kind=TextKind.ERASE)]
+    areas = fit_areas(image, mask, regions)
+    out = layout_page(image, regions, {"a": "XIN CHÀO", "b": "STALE"},
+                      areas, Path("assets/fonts"), page_mask=mask)
+    assert [r.id for r, _l, _s in out] == ["a"]
+
+
+def test_a_narrow_vertical_balloon_keeps_only_a_thin_margin():
+    """Kawaii ch.2 p.13: a 66 px wide vertical balloon lost a third of its
+    width to the one-O margin and set "À NÀY, TOKI" at 14 px."""
+    area = np.zeros((140, 120), np.uint8)
+    area[20:120, 30:96] = 1                     # 66 x 100, a vertical balloon
+    text = "À NÀY, TOKI"
+    full = fit_text(text, area, FONT, max_size=40, pad_em=None)
+    padded = fit_text(text, area, FONT, max_size=40, pad_em=0.6)
+    assert padded.font_size >= full.font_size - 2
+
+
+def test_a_tall_narrow_balloon_condenses_the_line_and_a_wide_one_does_not():
+    from comic.typesetting.render import Style, layout_region
+
+    style = Style("BeVietnamPro-Regular.ttf", uppercase=True, condense=0.8)
+    tall = np.zeros((220, 160), np.uint8)
+    tall[20:200, 50:110] = 1                      # 60 x 180
+    narrow, _ = layout_region(region("a", (60, 40, 100, 180)), "TÔI THÍCH TRUYỆN THIẾU NỮ",
+                              tall, Path("assets/fonts"), styles={TextKind.DIALOGUE: style})
+    plain, _ = layout_region(region("a", (60, 40, 100, 180)), "TÔI THÍCH TRUYỆN THIẾU NỮ",
+                             tall, Path("assets/fonts"),
+                             styles={TextKind.DIALOGUE: Style("BeVietnamPro-Regular.ttf", uppercase=True)})
+    assert narrow.hscale < 1.0 and narrow.font_size > plain.font_size
+    assert 50 <= narrow.x and narrow.x + narrow.width <= 110
+
+    wide = np.zeros((200, 400), np.uint8)
+    wide[20:180, 20:380] = 1
+    roomy, _ = layout_region(region("b", (150, 80, 250, 120)), "XIN CHÀO",
+                             wide, Path("assets/fonts"), styles={TextKind.DIALOGUE: style})
+    assert roomy.hscale == 1.0
+
+
+def test_a_condensed_block_is_drawn_inside_its_layout():
+    from PIL import Image
+    from comic.typesetting.fit import Layout
+    from comic.typesetting.render import Style, draw_layout
+
+    full = load_font(FONT, 30).getbbox("XIN CHÀO")
+    natural = full[2] - full[0]
+    width = int(natural * 0.8) + 4
+    page = Image.new("RGB", (300, 100), "white")
+    lay = Layout(("XIN CHÀO",), 30, 40, 20, width, 40, True, hscale=0.8)
+    draw_layout(page, lay, Style("BeVietnamPro-Regular.ttf"), Path("assets/fonts"))
+    ink = np.array(page.convert("L")) < 128
+    cols = np.flatnonzero(ink.any(axis=0))
+    assert cols.size and cols[0] >= 38 and cols[-1] <= 40 + width + 2
+    assert abs((cols[-1] - cols[0]) - natural * 0.8) <= 4
+
+
+def test_bubble_masks_are_cached_on_disk(tmp_path, monkeypatch):
+    """The bubble model costs ~8 s a page on the CPU (2026-11-13): masks made once
+    -- here or on the T4 -- are read back for every later stage and run."""
+    from comic.vision import bubbles
+
+    masks = [np.zeros((40, 30), bool), np.zeros((40, 30), bool)]
+    masks[0][5:10, 3:7] = True
+    masks[1][20:35, 10:29] = True
+    f = tmp_path / "k.npz"
+    bubbles.save_masks(f, masks, (40, 30, 3))
+    back = bubbles.load_masks(f)
+    assert len(back) == 2 and all((a == b).all() for a, b in zip(masks, back))
+    bubbles.save_masks(f, [], (40, 30, 3))
+    assert bubbles.load_masks(f) == []
+
+    image = np.full((40, 30, 3), 200, np.uint8)
+    monkeypatch.setattr(bubbles, "disk_cache", lambda: tmp_path)
+    monkeypatch.setattr(bubbles, "model_path", lambda: tmp_path / "model.onnx")
+    (tmp_path / "model.onnx").write_bytes(b"x")
+    bubbles._CACHE.clear()
+    bubbles.save_masks(tmp_path / f"{bubbles.page_key(image)}.npz", masks, image.shape)
+    monkeypatch.setattr(bubbles, "_detect", lambda *a: (_ for _ in ()).throw(AssertionError("model ran")))
+    assert len(bubbles.bubble_masks(image)) == 2
+
+
+def test_a_round_balloon_gets_a_stack_shaped_like_the_balloon():
+    # The operator, 2026-11-15: shape the text block to follow the bubble's
+    # contour -- short lines where an oval is narrow, the longest in the middle.
+    # Measured: one wrap width gave 28px in a rectangle-ish 322/316/244 stack;
+    # the contour wrap sets 31px as 195/286/309/192.
+    from comic.typesetting.fit import fit_text
+
+    yy, xx = np.mgrid[0:260, 0:420]
+    area = ((xx - 210) / 200) ** 2 + ((yy - 130) / 120) ** 2 <= 1
+    text = "tôi đã nói với cậu rồi mà sao cậu vẫn không chịu nghe lời tôi vậy hả"
+    layout = fit_text(text, area, FONT, max_size=80, pad_em=0.6)
+    assert layout.fits and len(layout.lines) >= 3
+    font = load_font(FONT, layout.font_size)
+    widths = [font.getbbox(line)[2] for line in layout.lines]
+    middle = max(widths[1:-1])
+    assert widths[0] < middle and widths[-1] < middle

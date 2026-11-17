@@ -19,3 +19,5 @@ Windows was reinstalled around 2026-10-12 (new user SID); drive E: with the proj
 
 **Why:** the user asked to recover after losing the environment; these are the non-obvious traps found.
 **How to apply:** set PATH before running `comic`/pytest; don't assume a missing tool means the project is broken.
+
+**2026-10-22: Windows Application Control (Smart App Control) started blocking `comic.exe`** ("An Application Control policy has blocked this file") mid-session; python.exe still runs. Use `python scripts/comic_run.py <args>` -- same CLI, no launcher. If the user wants `comic` back, they can allow it in Windows Security or reinstall with `pip install -e .`.

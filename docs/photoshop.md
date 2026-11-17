@@ -23,6 +23,15 @@ comic ps build --series NAME -c N [--clean pipeline|hybrid|content-aware]
 - **It makes no typesetting decisions of its own.** `photoshop/plan.py` calls
   the same `fit_areas` / `layout_region` / `source_size_cap` as
   `render_page`, and a test pins the two together. Only the medium changes.
+- **Typer Tools styles for the operator's own typing** (2026-10-27): one
+  folder per series in the Typer Tools panel, holding that series' faces
+  (dialogue, caption/narration, shout, whisper, aside, phone, SFX) at the
+  pipeline's case, leading and a measured size, centred, no hyphenation.
+  `python scripts/typer_styles.py [--install]` writes
+  `typertools/TyperToolsExport.json` (panel: Settings > Import) and, with
+  `--install`, the panel's own `storage` file (backup kept; close the panel
+  first or it overwrites the file). Add a series to `SERIES` there. Styles
+  carry no stroke -- add the white outline of an SFX as a layer style.
 - **Fonts live in `C:\Program Files\Common Files\Adobe\Fonts`** (made
   2026-10-13, all 23 project faces copied in, admin rights needed once).
   Photoshop loads that folder at startup without a Windows install. A
@@ -51,6 +60,11 @@ in `library/` -- the Photoshop PNG where one exists, the original for a page
 with nothing translated -- and removes each page's previous file, so a page
 never exists in two formats. It refuses if any translated page has no
 Photoshop build: half a chapter from each route would look finished.
+
+Pages are renumbered 001, 002, ... over excluded inserts, which close up.
+A page held back for its content (`comic exclude ... -p N --held`, the
+operator 2026-10-27) keeps its number instead, and whatever file the
+operator puts at that number in `library/` is never removed by a republish.
 
 Default output is **WebP quality 95**. Measured over 24 pages of this
 series:
@@ -85,8 +99,16 @@ erases those with Content-Aware Fill and sets the replacement in a group
   Every *easy* SFX is still replaced; only on a page crowded with difficult
   ones is 50-70% of those enough.
 - **Policy (the operator's):** translate every SFX that means something,
-  short or long (STEP, HUG, BEEP, SLAM, PANT, TRUDGE, FLINCH); leave only
-  near-meaningless noises (HAHA, HUH, HIC, AH, HAA, FUU) and bare `?`/`!`.
+  short or long (STEP, HUG, BEEP, SLAM, PANT, TRUDGE, FLINCH), and interjections
+  too (HUH? -> HẢ?, AH! -> A!, HAHA; the operator, 2026-11-09). Groans and
+  strain sounds are always translated, by what the panel shows (the operator,
+  2026-11-10): UGH/UHG -> HỪ / TRỜI Ạ (annoyed), Ư… / HỰ (pain, effort),
+  Ọẹ (disgust); NGHH/NGH -> HỰ / Ư Ư / ƯM (straining, pain held in). Crying
+  written as a word is translated too (the operator, 2026-11-10): SOB -> HỨC HỨC /
+  NỨC NỞ, SNIFF -> SỤT SỊT, WAAH -> OA OA. Leave only bare crying noises that
+  read the same in Vietnamese (HIC, HUU, UUU) and bare `?`/`!`. An SFX left
+  untranslated -- or one too tangled with a character to erase cleanly -- stays
+  **as drawn**; it is never erased without a replacement.
   CJK SFX go to English first, Vietnamese only if that English is hard. Match the original's colour, outline and angle --
   an intended exception to the dialogue's one-ink rule.
 - **Dropped regions are re-derived from the mask**, which reproduces the
@@ -163,3 +185,17 @@ erases those with Content-Aware Fill and sets the replacement in a group
 - `plan.py: refill_flat` is retired: it corrected the old whole-bubble fill,
   which no longer exists, and matching pixels by that colour could recolour
   art.
+
+### Watermarks that cannot be erased: cover them with our logo
+
+A translucent watermark laid over linework (Kimigazer's rainbow + eggplant,
+16 pages over ch.1-4) has no clean erase: LaMa removes it together with the
+lines and tone under it (hands, bags, a black wedge vanished). Erase where
+the art underneath is plain (`erase_only`, `letters: area`, `fill: lama`, a
+`bbox` found from the watermark's saturated colour); where erasing destroys
+art, cover it with the Rồng Nhỏ logo instead (the operator, 2026-10-22):
+list the boxes in `photoshop/logo_stamps.json` and run
+`python scripts/stamp_logo.py --series NAME -c N` **after** `comic ps build`
+and before `comic ps publish` -- a rebuild overwrites the stamped preview.
+The colourful watermark on a black-and-white page is found by saturation
+(HSV S > 60 for the seed, > 22 for the box).

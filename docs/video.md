@@ -20,6 +20,49 @@ comic video publish --series NAME -c N [--name NAME]  # -> videos/<series>/<chap
 comic video styles | comic video music
 ```
 
+## Retention structure -- translated-series and review videos (the operator, 2026-10-27)
+
+The goal is views and watch time: a video has to stay stimulating enough
+that the viewer does not swipe away. Every video about a series we translate
+or review is built in four beats, and its plan sets
+`"structure": "retention"` so `video_plan` refuses a plan that skips one
+(`VideoPlan.check_structure`; numbers in `video/schemas.py`):
+
+1. **Hook -- spark curiosity (shot 1, <= 3 s).** The most striking panel,
+   chosen so it **shows the situation at a glance** (who, what is wrong or
+   strange), a short `hook` line, and movement from the first frame
+   (`punch`, `zoom_in`, `shake`). **Write a hook for this series**, from its
+   own premise -- never a stock line reused across series.
+2. **Setting the scene (2-3 shots).** Establish the situation with short,
+   easy-to-read subtitles (`caption`, or a `quote` of the original line in
+   Vietnamese), one idea per shot, 3-4 s each, slow motion (`zoom_in`,
+   `pan_*`, `drift`).
+3. **The highlight.** The strongest reaction, line or plot turn. Lift the
+   pace here: at least two quick shots (<= 1.6 s), `punch` / `shake`, and
+   fast switches (`flash`, `zoom_blur`, `whip`, `glitch`) on the beat.
+4. **Conclusion and teaser (last shot).** Hold a memorable moment and close
+   with a line: the series title, or a prompt toward the next part
+   ("Tập sau: ..."), or the open question the hook raised.
+
+**Motion on every shot, never a static swap.** A slideshow of still images
+is what loses the viewer; `static` fails a retention plan.
+
+This supersedes, for these videos, the v1/v2 lesson below that recap edits
+carry "no on-screen text": the hook line and the setup subtitles are now
+required. Channel-folder videos keep their own recipes. The other rules here
+still hold -- never our Vietnamese translation pages (subtitles are our own
+words, not the translated lettering), whole scenes rather than tight face
+crops, minors never framed romantically.
+
+**Posting:** finished translated-series videos go to **Facebook (Rồng Nhỏ),
+TikTok and YouTube** in the **open days of the channel schedule** -- the
+days with nothing scheduled (`workspace/_logs/channel_schedule.json`), which
+are reserved for them (the operator, 2026-10-27). Same tooling as the channel
+videos (`scripts/channel_post.py`, the project Edge on 9223), the same
+hashtags rules and the YouTube daily cap.
+
+## General rules
+
 - **Never our Vietnamese translation in a video** (the operator, 2026-10-13;
   clarified 2026-10-14: the source's own lettering, English or otherwise, is
   fine, and the original is now the default -- text-free art leaves empty

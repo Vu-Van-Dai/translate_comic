@@ -1,0 +1,776 @@
+[
+  {
+    "source": "Yu Yun",
+    "target": "Dư Vân",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Lu Xingwen",
+    "target": "Lục Tinh Văn",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Tempest Media",
+    "target": "Truyền thông Phong Bạo",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "King of Acting",
+    "target": "Ảnh đế",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Injury Inspection Notice",
+    "target": "Phiếu giám định thương tích",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Summer Watermelon",
+    "target": "Dưa Hấu Mùa Hè",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Don't Cry Yunyun",
+    "target": "Vân Vân Đừng Khóc",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Angry Dumpling",
+    "target": "Bánh Bao Nổi Giận",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "king of acting",
+    "target": "ảnh đế",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Weibo",
+    "target": "Weibo",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Liang Hua",
+    "target": "Lương Hoa",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Fei Ke",
+    "target": "Phí Khả",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "President Zhang",
+    "target": "Chủ tịch Trương",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Feng Jie",
+    "target": "Feng Jie",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Miao Xin",
+    "target": "Miêu Hân",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Eastern Star University",
+    "target": "Đại học Đông Tinh",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "I Love Pineapples",
+    "target": "Tôi Yêu Dứa",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "The Price of Cuteness",
+    "target": "Cái Giá Của Sự Đáng Yêu",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Bao Xiaorui",
+    "target": "Bao Tiểu Thụy",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Xiaolin",
+    "target": "Tiểu Lâm",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "WeChat",
+    "target": "WeChat",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Zhong Jiang",
+    "target": "Chung Giang",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Wei Xingzhe",
+    "target": "Ngụy Hành Triết",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "One Day",
+    "target": "Một Ngày",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Waves Entertainment",
+    "target": "Giải trí Sóng Biển",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Life Is Wonderful",
+    "target": "Cuộc Sống Tươi Đẹp",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Wei Xia",
+    "target": "Ngụy Hạ",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Zhou Yi",
+    "target": "Chu Dịch",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Shining Star",
+    "target": "Ngôi Sao Tỏa Sáng",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Jiang Chenxi",
+    "target": "Giang Thần Hi",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Zhang Ruiqing",
+    "target": "Trương Thụy Thanh",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Director Luo",
+    "target": "đạo diễn La",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "hot trends",
+    "target": "hot search",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Teacher Yuan",
+    "target": "thầy Viên",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Yuan Pingchen",
+    "target": "Viên Bình Thần",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "National Film Academy",
+    "target": "Học viện Điện ảnh Quốc gia",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Bailan Award",
+    "target": "giải Bạch Lan",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Kong Pingyi",
+    "target": "Khổng Bình Ý",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Immortal Sect",
+    "target": "tiên môn",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Kong Yiping",
+    "target": "Khổng Bình Ý",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Immortal Blade",
+    "target": "Tiên Kiếm",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Weapons Scripture",
+    "target": "Binh Khí Phổ",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Li Junming",
+    "target": "Lý Tuấn Minh",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Huang Xidong",
+    "target": "Hoàng Hi Đông",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Huang Xinan",
+    "target": "Hoàng Hi Nam",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Lin Juanmin",
+    "target": "Lâm Quyên Mẫn",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Huang Yueqing",
+    "target": "Hoàng Việt Thanh",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Lil' Ke",
+    "target": "Tiểu Khả",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Nannan",
+    "target": "Nam Nam",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Dongdong",
+    "target": "Đông Đông",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "civil partnership",
+    "target": "đăng ký kết đôi",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Deep Flow",
+    "target": "Dòng Chảy Ngầm",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Lu-Ke",
+    "target": "Lục–Khả",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Gotta Have Watermelon in the Summer",
+    "target": "Mùa Hè Phải Ăn Dưa Hấu",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Don't Cry Cloud",
+    "target": "Mây Đừng Khóc",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Rampaging Bun",
+    "target": "Bánh Bao Nổi Giận",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Golden Quill Award",
+    "target": "giải Bút Vàng",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "32 Pu Xi Road",
+    "target": "Số 32 đường Phố Tây",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Chen Siyu",
+    "target": "Trần Tư Vũ",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Dongming",
+    "target": "Đông Minh",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Xianghua Clan Records",
+    "target": "Tương Hoa Tộc Ký",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Crossing the River",
+    "target": "Qua Sông",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Director Chen",
+    "target": "đạo diễn Trần",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Puppy",
+    "target": "Cún con",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Xiaohe",
+    "target": "Tiểu Hà",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Li Qi",
+    "target": "Lý Kỳ",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Knives Out",
+    "target": "Đao Xuất Vỏ",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Mr. Gao",
+    "target": "ông Cao",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Mingda",
+    "target": "Minh Đạt",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Keke",
+    "target": "Khả Khả",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Director Lin",
+    "target": "đạo diễn Lâm",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Li Xin",
+    "target": "Lý Hân",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Cai Zhiqing",
+    "target": "Thái Chí Thanh",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "The Legend of 1900",
+    "target": "Huyền Thoại 1900",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Lin Yuansen",
+    "target": "Lâm Viễn Sâm",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Tangtang",
+    "target": "Đường Đường",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Sister Xing",
+    "target": "chị Tinh",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Gongliang Xingqiu",
+    "target": "Công Lương Tinh Thu",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Xianhua Sect",
+    "target": "phái Tiên Hoa",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Gray",
+    "target": "Xám",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Xiao Yu",
+    "target": "Tiểu Vũ",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Xiao Jie",
+    "target": "Tiểu Kiệt",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Xiaojie",
+    "target": "Tiểu Kiệt",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Xianghua Clan",
+    "target": "tộc Tương Hoa",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "blade's spirit",
+    "target": "kiếm linh",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Provable",
+    "target": "Khả Chứng",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Kong Weisi",
+    "target": "Khổng Duy Tư",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Zhang Yuehua",
+    "target": "Trương Nguyệt Hoa",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Lin Pei",
+    "target": "Lâm Bùi",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Fermat's Last Theorem",
+    "target": "định lý cuối cùng của Fermat",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Fermat's Grand Theorem",
+    "target": "đại định lý Fermat",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Sword",
+    "target": "Kiếm",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Director Qi",
+    "target": "đạo diễn Kỳ",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Qi Feizhong",
+    "target": "Kỳ Phi Trung",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Lil' Tang",
+    "target": "Tiểu Đường",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Lil' Huang",
+    "target": "Tiểu Hoàng",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Zheng Cuobin",
+    "target": "Trịnh Thác Bân",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Swordsman",
+    "target": "Kiếm Khách",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "On the Road Together",
+    "target": "Cùng Nhau Lên Đường",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Ah Tian",
+    "target": "A Thiên",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Lu Jun",
+    "target": "Lục Quân",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Zeng Kaibin",
+    "target": "Tăng Khải Bân",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Fatty",
+    "target": "Béo",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Fang Jiahe",
+    "target": "Phương Gia Hòa",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Jiang Huang",
+    "target": "Giang Hoàng",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Li Feng",
+    "target": "Lý Phong",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Zhang Hao",
+    "target": "Trương Hạo",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "acting police",
+    "target": "cảnh sát diễn xuất",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Lin Yuanli",
+    "target": "Lin Yuanli",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Pineapple Station",
+    "target": "đài Dứa",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Pu Xi Road",
+    "target": "đường Phố Tây",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Fat Bro",
+    "target": "Anh Béo",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Ah Wei",
+    "target": "A Vĩ",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Lil' Nan",
+    "target": "Tiểu Nam",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Zhang Shanwen",
+    "target": "Trương San Văn",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Hua Jingcheng",
+    "target": "Hoa Cảnh Thành",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Széchenyi Chain Bridge",
+    "target": "cầu Xích Széchenyi",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Budapest Love",
+    "target": "Tình Yêu Budapest",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Princess Sissi",
+    "target": "Công chúa Sissi",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Liszt",
+    "target": "Liszt",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Von Neumann",
+    "target": "Von Neumann",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "The Fisherman's Castle",
+    "target": "pháo đài Ngư Phủ",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Team Zhousi",
+    "target": "đội Chu Tư",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "The Record of Xianhua Sect",
+    "target": "Tiên Hoa Phái Ký",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Flying on Land",
+    "target": "Bay Trên Cạn",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Zhou Sizhi",
+    "target": "Chu Tư Tri",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Weng Rouman",
+    "target": "Ông Nhu Mạn",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "travelcard",
+    "target": "vé đi lại",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Danube",
+    "target": "Danube",
+    "note": null,
+    "category": "term"
+  }
+]

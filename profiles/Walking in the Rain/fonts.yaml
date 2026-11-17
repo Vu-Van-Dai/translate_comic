@@ -1,0 +1,6 @@
+# Lettering for "Walking in the Rain" (他从雨中来): a Chinese manhua, full
+# colour, long strip, read from an English scanlation (comix). Wide
+# horizontal balloons, so the manhwa preset, no voices (one face per kind).
+# See docs/lettering.md.
+preset: manhwa
+clean: auto

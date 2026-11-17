@@ -1,0 +1,56 @@
+:root {
+  --bg: #16181d; --panel: #1f2229; --panel2: #262a33; --line: #343945;
+  --text: #e6e8ec; --muted: #9aa1ad; --accent: #4c8dff; --ok: #3ecf8e; --bad: #ff6b6b;
+  font-family: "Segoe UI", system-ui, sans-serif; font-size: 13px;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; background: var(--bg); color: var(--text); }
+button, select, input, textarea { font: inherit; color: var(--text); }
+button, select { background: var(--panel2); border: 1px solid var(--line); border-radius: 5px; padding: 4px 9px; cursor: pointer; }
+button:hover { border-color: var(--accent); }
+button.danger { background: #5a2328; border-color: #ff6b6b; color: #fff; width: 100%; }
+button.primary { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 600; }
+#bar { display: flex; align-items: center; gap: 6px; padding: 6px 10px; background: var(--panel); border-bottom: 1px solid var(--line); height: 44px; }
+#bar .brand { margin-right: 6px; }
+#bar select { max-width: 260px; }
+.sep { width: 1px; height: 22px; background: var(--line); margin: 0 4px; }
+.grow { flex: 1; }
+.chk { display: flex; align-items: center; gap: 4px; color: var(--muted); }
+.status { color: var(--muted); min-width: 70px; text-align: right; }
+.status.err { color: var(--bad); } .status.ok { color: var(--ok); }
+main { display: grid; grid-template-columns: 78px 1fr 340px; height: calc(100% - 44px); }
+#pages { overflow-y: auto; border-right: 1px solid var(--line); background: var(--panel); padding: 4px; }
+#pages button { display: flex; width: 100%; margin: 2px 0; justify-content: space-between; padding: 4px 6px; font-variant-numeric: tabular-nums; }
+#pages button.cur { border-color: var(--accent); background: #2b3a57; }
+#pages .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--line); align-self: center; }
+#pages .done .dot { background: var(--ok); }
+#stage { overflow: auto; position: relative; background: #0f1013; }
+#canvas { position: relative; margin: 12px auto; }
+#img { display: block; width: 100%; height: 100%; user-select: none; }
+#ov { position: absolute; inset: 0; width: 100%; height: 100%; cursor: crosshair; }
+#ov .box { cursor: move; }
+#ov .handle { fill: #fff; stroke: #000; stroke-width: 1; }
+#ov .handle.rot { fill: #ffd84c; }
+.meta .ang input { width: 4.5em; background: transparent; color: inherit; border: 1px solid #555; border-radius: 4px; padding: 1px 4px; }
+#ov text { font: 600 12px "Segoe UI", sans-serif; paint-order: stroke; stroke: #000; stroke-width: 3px; pointer-events: none; }
+#side { overflow-y: auto; border-left: 1px solid var(--line); background: var(--panel); padding: 8px; }
+.card { background: var(--panel2); border: 1px solid var(--line); border-radius: 8px; padding: 10px; margin-bottom: 8px; }
+.cardhead { font-weight: 600; margin-bottom: 8px; }
+.muted { color: var(--muted); }
+.labels { display: grid; grid-template-columns: repeat(2, 1fr); gap: 4px; margin: 8px 0; }
+.labels button { text-align: left; border-left: 6px solid var(--c); }
+.labels button.on { background: color-mix(in srgb, var(--c) 35%, var(--panel2)); border-color: var(--c); }
+.labels kbd { color: var(--muted); float: right; }
+textarea { width: 100%; min-height: 90px; background: #14161a; border: 1px solid var(--line); border-radius: 5px; padding: 6px; resize: vertical; }
+.meta { display: flex; gap: 10px; flex-wrap: wrap; color: var(--muted); margin-top: 6px; }
+.warn { color: #ffb347; }
+#list { margin: 0; padding: 0; list-style: none; }
+#list li { display: flex; gap: 6px; padding: 5px 6px; border-radius: 5px; cursor: pointer; border-left: 5px solid var(--c); margin-bottom: 3px; background: #1b1e24; }
+#list li.cur { outline: 1px solid var(--accent); }
+#list li .t { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#list li .k { color: var(--muted); font-size: 11px; min-width: 84px; }
+#helpbox { position: fixed; inset: 0; background: #000a; display: grid; place-items: center; }
+#helpbox[hidden] { display: none; }  /* display:grid above would otherwise override [hidden] */
+#helpbox .card { max-width: 560px; }
+#helpbox td { padding: 3px 12px 3px 0; vertical-align: top; }
+#helpbox td:first-child { color: var(--accent); white-space: nowrap; }

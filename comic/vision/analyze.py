@@ -36,8 +36,12 @@ def analyze_page(
     page: int,
     direction: ReadingDirection,
     conf_threshold: float | None = None,
+    vertical_text: bool = False,
 ) -> tuple[PageAnalysis, np.ndarray]:
     """Detect text on one page and order it for reading.
+
+    ``vertical_text``: the lettering runs in columns (Japanese/Chinese manga),
+    which is how a region holding two balloons is told apart.
 
     Returns the analysis document and the text mask, so the caller can persist
     both without decoding the page twice.
@@ -50,7 +54,8 @@ def analyze_page(
 
     right_to_left = direction is ReadingDirection.RTL
     candidates = order_regions(
-        extract_regions(image, result.mask), right_to_left=right_to_left
+        extract_regions(image, result.mask, vertical_text=vertical_text),
+        right_to_left=right_to_left,
     )
 
     regions = [
@@ -114,6 +119,8 @@ def crop_region(
     height, width = image.shape[:2]
     box = region.bbox.padded(pad, bounds=(width, height))
     crop = image[box.y1:box.y2, box.x1:box.x2]
+    if region.angle and len(region.polygon) == 4 and crop.size:
+        crop = _straightened(image, region, pad)
     if scale > 1 and crop.size:
         crop = cv2.resize(
             crop,
@@ -121,6 +128,28 @@ def crop_region(
             interpolation=cv2.INTER_CUBIC,
         )
     return crop
+
+
+def _straightened(image: np.ndarray, region: TextRegion, pad: int) -> np.ndarray:
+    """A tilted box's lettering turned level: the operator's box drawn at an
+    angle in Studio (2026-11-09) is read as the reader sees it."""
+    import cv2
+    import math
+
+    from comic.schemas import unrotated_box
+
+    x1, y1, x2, y2 = unrotated_box(region.polygon, region.angle)
+    cx, cy = (x1 + x2) / 2, (y1 + y2) / 2
+    w, h = int(round(x2 - x1)) + 2 * pad, int(round(y2 - y1)) + 2 * pad
+    # Rotate the page about the box centre by -angle (OpenCV: positive is
+    # counter-clockwise on screen), and move that centre to the crop's middle.
+    m = cv2.getRotationMatrix2D((cx, cy), region.angle, 1.0)
+    m[0, 2] += w / 2 - cx
+    m[1, 2] += h / 2 - cy
+    border = tuple(int(v) for v in np.median(image.reshape(-1, image.shape[-1]) if image.ndim == 3
+                                              else image.reshape(-1, 1), axis=0))
+    return cv2.warpAffine(image, m, (max(1, w), max(1, h)), flags=cv2.INTER_CUBIC,
+                          borderMode=cv2.BORDER_CONSTANT, borderValue=border)
 
 
 def write_crop(crop: np.ndarray, path: Path) -> None:
@@ -156,9 +185,13 @@ def overlay_regions(image: np.ndarray, analysis: PageAnalysis) -> np.ndarray:
     for index, region in enumerate(analysis.regions, start=1):
         colour = colours.get(region.kind.value, (128, 128, 128))
         b = region.bbox
+        # The region's own number, not its position: after ocr_review drops a
+        # region the positions shift, and a label one too low names the
+        # neighbouring bubble.
+        label = region.id.rsplit("_r", 1)[-1].lstrip("0") or str(index)
         cv2.rectangle(canvas, (b.x1, b.y1), (b.x2, b.y2), colour, thickness)
         cv2.putText(
-            canvas, str(index), (b.x1 + 3, max(14, b.y1 - 4)),
+            canvas, label, (b.x1 + 3, max(14, b.y1 - 4)),
             cv2.FONT_HERSHEY_SIMPLEX, font_scale, colour, thickness,
         )
     return canvas

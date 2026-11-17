@@ -30,8 +30,9 @@ from comic.handoff.schemas import (
     VisualQaRequest,
 )
 from comic.image_processing.clean import clean_page
-from comic.image_processing.mask import fit_areas, region_glyphs
+from comic.image_processing.mask import fit_areas, refine_page_mask, region_glyphs, with_erase_boxes
 from comic.paths import ChapterPaths, SeriesPaths
+from comic.poster import write_poster
 from comic.schemas import (
     ChapterState,
     ChapterTranslation,
@@ -157,6 +158,10 @@ def _page_checks(
     for region in analysis.regions:
         if region.id not in areas:
             continue
+        # A logo erased over art gets art painted back in: dark pixels there
+        # are not leftover lettering, so the residue measure means nothing.
+        if region.kind is TextKind.ERASE:
+            continue
         # Decide which way round "ink" is from the region's own background.
         inverted = background_luma(cleaned, areas[region.id]) < DARK_BACKGROUND
         before = _ink(original, inverted)
@@ -183,6 +188,14 @@ def _page_checks(
     return checks
 
 
+def page_renders(analysis, text: dict) -> bool:
+    """A page renders when it has a line to set or a logo/watermark to erase."""
+    return any(
+        text.get(r.id, "").strip() or r.kind is TextKind.ERASE
+        for r in analysis.regions
+    )
+
+
 def render_one(
     paths: ChapterPaths,
     page: int,
@@ -205,7 +218,7 @@ def render_one(
     analysis = analysis_for(paths, page)
     if analysis is None:
         return result
-    if not any(text.get(r.id, "").strip() for r in analysis.regions):
+    if not page_renders(analysis, text):
         return result
 
     source = paths.source_pages / filename
@@ -215,7 +228,8 @@ def render_one(
         return result
 
     image = load_page(source)
-    page_mask = load_mask(mask_path)
+    page_mask = with_erase_boxes(
+        refine_page_mask(image, load_mask(mask_path), analysis.regions), analysis.regions)
     areas = fit_areas(image, page_mask, analysis.regions)
 
     cleaned, touched, report = clean_page(
@@ -512,7 +526,8 @@ def _render_environment(paths: ChapterPaths) -> str:
         digest.update(f"profile error: {exc}".encode())
     fonts = paths.root / "assets" / "fonts"
     model = paths.root / "models" / "inpainting_lama.onnx"
-    for item in [*(sorted(fonts.iterdir()) if fonts.is_dir() else []), model]:
+    bubbles = paths.root / "models" / "bubble_seg_yolov8m.onnx"
+    for item in [*(sorted(fonts.iterdir()) if fonts.is_dir() else []), model, bubbles]:
         if item.is_file():
             stat = item.stat()
             digest.update(f"{item.name}:{stat.st_size}:{stat.st_mtime_ns}".encode())
@@ -547,7 +562,7 @@ def page_fingerprints(
         if analysis is None:
             continue
         ids = [r.id for r in analysis.regions]
-        if not any(entries.get(i) and entries[i].target_text.strip() for i in ids):
+        if not page_renders(analysis, {i: e.target_text for i, e in entries.items()}):
             continue
         digest = hashlib.sha256(common.encode())
         for item in (paths.analysis_file(record.page),
@@ -794,4 +809,5 @@ def publish(paths: ChapterPaths, state: ChapterState) -> tuple[int, list[str]]:
     paths.library.mkdir(parents=True, exist_ok=True)
     for record, rendered in ready:
         (paths.library / record.filename).write_bytes(rendered.read_bytes())
+    write_poster(paths.library, "png")
     return len(ready), problems

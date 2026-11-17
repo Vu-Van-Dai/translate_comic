@@ -112,6 +112,40 @@ def test_plan_length_must_be_25_to_40_seconds():
         short.check_length()
 
 
+def _retention_shots() -> list[dict]:
+    text = lambda role, t: {"text": t, "role": role}
+    return [
+        {"panel": "p001_k0", "seconds": 2.5, "motion": "punch", "text": text("hook", "Cậu ấy khóc vì làm mất ví?")},
+        {"panel": "p002_k0", "seconds": 4.0, "motion": "zoom_in", "text": text("caption", "Ngày đầu đại học")},
+        {"panel": "p003_k0", "seconds": 4.0, "motion": "pan_down", "text": text("quote", "Tớ tìm cùng cậu")},
+        {"panel": "p004_k0", "seconds": 1.2, "motion": "shake", "transition": "flash"},
+        {"panel": "p005_k0", "seconds": 1.2, "motion": "punch", "transition": "zoom_blur"},
+        {"panel": "p006_k0", "seconds": 8.0, "motion": "drift"},
+        {"panel": "p007_k0", "seconds": 8.0, "motion": "zoom_out", "text": text("caption", "Tập sau: gặp lại nhau")},
+    ]
+
+
+def test_retention_structure_is_checked_only_when_asked():
+    free = VideoPlan.model_validate(_plan())             # static shots, no text
+    assert free.check_structure() == []
+    good = VideoPlan.model_validate(_plan(structure="retention", shots=_retention_shots()))
+    assert good.check_structure() == []
+
+
+def test_retention_structure_names_what_is_missing():
+    shots = _retention_shots()
+    shots[0].pop("text")                                 # no hook
+    shots[0]["seconds"] = 5.0                            # hook held too long
+    shots[2].pop("text")                                 # only one subtitle left
+    shots[4]["seconds"] = 3.0                            # one quick shot left
+    shots[-1].pop("text")                                # no closing line
+    shots[5]["motion"] = "static"
+    problems = VideoPlan.model_validate(_plan(structure="retention", shots=shots)).check_structure()
+    joined = " | ".join(problems)
+    for needle in ("hook line", "holds 5.0s", "subtitled", "quick shots", "closing line", "shot(s) 6 are static"):
+        assert needle in joined, needle
+
+
 def test_hashtags_are_normalised():
     plan = VideoPlan.model_validate(_plan(hashtags=["#fyp", "manga"]))
     assert plan.hashtags == ["fyp", "manga"]

@@ -106,10 +106,18 @@ a bubble's outline was the first complaint from a reader.
   Caption text breaks "in the most rectangular shape you can".
 - editmanga: **follow the bubble's own shape** -- a square box takes a
   squarish block, not the "egg" every time.
-- The fitter wraps into the bubble mask itself, and among wraps that fit at
-  the same size it prefers the one whose emptiest line fills most of its row
-  (`fit._evenness`), then no widow, then fewer lines. A true balanced
-  oval stack (a line-breaking pass in its own right) is not built yet.
+- **The block follows the bubble's contour** (the operator, 2026-11-15:
+  "shape the text blocks to follow the contours of the speech bubbles").
+  Besides the single-width wraps (`WRAP_ATTEMPTS`), `fit._contour_wraps`
+  stands each line count at the balloon's centre, reads every line's room off
+  the row it would sit in, and splits the words (in order, never inside a
+  word or a no-break space) so each line fills the same share of its own
+  row: short lines where an oval narrows, the longest in the middle, equal
+  lines in a caption box. Among wraps that fit at the same size the fitter
+  prefers no widow, then the emptiest line filling most of its row
+  (`fit._evenness`), then the most even fill (`fit._follows`), then fewer
+  lines. Measured on a 400x240 oval: 28px as 322/316/244 px lines before,
+  31px as 195/286/309/192 after. Both renderers and `comic ps build` use it.
 
 ## 6. Breaking lines (p. 65; editmanga)
 

@@ -1,0 +1,895 @@
+{
+  "Lu Huai": {
+    "name": "Lu Huai",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Gou Xiaoling": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "cold",
+        "note": null
+      },
+      "Tiểu Thanh": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "casual",
+        "note": null
+      },
+      "Tiểu Ba": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "casual",
+        "note": null
+      },
+      "Vu An Minh": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "casual",
+        "note": null
+      }
+    },
+    "notes": [
+      "Lục Hòe: aloof young man who doesn't believe in ghosts; his aura makes ghosts fear and avoid him. Adult.",
+      "Lục Hòe has heterochromia (dị đồng); a strange feeling hits Xiaoling at first contact; ghosts are blown away when his door opens. Calls Xiaoling a con man at first."
+    ]
+  },
+  "Gou Xiaoling": {
+    "name": "Gou Xiaoling",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Xueqiu": {
+        "self_term": "tôi",
+        "other_term": "mày",
+        "formality": "casual",
+        "note": null
+      },
+      "Grandma Lu": {
+        "self_term": "cháu",
+        "other_term": "bà",
+        "formality": "polite",
+        "note": null
+      },
+      "Client": {
+        "self_term": "tôi",
+        "other_term": "chú",
+        "formality": "polite",
+        "note": null
+      },
+      "Lu Huai": {
+        "self_term": "tôi",
+        "other_term": "anh",
+        "formality": "casual",
+        "note": null
+      },
+      "Thụ": {
+        "self_term": "anh",
+        "other_term": "em",
+        "formality": "casual",
+        "note": null
+      },
+      "Tiểu Thanh": {
+        "self_term": "tôi",
+        "other_term": "cô",
+        "formality": "casual",
+        "note": null
+      },
+      "Tiểu Ba": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "casual",
+        "note": null
+      },
+      "Vu An Minh": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "casual",
+        "note": null
+      }
+    },
+    "notes": [
+      "Cẩu Tiểu Lăng: lively young man with yin-yang eyes (sees ghosts); his soul strangely attracts ghosts. White hair. Adult.",
+      "Lost part of his soul (hồn phách) over ten years ago; Tuyết Cầu says it is inside Lục Hòe. His blood lets others see ghosts. Casts \"Lôi lai!\" (summon lightning), rarely succeeds."
+    ]
+  },
+  "Xueqiu": {
+    "name": "Xueqiu",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Gou Xiaoling": {
+        "self_term": "ta",
+        "other_term": "nhóc",
+        "formality": "casual",
+        "note": null
+      }
+    },
+    "notes": [
+      "Tuyết Cầu ('Snowball'): sharp-tongued mysterious black cat, true form unknown."
+    ]
+  },
+  "Grandma Lu": {
+    "name": "Grandma Lu",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Gou Xiaoling": {
+        "self_term": "ta",
+        "other_term": "cậu",
+        "formality": "casual",
+        "note": null
+      },
+      "Lu Huai": {
+        "self_term": "bà",
+        "other_term": "cháu",
+        "formality": "family",
+        "note": null
+      }
+    },
+    "notes": [
+      "Bà Lục: ghost of Lu Huai's grandmother, trapped in a park grove maze; gave the jade to her grandson A Hòe (Lục Hòe)."
+    ]
+  },
+  "Client": {
+    "name": "Client",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Gou Xiaoling": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "polite",
+        "note": null
+      }
+    },
+    "notes": [
+      "Man in a bucket hat and long coat who hired Xiaoling to find the jade; carries death energy (tử khí); can see ghosts; after the jade.",
+      "The client is the man who long harassed bà Lục for the jade; reportedly died in an accident -- now an undead driven by obsession."
+    ]
+  },
+  "Thụ": {
+    "name": "Thụ",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Gou Xiaoling": {
+        "self_term": "em",
+        "other_term": "anh",
+        "formality": "polite",
+        "note": null
+      },
+      "Tiểu Hà": {
+        "self_term": "con",
+        "other_term": "mẹ",
+        "formality": "family",
+        "note": null
+      }
+    },
+    "notes": []
+  },
+  "Tiểu Hà": {
+    "name": "Tiểu Hà",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Thụ": {
+        "self_term": "mẹ",
+        "other_term": "con",
+        "formality": "family",
+        "note": null
+      },
+      "Cẩu Tiểu Lăng": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "polite",
+        "note": null
+      }
+    },
+    "notes": []
+  },
+  "Cẩu Tiểu Lăng": {
+    "name": "Cẩu Tiểu Lăng",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Tiểu Hà": {
+        "self_term": "tôi",
+        "other_term": "cô",
+        "formality": "polite",
+        "note": null
+      },
+      "Mẹ Tiểu Thụ": {
+        "self_term": "tôi",
+        "other_term": "chị",
+        "formality": "polite",
+        "note": null
+      },
+      "Sếp Trịnh": {
+        "self_term": "tôi",
+        "other_term": "chú",
+        "formality": "polite",
+        "note": null
+      },
+      "Cháu sếp Trịnh": {
+        "self_term": "tôi",
+        "other_term": "anh",
+        "formality": "polite",
+        "note": null
+      },
+      "chú Ngưu": {
+        "self_term": "tôi",
+        "other_term": "chú",
+        "formality": "polite",
+        "note": null
+      },
+      "Dạ Dư": {
+        "self_term": "tôi",
+        "other_term": "anh",
+        "formality": "casual",
+        "note": null
+      },
+      "Ngoa": {
+        "self_term": "tôi",
+        "other_term": "mày",
+        "formality": "hostile",
+        "note": null
+      },
+      "Hạc giấy": {
+        "self_term": "tôi",
+        "other_term": "mày",
+        "formality": "casual",
+        "note": null
+      },
+      "Bọt Nước": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "casual",
+        "note": null
+      },
+      "Vu An Minh": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "casual",
+        "note": null
+      },
+      "Cô Hải": {
+        "self_term": "tôi",
+        "other_term": "cô",
+        "formality": "polite",
+        "note": null
+      },
+      "Cá voi sát thủ": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "casual",
+        "note": null
+      },
+      "Tiểu Hồ": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "casual",
+        "note": null
+      },
+      "Gareth": {
+        "self_term": "tôi",
+        "other_term": "anh",
+        "formality": "polite",
+        "note": null
+      },
+      "Quản lý Trần": {
+        "self_term": "tôi",
+        "other_term": "anh",
+        "formality": "polite",
+        "note": null
+      }
+    },
+    "notes": []
+  },
+  "Tuyết Cầu": {
+    "name": "Tuyết Cầu",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Lục Hòe": {
+        "self_term": "ta",
+        "other_term": "nhóc",
+        "formality": "casual",
+        "note": null
+      },
+      "Dạ Dư": {
+        "self_term": "ta",
+        "other_term": "ngươi",
+        "formality": "hostile",
+        "note": null
+      }
+    },
+    "notes": []
+  },
+  "Mẹ Tiểu Thụ": {
+    "name": "Mẹ Tiểu Thụ",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Tiểu Thụ": {
+        "self_term": "mẹ",
+        "other_term": "con",
+        "formality": "family",
+        "note": null
+      },
+      "Cẩu Tiểu Lăng": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "polite",
+        "note": null
+      },
+      "Lục Hòe": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "polite",
+        "note": null
+      }
+    },
+    "notes": []
+  },
+  "Tiểu Thụ": {
+    "name": "Tiểu Thụ",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Mẹ Tiểu Thụ": {
+        "self_term": "con",
+        "other_term": "mẹ",
+        "formality": "family",
+        "note": null
+      },
+      "Cẩu Tiểu Lăng": {
+        "self_term": "em",
+        "other_term": "anh",
+        "formality": "casual",
+        "note": null
+      }
+    },
+    "notes": []
+  },
+  "Lục Hòe": {
+    "name": "Lục Hòe",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Mẹ Tiểu Thụ": {
+        "self_term": "tôi",
+        "other_term": "chị",
+        "formality": "polite",
+        "note": null
+      },
+      "Tuyết Cầu": {
+        "self_term": "tôi",
+        "other_term": "mày",
+        "formality": "casual",
+        "note": null
+      },
+      "Tiểu Thụ": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "cold",
+        "note": null
+      },
+      "Cháu sếp Trịnh": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "casual",
+        "note": null
+      },
+      "chú Ngưu": {
+        "self_term": "tôi",
+        "other_term": "chú",
+        "formality": "polite",
+        "note": null
+      },
+      "Sếp Trịnh": {
+        "self_term": "tôi",
+        "other_term": "chú",
+        "formality": "polite",
+        "note": null
+      },
+      "Dạ Dư": {
+        "self_term": "tôi",
+        "other_term": "anh",
+        "formality": "casual",
+        "note": null
+      },
+      "Ngoa": {
+        "self_term": "tôi",
+        "other_term": "mày",
+        "formality": "hostile",
+        "note": null
+      },
+      "Vu An Minh": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "casual",
+        "note": null
+      },
+      "Tiểu Duy": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "casual",
+        "note": null
+      },
+      "Cô Hải": {
+        "self_term": "tôi",
+        "other_term": "cô",
+        "formality": "polite",
+        "note": null
+      },
+      "Gareth": {
+        "self_term": "tôi",
+        "other_term": "anh",
+        "formality": "polite",
+        "note": null
+      },
+      "Tiểu Hồ": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "polite",
+        "note": null
+      },
+      "Bọt Nước": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "casual",
+        "note": null
+      },
+      "Quản lý Trần": {
+        "self_term": "tôi",
+        "other_term": "anh",
+        "formality": "polite",
+        "note": null
+      }
+    },
+    "notes": []
+  },
+  "Sếp Trịnh": {
+    "name": "Sếp Trịnh",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Cẩu Tiểu Lăng": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "polite",
+        "note": null
+      },
+      "Tiểu Thụ": {
+        "self_term": "bố",
+        "other_term": "con",
+        "formality": "family",
+        "note": null
+      },
+      "Lục Hòe": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "polite",
+        "note": null
+      }
+    },
+    "notes": []
+  },
+  "Tiểu Thanh": {
+    "name": "Tiểu Thanh",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Xuân Lan": {
+        "self_term": "em",
+        "other_term": "chị",
+        "formality": "family",
+        "note": null
+      },
+      "Gou Xiaoling": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "casual",
+        "note": null
+      },
+      "Tiểu Ba": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "casual",
+        "note": null
+      },
+      "Lu Huai": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "casual",
+        "note": null
+      },
+      "Tiểu Duy": {
+        "self_term": "tôi",
+        "other_term": "cô",
+        "formality": "casual",
+        "note": null
+      },
+      "Vu An Minh": {
+        "self_term": "tôi",
+        "other_term": "anh",
+        "formality": "casual",
+        "note": null
+      },
+      "Cô Hải": {
+        "self_term": "tôi",
+        "other_term": "cô",
+        "formality": "polite",
+        "note": null
+      },
+      "Tiểu Hồ": {
+        "self_term": "tôi",
+        "other_term": "anh",
+        "formality": "casual",
+        "note": null
+      }
+    },
+    "notes": []
+  },
+  "Tiểu Ba": {
+    "name": "Tiểu Ba",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Tiểu Thanh": {
+        "self_term": "tôi",
+        "other_term": "cô",
+        "formality": "casual",
+        "note": null
+      },
+      "Gou Xiaoling": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "casual",
+        "note": null
+      },
+      "Lu Huai": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "casual",
+        "note": null
+      },
+      "Vu An Minh": {
+        "self_term": "tôi",
+        "other_term": "anh",
+        "formality": "casual",
+        "note": null
+      }
+    },
+    "notes": []
+  },
+  "Cháu sếp Trịnh": {
+    "name": "Cháu sếp Trịnh",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Cẩu Tiểu Lăng": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "casual",
+        "note": null
+      },
+      "Lục Hòe": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "casual",
+        "note": null
+      }
+    },
+    "notes": []
+  },
+  "chú Ngưu": {
+    "name": "chú Ngưu",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Cẩu Tiểu Lăng": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "polite",
+        "note": null
+      },
+      "Lục Hòe": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "polite",
+        "note": null
+      }
+    },
+    "notes": []
+  },
+  "Dạ Dư": {
+    "name": "Dạ Dư",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Cẩu Tiểu Lăng": {
+        "self_term": "ta",
+        "other_term": "cậu",
+        "formality": "casual",
+        "note": null
+      },
+      "Lục Hòe": {
+        "self_term": "ta",
+        "other_term": "cậu",
+        "formality": "casual",
+        "note": null
+      },
+      "Tuyết Cầu": {
+        "self_term": "ta",
+        "other_term": "ngươi",
+        "formality": "hostile",
+        "note": null
+      }
+    },
+    "notes": []
+  },
+  "Ngoa": {
+    "name": "Ngoa",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Cẩu Tiểu Lăng": {
+        "self_term": "ta",
+        "other_term": "ngươi",
+        "formality": "hostile",
+        "note": null
+      },
+      "Lục Hòe": {
+        "self_term": "ta",
+        "other_term": "ngươi",
+        "formality": "hostile",
+        "note": null
+      }
+    },
+    "notes": []
+  },
+  "Tiểu Duy": {
+    "name": "Tiểu Duy",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Tiểu Thanh": {
+        "self_term": "tôi",
+        "other_term": "cô",
+        "formality": "casual",
+        "note": null
+      },
+      "Lục Hòe": {
+        "self_term": "em",
+        "other_term": "anh",
+        "formality": "polite",
+        "note": null
+      }
+    },
+    "notes": []
+  },
+  "Hạc giấy": {
+    "name": "Hạc giấy",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Cẩu Tiểu Lăng": {
+        "self_term": "con",
+        "other_term": "mẹ",
+        "formality": "family",
+        "note": null
+      }
+    },
+    "notes": []
+  },
+  "Vu An Minh": {
+    "name": "Vu An Minh",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Cẩu Tiểu Lăng": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "casual",
+        "note": null
+      },
+      "Lục Hòe": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "casual",
+        "note": null
+      },
+      "Gou Xiaoling": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "casual",
+        "note": null
+      },
+      "Lu Huai": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "casual",
+        "note": null
+      }
+    },
+    "notes": []
+  },
+  "Cô Hải": {
+    "name": "Cô Hải",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Tiểu Thanh": {
+        "self_term": "tôi",
+        "other_term": "cô",
+        "formality": "polite",
+        "note": null
+      },
+      "Cẩu Tiểu Lăng": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "polite",
+        "note": null
+      }
+    },
+    "notes": []
+  },
+  "Cá voi sát thủ": {
+    "name": "Cá voi sát thủ",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Cẩu Tiểu Lăng": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "casual",
+        "note": null
+      }
+    },
+    "notes": []
+  },
+  "Bọt Nước": {
+    "name": "Bọt Nước",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Cẩu Tiểu Lăng": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "casual",
+        "note": null
+      }
+    },
+    "notes": []
+  },
+  "Gareth": {
+    "name": "Gareth",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Cẩu Tiểu Lăng": {
+        "self_term": "ta",
+        "other_term": "cậu",
+        "formality": "casual",
+        "note": null
+      },
+      "Lục Hòe": {
+        "self_term": "ta",
+        "other_term": "cậu",
+        "formality": "casual",
+        "note": null
+      }
+    },
+    "notes": []
+  },
+  "Tiểu Hồ": {
+    "name": "Tiểu Hồ",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Tiểu Thanh": {
+        "self_term": "tôi",
+        "other_term": "cô",
+        "formality": "casual",
+        "note": null
+      },
+      "Cẩu Tiểu Lăng": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "casual",
+        "note": null
+      },
+      "Lục Hòe": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "polite",
+        "note": null
+      },
+      "Quản lý Trần": {
+        "self_term": "tôi",
+        "other_term": "anh",
+        "formality": "polite",
+        "note": null
+      }
+    },
+    "notes": []
+  },
+  "Quản lý Trần": {
+    "name": "Quản lý Trần",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Cẩu Tiểu Lăng": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "polite",
+        "note": null
+      },
+      "Lục Hòe": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "polite",
+        "note": null
+      }
+    },
+    "notes": []
+  }
+}

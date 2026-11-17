@@ -10,6 +10,8 @@ assets/fonts/*.ttf
 assets/fonts/*.otf
 workspace/
 library/
+videos/
+posts/
 # Browser user-data directories. These hold the operator's live session
 # cookies for logged-in sources, so committing one leaks their account.
 # Both are here deliberately: `comic login` writes _browser, `comic chrome`
@@ -33,3 +35,6 @@ profiles/_edge/
 
 /Essential Guide to Comic Book Lettering.pdf
 /assets/music/trending/
+
+# Local API keys (AgentRouter etc.) -- never committed
+.secrets/

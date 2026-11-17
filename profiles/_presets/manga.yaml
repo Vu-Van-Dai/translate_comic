@@ -21,6 +21,12 @@ pad_em: 0.6
 size_scale: 0.9
 leading: auto
 
+# Tall vertical CJK balloons are 50-90 px wide: AnimeAce is condensed down
+# to 80% there, as editors narrow it in Photoshop, rather than set at 10-12 px
+# or swapped for another face (the operator, 2026-10-31). Only where it buys
+# at least 10% of size, so roomy balloons stay at 100%.
+condense: 0.8
+
 # Case (docs/lettering.md, section 9): bubbles caps; caption and narration
 # boxes sentence case, as the manga groups set them; asides on the art
 # sentence case when the source's were. Caps-only faces hand sentence-case

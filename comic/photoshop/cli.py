@@ -23,7 +23,25 @@ ps_app = typer.Typer(
     no_args_is_help=True,
 )
 
-CLEAN_MODES = ("pipeline", "hybrid", "content-aware")
+CLEAN_MODES = ("pipeline", "hybrid", "content-aware", "published")
+
+
+def _refuse_if_blocked(paths: ChapterPaths) -> None:
+    """A blocked chapter is skipped (exit 3); other chapters are unaffected.
+
+    Held pages are not a block: they are excluded, so the SFX crops, the
+    builds and the publish skip them page by page and carry on.
+    """
+    from comic.state.store import ChapterStore, StateError
+
+    try:
+        state = ChapterStore(paths).load()
+    except StateError:
+        return                      # the command itself reports a missing chapter
+    if state.blocked:
+        console.print(f"[warn]![/warn] {escape(paths.chapter)} is blocked: {escape(state.blocked)}"
+                      " -- skipped, other chapters are unaffected")
+        raise typer.Exit(3)
 
 
 @ps_app.callback()
@@ -105,6 +123,7 @@ def sfx(
     from comic.photoshop.sfx import open_request, response_path
 
     paths = ChapterPaths(series, chapter)
+    _refuse_if_blocked(paths)
     request, count = open_request(paths, list(page or []) or None)
     console.print(f"[gate]GATE: sfx[/gate] -- {count} dropped region(s) to look at")
     console.print(f"  read   [path]{escape(str(request))}[/path]")
@@ -120,6 +139,10 @@ def publish(
     chapter: str = typer.Option(..., "--chapter", "-c", help="Chapter number."),
     fmt: str = typer.Option("webp", "--format", help="webp (default) or png."),
     quality: int = typer.Option(95, "--quality", help="WebP quality; 95 is visually lossless."),
+    keep_published: bool = typer.Option(
+        False, "--keep-published",
+        help="A translated page with no Photoshop build keeps its library page "
+             "(after `ps build --clean published`: an SFX-only pass on an old chapter)."),
 ) -> None:
     """Replace a chapter's library pages with the Photoshop versions.
 
@@ -132,15 +155,32 @@ def publish(
     from comic.photoshop.publish import publish_chapter
 
     paths = ChapterPaths(series, chapter)
+    _refuse_if_blocked(paths)
+    # The operator finishes pages in Photoshop: re-export every PSD saved after
+    # its PNG, so the library gets the edited page, not the first build.
+    from comic.photoshop.driver import PhotoshopError, connect, export_png, stale_exports
+
+    edited = stale_exports(paths.workspace / "photoshop")
+    if edited:
+        try:
+            app = connect()
+            for psd in edited:
+                export_png(app, psd)
+        except PhotoshopError as exc:
+            console.print(f"[fail]x[/fail] {escape(str(exc))}")
+            raise typer.Exit(1)
+        console.print(f"  re-exported {len(edited)} edited PSD(s): "
+                      + ", ".join(p.stem for p in edited))
     try:
-        report = publish_chapter(paths, fmt, quality)
+        report = publish_chapter(paths, fmt, quality, keep_published=keep_published)
     except ValueError as exc:
         console.print(f"[fail]x[/fail] {escape(str(exc))}")
         raise typer.Exit(1)
     console.print(
         f"[ok]+[/ok] {report.pages} page(s) -> [path]{escape(str(paths.library))}[/path]\n"
         f"  {report.from_photoshop} from Photoshop, {report.originals} original(s); "
-        f"{report.before / 1e6:.1f} MB -> {report.after / 1e6:.1f} MB"
+        + (f"{report.held} held (number kept); " if report.held else "")
+        + f"{report.before / 1e6:.1f} MB -> {report.after / 1e6:.1f} MB"
     )
 
 
@@ -155,6 +195,11 @@ def build(
              "Content-Aware Fill over artwork; content-aware: Content-Aware Fill "
              "for every region, from the original.",
     ),
+    overwrite_edited: bool = typer.Option(
+        False, "--overwrite-edited",
+        help="Also rebuild pages whose PSD the operator saved after the last build "
+             "(their edits are lost). Off by default: those pages are skipped.",
+    ),
 ) -> None:
     """Build layered PSDs with editable Vietnamese text for a rendered chapter."""
     setup_console()
@@ -166,9 +211,25 @@ def build(
         raise typer.Exit(1)
 
     paths = ChapterPaths(series, chapter)
+    _refuse_if_blocked(paths)
     fonts_dir = project_root() / "assets" / "fonts"
     console.rule(f"[stage]{escape(paths.series)} / {escape(paths.chapter)} -- Photoshop[/stage]")
-    plans, notes = plan_chapter(paths, list(page or []) or None, fonts_dir, clean)
+    from comic.photoshop.driver import stale_exports
+
+    wanted_pages = list(page or [])
+    edited = [] if overwrite_edited else [int(p.stem) for p in stale_exports(paths.workspace / "photoshop")]
+    if edited:
+        if not wanted_pages:
+            from comic.state.store import ChapterStore
+
+            wanted_pages = [r.page for r in ChapterStore(paths).load().pages if not r.excluded]
+        wanted_pages = [p for p in wanted_pages if p not in edited]
+        console.print(f"  [warn]![/warn] keeping {len(edited)} PSD(s) you edited: "
+                      + ", ".join(f"{p:03d}" for p in edited) + "  (--overwrite-edited to rebuild)")
+        if not wanted_pages:
+            console.print("[ok]+[/ok] nothing else to build")
+            return
+    plans, notes = plan_chapter(paths, wanted_pages or None, fonts_dir, clean)
     for note in notes:
         console.print(f"  [warn]![/warn] {escape(note)}")
     if not plans:

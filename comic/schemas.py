@@ -42,10 +42,20 @@ class TextKind(str, Enum):
     SHOUT = "shout"
     CAPTION = "caption"
     SFX = "sfx"
+    #: Another group's logo or a site watermark (the operator, 2026-10-28):
+    #: erased like lettering, never translated or typeset.
+    ERASE = "erase"
+    #: Lettering left exactly as drawn: in-world signage, a book cover, a shop
+    #: sign (the operator's Studio review, 2026-11-08). Neither cleaned nor
+    #: translated; kept as a region so a re-derivation does not resurrect it.
+    KEEP = "keep"
 
 
 #: SFX is left untouched by default (spec 27) so the original artwork survives.
 UNTRANSLATED_KINDS: frozenset[TextKind] = frozenset({TextKind.SFX})
+
+#: ``TextRegion.tag`` of an SFX that LaMa erases at cleaning (Studio key L).
+LAMA_SFX_TAG = "lama"
 
 
 class Stage(str, Enum):
@@ -163,6 +173,33 @@ class Panel(Base):
     bbox: BBox
 
 
+def rotated_corners(box: tuple[float, float, float, float], angle: float) -> list[tuple[float, float]]:
+    """Corners (nw, ne, se, sw) of the upright box ``box`` turned ``angle``
+    degrees clockwise about its centre, in image coordinates (y down)."""
+    import math
+
+    x1, y1, x2, y2 = box
+    cx, cy = (x1 + x2) / 2, (y1 + y2) / 2
+    t = math.radians(angle)
+    c, s_ = math.cos(t), math.sin(t)
+    out = []
+    for x, y in ((x1, y1), (x2, y1), (x2, y2), (x1, y2)):
+        dx, dy = x - cx, y - cy
+        out.append((cx + dx * c - dy * s_, cy + dx * s_ + dy * c))
+    return out
+
+
+def unrotated_box(corners: list, angle: float) -> tuple[float, float, float, float]:
+    """The upright box that ``rotated_corners`` turned into ``corners``."""
+    import math
+
+    cx = sum(p[0] for p in corners) / 4
+    cy = sum(p[1] for p in corners) / 4
+    w = math.dist(corners[0], corners[1])
+    h = math.dist(corners[1], corners[2])
+    return (cx - w / 2, cy - h / 2, cx + w / 2, cy + h / 2)
+
+
 class TextRegion(Base):
     id: str
     page: int
@@ -193,9 +230,70 @@ class TextRegion(Base):
     #: Set when an agent transcription superseded the OCR engine output.
     ocr_reviewed: bool = False
 
+    #: What an erase-only region is, as the operator labelled it in Studio:
+    #: ``logo``, ``watermark`` or ``credit`` -- purely descriptive. On an SFX,
+    #: ``lama`` (:data:`LAMA_SFX_TAG`, Studio key L) means LaMa erases it at
+    #: cleaning instead of Photoshop at the PSD build; see :attr:`lama_sfx`.
+    tag: str | None = None
+    #: Drawn or reshaped by the operator in Studio. The detector's glyph mask
+    #: may not cover such a box, so cleaning finds its letters itself.
+    edited: bool = False
+    #: Tilt of the box the operator drew in Studio, in degrees clockwise
+    #: (2026-11-09). When set, ``polygon`` holds the tilted rectangle's four
+    #: corners and ``bbox`` its upright bounds, so code that only knows boxes
+    #: still covers the lettering; cleaning, the check's crops and the PSD's
+    #: text layer follow the tilt.
+    angle: float = Field(default=0.0, ge=-180, le=180)
+    #: Set by the transcription check when the agent leaves this region for the
+    #: operator (2026-11-08). The region is kept and cleaned like any other,
+    #: never translated by the pipeline, and listed in ``untranslated.txt``.
+    hold_reason: str | None = None
+
     @property
     def translatable(self) -> bool:
-        return self.kind not in UNTRANSLATED_KINDS
+        return self.kind not in UNTRANSLATED_KINDS and self.kind not in (
+            TextKind.ERASE, TextKind.KEEP
+        )
+
+    @property
+    def lama_sfx(self) -> bool:
+        """An SFX the operator boxed with Studio's key L (2026-11-14).
+
+        Checked, translated and set like any SFX, but erased by LaMa at
+        cleaning -- whole box, as a group mark is -- instead of by Content-Aware
+        Fill at the PSD build, which botched the hard ones and had to be redone
+        by hand. Untranslated, its spot is simply the cleaned art.
+        """
+        return self.kind is TextKind.SFX and self.tag == LAMA_SFX_TAG
+
+    @property
+    def erased_whole(self) -> bool:
+        """Erased at cleaning as a whole box, always by LaMa: another group's
+        logo / watermark / credit, or an SFX marked for LaMa."""
+        return self.kind is TextKind.ERASE or self.lama_sfx
+
+    @property
+    def erasable(self) -> bool:
+        """Cleaned from the page: every translatable region, erase-only ones,
+        and SFX marked for LaMa."""
+        return self.translatable or self.erased_whole
+
+    @property
+    def cleanable(self) -> bool:
+        """Actually erased by cleaning.
+
+        An empty reading on a detector box means "leave it" (front matter
+        answered "" at ``ocr_review``), so that box stays. A logo, watermark or
+        credit is different: it is a picture or faint grey that OCR seldom
+        reads, and the label alone says to erase it. A box the operator drew or
+        reshaped in Studio is there because they saw lettering. Both are erased
+        whatever OCR made of them -- gating them on text skipped every
+        watermark drawn by hand in Studio (the operator, 2026-11-12: jmcomic
+        and mw123.cc marks left on Kawaii ch.4 after cleaning).
+        """
+        if not self.erasable:
+            return False
+        return bool(self.source_text.strip()) or self.erased_whole or self.edited
 
     @property
     def reading_looks_truncated(self) -> bool:
@@ -357,6 +455,17 @@ class PageRecord(Base):
     #: Kept in ``original/`` regardless: that stays the verbatim archive of
     #: what the source served. This only decides what reaches ``library/``.
     excluded: bool = False
+    #: Excluded, but still a page of the comic: held back for its content (the
+    #: operator, 2026-10-27). Unlike an insert it keeps its number when the
+    #: Photoshop route renumbers, so the pages after it still match the
+    #: source, and a file the operator puts at that number is never removed.
+    held: bool = False
+    #: Why the page is held, in a line the operator can act on.
+    hold_reason: str | None = None
+    #: A held page that may still have logos and site watermarks erased
+    #: (``scripts/erase_marks.py``), never anything else (the operator,
+    #: 2026-10-28). Off for a page held for sexual content.
+    hold_cleanup: bool = False
 
     def status_of(self, stage: Stage) -> StageStatus:
         return self.stages.get(stage, StageStatus.PENDING)
@@ -393,6 +502,13 @@ class ChapterState(Base):
     pages: list[PageRecord] = Field(default_factory=list)
     stages: dict[Stage, StageRecord] = Field(default_factory=dict)
 
+    #: Why this chapter as a whole cannot be processed, or None. A block is
+    #: the chapter's alone (the operator, 2026-10-28): the series queue skips
+    #: it and carries on with the next chapter, and other chapters' Photoshop
+    #: and SFX work is unaffected. One held page is not a block -- see
+    #: ``PageRecord.held``.
+    blocked: str | None = None
+
     pipeline_version: str = "0.1.0"
     created_at: datetime = Field(default_factory=utcnow)
     updated_at: datetime = Field(default_factory=utcnow)
@@ -403,3 +519,14 @@ class ChapterState(Base):
 
     def page(self, number: int) -> PageRecord | None:
         return next((p for p in self.pages if p.page == number), None)
+
+    @property
+    def held_pages(self) -> list[PageRecord]:
+        return [p for p in self.pages if p.held]
+
+    @property
+    def content_status(self) -> str:
+        """``blocked`` (whole chapter), ``partial`` (some pages held) or ``ok``."""
+        if self.blocked:
+            return "blocked"
+        return "partial" if self.held_pages else "ok"

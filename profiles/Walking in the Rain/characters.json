@@ -1,0 +1,98 @@
+{
+  "Xiyu": {
+    "name": "Xiyu",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Mother": {
+        "self_term": "con",
+        "other_term": "mẹ",
+        "formality": "family",
+        "note": null
+      },
+      "Ruiyang": {
+        "self_term": "em",
+        "other_term": "anh",
+        "formality": "casual",
+        "note": null
+      },
+      "Zhang Suihan": {
+        "self_term": "em",
+        "other_term": "anh",
+        "formality": "casual",
+        "note": null
+      }
+    },
+    "notes": [
+      "Yu Xiyu, narrator; idol in the boy band GREATEST (Daye Entertainment), youngest member, 15 at selection; grew up poor with a single mother; public persona innocent, privately independent and looks after his elder teammates. MINOR -- no romance translated while under 18."
+    ]
+  },
+  "Mother": {
+    "name": "Mother",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Xiyu": {
+        "self_term": "mẹ",
+        "other_term": "con",
+        "formality": "family",
+        "note": null
+      }
+    },
+    "notes": [
+      "Xiyu's single mother, restaurant waitress paying off debts; gave all her savings to get him into the group."
+    ]
+  },
+  "Ruiyang": {
+    "name": "Ruiyang",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Xiyu": {
+        "self_term": "anh",
+        "other_term": "em",
+        "formality": "casual",
+        "note": null
+      }
+    },
+    "notes": [
+      "Bai Ruiyang, red hair, elder GREATEST teammate; stands by Xiyu during the scandal.",
+      "From a rich family; lends Xiyu a year of tuition (\"so poor I only have money\")."
+    ]
+  },
+  "Song Wei": {
+    "name": "Song Wei",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {},
+    "notes": [
+      "GREATEST member, blond with headband; punches a trainee who insults Xiyu."
+    ]
+  },
+  "Zhang Suihan": {
+    "name": "Zhang Suihan",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Xiyu": {
+        "self_term": "anh",
+        "other_term": "em",
+        "formality": "casual",
+        "note": null
+      }
+    },
+    "notes": [
+      "GREATEST member, brown hair; blunt but promises the band will help Xiyu."
+    ]
+  }
+}

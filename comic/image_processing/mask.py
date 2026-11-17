@@ -21,7 +21,7 @@ from __future__ import annotations
 import cv2
 import numpy as np
 
-from comic.schemas import BBox, TextRegion
+from comic.schemas import BBox, TextKind, TextRegion
 
 #: How far past a glyph edge to erase. Anti-aliasing leaves a grey halo a
 #: pixel or two wide; leaving it behind reads as a smudge where text used to be.
@@ -85,7 +85,7 @@ def text_mask(
     """
     out = np.zeros(page_mask.shape[:2], dtype=np.uint8)
     for region in regions:
-        if not region.translatable:
+        if not region.erasable:
             continue
         box = region.bbox
         patch = page_mask[box.y1 : box.y2, box.x1 : box.x2]
@@ -110,6 +110,14 @@ def region_glyphs(
     out[box.y1 : box.y2, box.x1 : box.x2] = (
         page_mask[box.y1 : box.y2, box.x1 : box.x2] > 0
     ).astype(np.uint8)
+    if region.angle and len(region.polygon) == 4:
+        # A box the operator tilted in Studio (2026-11-09): its upright bounds
+        # reach into the corners beside the lettering -- keep to the tilt.
+        import cv2
+
+        inside = np.zeros_like(out)
+        cv2.fillPoly(inside, [np.array(region.polygon, dtype=np.int32)], 1)
+        out &= inside
     return dilate(out, dilation)
 
 
@@ -418,6 +426,272 @@ def _on_tone(image: np.ndarray, page_mask: np.ndarray, box: BBox) -> bool:
     return float((behind < 200).mean()) > TONE_DARK_SHARE
 
 
+#: An outline encloses lettering and dwarfs it; a glyph like 回 encloses only
+#: a stroke of its own size. Measured: Kimi ch.1 p.18's spiky bubble is ~19x
+#: its one glyph; 回's outer square ~3x its inner one.
+OUTLINE_RATIO = 6.0
+#: How far past its box a stroke may run and still count as the region's.
+STROKE_PAD = 6
+#: Grey level below which a pixel is ink.
+INK_LEVEL = 100
+
+
+def refine_page_mask(image: np.ndarray, page_mask: np.ndarray,
+                     regions: list[TextRegion]) -> np.ndarray:
+    """The detector's text mask, corrected per region before anything uses it.
+
+    Two misses, both Kimi ga Tomoshite ch.1 p.18 (the operator, 2026-10-28):
+
+    - **A drawn outline marked as lettering.** The spiky bubble around one
+      glyph came back in the mask whole, so cleaning erased the bubble and
+      left fragments. A mask component that encloses the region's other
+      lettering and is OUTLINE_RATIO times its size is an outline: dropped.
+    - **Lettering marked only in part.** Diagonal free text on screen tone
+      was half in the mask, so half of it survived cleaning. Dark strokes
+      touching the marked letters, and staying within the region's box, are
+      added.
+    """
+    usable = [r for r in regions if r.translatable and r.cleanable]
+    if not usable:
+        return page_mask
+    from comic.vision.bubbles import bubble_masks
+
+    gray = cv2.cvtColor(image[:, :, :3], cv2.COLOR_RGB2GRAY) if image.ndim == 3 else image
+    bubbles = bubble_masks(image)
+    out = page_mask.copy()
+    h, w = out.shape[:2]
+    for region in usable:
+        b = region.bbox
+        x1, y1 = max(0, b.x1 - STROKE_PAD), max(0, b.y1 - STROKE_PAD)
+        x2, y2 = min(w, b.x2 + STROKE_PAD), min(h, b.y2 + STROKE_PAD)
+        patch = (out[y1:y2, x1:x2] > 0).astype(np.uint8)
+        if not patch.any():
+            continue
+
+        # 1. Enclosing outlines.
+        outline = np.zeros_like(patch)
+        count, labels, stats, _ = cv2.connectedComponentsWithStats(patch, connectivity=8)
+        if count > 2:
+            sizes = stats[1:, cv2.CC_STAT_WIDTH] * stats[1:, cv2.CC_STAT_HEIGHT]
+            for label in range(1, count):
+                comp = (labels == label).astype(np.uint8)
+                # The hull, not the contour: a drawn outline often has a gap
+                # in the mask, and a filled contour then encloses nothing.
+                filled = np.zeros_like(comp)
+                points = cv2.findNonZero(comp)
+                cv2.fillConvexPoly(filled, cv2.convexHull(points), 1)
+                others = (labels > 0) & (labels != label)
+                enclosed = (filled > 0) & others
+                rest = np.delete(sizes, label - 1)
+                if enclosed.any() and len(rest) and                         sizes[label - 1] > OUTLINE_RATIO * float(np.median(rest)) and                         _ring_like(comp, filled):
+                    patch[labels == label] = 0
+                    outline[labels == label] = 1
+
+        # 2. Strokes the detector marked only in part.
+        ink = (gray[y1:y2, x1:x2] < INK_LEVEL).astype(np.uint8)
+        near = cv2.dilate(patch, np.ones((3, 3), np.uint8), iterations=2)
+        # An outline dropped above is a dark stroke too; it must not come back.
+        outline = cv2.dilate(outline, np.ones((3, 3), np.uint8), iterations=2)
+        count, labels, stats, _ = cv2.connectedComponentsWithStats(ink, connectivity=8)
+        pw, ph = x2 - x1, y2 - y1
+        for label in range(1, count):
+            sx, sy, sw, sh = stats[label, :4]
+            if sx == 0 or sy == 0 or sx + sw >= pw or sy + sh >= ph:
+                continue                     # runs past the region: art or an outline
+            comp = labels == label
+            if (near[comp] > 0).any() and not (outline[comp] > 0).any():
+                patch[comp] = 1
+        out[y1:y2, x1:x2] = np.where(patch > 0, 255, 0).astype(out.dtype)
+
+        # 3. Free text on texture (no bubble around it): its strokes merge
+        # with the tone and the art, so neither the detector's mask nor a
+        # stroke search gets them all (p.18 r20). Clean its whole box, as a
+        # letterer would.
+        if not _in_a_bubble(region, bubbles) and _textured(gray, out, b):
+            out[b.y1 : b.y2, b.x1 : b.x2] = 255
+    return out
+
+
+#: Share of a box's non-letter pixels that are mid-grey for it to be texture.
+TEXTURE_SHARE = 0.3
+
+
+def _textured(gray: np.ndarray, page_mask: np.ndarray, b: BBox) -> bool:
+    patch = gray[b.y1 : b.y2, b.x1 : b.x2]
+    letters = page_mask[b.y1 : b.y2, b.x1 : b.x2] > 0
+    back = patch[~letters]
+    return back.size > 0 and float(((back > 60) & (back < 200)).mean()) > TEXTURE_SHARE
+
+
+def _in_a_bubble(region: TextRegion, bubbles: list[np.ndarray]) -> bool:
+    b = region.bbox
+    cy, cx = (b.y1 + b.y2) // 2, (b.x1 + b.x2) // 2
+    return any(m[cy, cx] for m in bubbles)
+
+
+#: Share of a component's pixels that must lie near its hull's edge for it
+#: to be an outline. A drawn outline is a thin ring (measured ~0.95); a
+#: column of lettering fills its hull (Kimi ch.1 p.20 "当然可以", whose
+#: removal left the line unerased under tiny type -- the operator 2026-10-28).
+RING_SHARE = 0.8
+
+
+def _ring_like(comp: np.ndarray, hull: np.ndarray) -> bool:
+    ys, xs = np.nonzero(hull)
+    depth = max(2, int(0.15 * min(xs.max() - xs.min() + 1, ys.max() - ys.min() + 1)))
+    inner = cv2.erode(hull.astype(np.uint8), np.ones((3, 3), np.uint8), iterations=depth)
+    on = comp > 0
+    return float((on & (inner == 0)).sum()) / max(1, int(on.sum())) >= RING_SHARE
+
+
+def with_erase_boxes(page_mask: np.ndarray, regions: list[TextRegion]) -> np.ndarray:
+    """The page mask with every erase-only region's whole box marked.
+
+    A logo is a picture and a site watermark is faint grey; the detector
+    marks little or none of either, so the glyph mask alone would leave them.
+    """
+    # Group marks only. An SFX marked for LaMa is erased from its own box
+    # (``clean.mark_hole``) without the mask, and the PSD build still has to
+    # find its letters in the mask to copy their ink and outline.
+    marks = [r for r in regions if r.kind is TextKind.ERASE]
+    if not marks:
+        return page_mask
+    out = page_mask.copy()
+    for r in marks:
+        b = r.bbox
+        out[b.y1 : b.y2, b.x1 : b.x2] = 255
+    return out
+
+
+def _bubble_for(region: TextRegion, page_mask: np.ndarray, bubbles: list[np.ndarray]):
+    """The model bubble holding most of this region's lettering, or None."""
+    if not bubbles:
+        return None
+    b = region.bbox
+    glyphs = page_mask[b.y1 : b.y2, b.x1 : b.x2] > 0
+    if not glyphs.any():
+        glyphs = np.ones((max(1, b.y2 - b.y1), max(1, b.x2 - b.x1)), bool)
+    best, share = None, 0.5
+    for mask in bubbles:
+        inside = float((mask[b.y1 : b.y2, b.x1 : b.x2] & glyphs).sum()) / float(glyphs.sum())
+        if inside > share:
+            best, share = mask, inside
+    return best
+
+
+#: Model bubble edges are approximate: a few pixels in or out of the drawn
+#: outline. Grown, it is a limit on a fill; shrunk, it is a safe interior.
+BUBBLE_SHRINK = 5
+#: A fill this many times its model bubble leaked through the outline.
+LEAK_RATIO = 3.0
+#: How far past the model's bubble a fill may reach (spikes it leaves out).
+BUBBLE_REACH = 15
+#: The smallest bubble interior accepted, as a share of the region's box.
+BUBBLE_MIN_SHARE = 0.3
+
+
+def _limit_by_bubble(found: np.ndarray, failed: bool, bubble: np.ndarray,
+                     box: BBox) -> np.ndarray:
+    """Use the model's bubble where the flood fill could not.
+
+    The model under-segments jagged shout bubbles (spikes left out), so its
+    outline is never trusted over a fill that stayed near it. Measured on
+    Kimi ch.1 p.8/p.17 (fill area / model bubble area): real leaks through a
+    dashed outline 4.0-8.1; jagged or panel-cut bubbles 1.0-2.7.
+
+    - fill failed (leak guard rejected it): the bubble, shrunk off its outline;
+    - fill LEAK_RATIO times the bubble or more: a leak -- the shrunk bubble;
+    - fill reaching far past the bubble: the far part is cut, the rest kept
+      (a bubble cut by the panel edge, p.17 r05);
+    - otherwise the fill as it is: pixel-exact on a closed outline.
+    """
+    kernel = np.ones((3, 3), np.uint8)
+    inner = cv2.erode(bubble.astype(np.uint8), kernel, iterations=BUBBLE_SHRINK)
+    # The detector's box can span the whole bubble, outline included (p.18
+    # r15, a spiky one), so the true interior may be smaller than the box.
+    box_area = max(1, int(BUBBLE_MIN_SHARE * (box.x2 - box.x1) * (box.y2 - box.y1)))
+    if failed:
+        return inner if inner.sum() >= box_area else found
+    total = int(found.sum())
+    if total >= LEAK_RATIO * int(bubble.sum()):
+        return inner if inner.sum() >= box_area else found
+    reach = cv2.dilate(bubble.astype(np.uint8), kernel, iterations=BUBBLE_REACH)
+    near = found & reach
+    if total and int(near.sum()) < total and near.sum() >= box_area:
+        return near
+    return found
+
+
+
+#: Vertical CJK lettering on open background leaves a box a column wide, and a
+#: horizontal Vietnamese line set into it comes out at 8-10px (Kimi ch.1 p.5,
+#: p.7, p.20, p.35: narration on plain white or black, all below the 11px
+#: floor). Such a box may widen sideways across *plain* background -- the
+#: field the lettering sits on -- up to this share of its height.
+OPEN_WIDEN_MAX = 0.9
+#: ... or this many of its own widths, whichever is wider: a short column
+#: ("藤真他…", 84px tall) would otherwise stay too narrow for one line.
+OPEN_WIDEN_COLUMNS = 4
+#: A column counts as plain field when this share of it is within
+#: ``OPEN_FIELD_TOLERANCE`` of the field's median luma. Hatching, screentone
+#: and panel borders fail it, so the widening stops at artwork; the odd thin
+#: outline crossing it (a falling petal) does not, since only glyphs are
+#: ever erased and type may sit over a stray line.
+OPEN_PLAIN_SHARE = 0.9
+OPEN_FIELD_TOLERANCE = 40
+#: Kept clear between the widened box and whatever stopped it.
+OPEN_CLEARANCE = 6
+
+
+def widen_open_box(image: np.ndarray, page_mask: np.ndarray, box: BBox,
+                   others: list[BBox]) -> BBox:
+    """A tall lettering box on open background, widened over plain field.
+
+    Only columns of the box's own field colour are taken -- never lettering,
+    another region's box or artwork -- so the area stays where nothing but
+    background was. Boxes that are not taller than wide come back unchanged.
+    """
+    height, width = box.y2 - box.y1, box.x2 - box.x1
+    if height <= width:
+        return box
+    target = max(int(height * OPEN_WIDEN_MAX), width * OPEN_WIDEN_COLUMNS)
+    if target <= width:
+        return box
+    grey = _gray(image).astype(np.int16) if image.ndim == 3 else image.astype(np.int16)
+    glyphs = page_mask[box.y1 : box.y2, box.x1 : box.x2] > 0
+    if not (~glyphs).any():
+        return box
+    field = float(np.median(grey[box.y1 : box.y2, box.x1 : box.x2][~glyphs]))
+    blocked = page_mask[box.y1 : box.y2] > 0
+    for other in others:
+        if other.y2 <= box.y1 or other.y1 >= box.y2:
+            continue
+        x1 = max(0, other.x1 - OPEN_CLEARANCE)
+        blocked[:, x1 : other.x2 + OPEN_CLEARANCE] = True
+
+    def plain(x: int) -> bool:
+        if x < 0 or x >= grey.shape[1] or blocked[:, x].any():
+            return False
+        column = grey[box.y1 : box.y2, x]
+        return float(np.mean(np.abs(column - field) <= OPEN_FIELD_TOLERANCE)) >= OPEN_PLAIN_SHARE
+
+    left, right = box.x1, box.x2
+    left_open = right_open = True
+    while right - left < target and (left_open or right_open):
+        if left_open:
+            left_open = plain(left - 1)
+            left -= left_open
+        if right_open and right - left < target:
+            right_open = plain(right)
+            right += right_open
+    # Keep clear of whatever stopped the widening.
+    if not left_open:
+        left = min(box.x1, left + OPEN_CLEARANCE)
+    if not right_open:
+        right = max(box.x2, right - OPEN_CLEARANCE)
+    return BBox(x1=left, y1=box.y1, x2=right, y2=box.y2)
+
+
 def fit_areas(
     image: np.ndarray, page_mask: np.ndarray, regions: list[TextRegion]
 ) -> dict[str, np.ndarray]:
@@ -435,10 +709,21 @@ def fit_areas(
     lettering is protected from its neighbours.
     """
     shape = image.shape[:2]
-    usable = [r for r in regions if r.translatable and r.source_text.strip()]
+    # A logo or watermark has no bubble to find: it is erased within its own
+    # box and never competes with lettering for room.
+    own_box: dict[str, np.ndarray] = {}
+    for r in regions:
+        if r.erased_whole:
+            box_area = np.zeros(shape, dtype=np.uint8)
+            box_area[r.bbox.y1 : r.bbox.y2, r.bbox.x1 : r.bbox.x2] = 1
+            own_box[r.id] = box_area
+    usable = [r for r in regions if r.translatable and r.cleanable]
     if not usable:
-        return {}
+        return own_box
 
+    from comic.vision.bubbles import bubble_masks
+
+    bubbles = bubble_masks(image)
     interiors: dict[str, np.ndarray] = {}
     for region in usable:
         found = None if _inverted(image, page_mask, region.bbox) else bubble_interior(
@@ -456,10 +741,21 @@ def fit_areas(
             toned = toned_interior(image, page_mask, region.bbox)
             if toned is not None and (found is None or toned.sum() > found.sum()):
                 found = toned
-        if found is None:
+        failed = found is None
+        bubble = _bubble_for(region, page_mask, bubbles)
+        if failed:
             found = np.zeros(shape, dtype=np.uint8)
             box = region.bbox
+            if bubble is None:
+                # Open background: a column of vertical lettering may take
+                # the plain field beside it.
+                box = widen_open_box(
+                    image, page_mask, box,
+                    [r.bbox for r in regions if r.id != region.id],
+                )
             found[box.y1 : box.y2, box.x1 : box.x2] = 1
+        if bubble is not None:
+            found = _limit_by_bubble(found, failed, bubble, region.bbox)
         interiors[region.id] = found
 
     distances = np.stack([_distance_to_box(shape, r.bbox) for r in usable])
@@ -492,4 +788,5 @@ def fit_areas(
         ).astype(np.uint8)
         areas[region.id] = area
 
+    areas.update(own_box)
     return areas

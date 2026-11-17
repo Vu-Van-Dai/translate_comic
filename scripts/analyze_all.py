@@ -20,11 +20,21 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 
 
+def blocked(chapter_dir: Path) -> str | None:
+    """The chapter's block reason (`comic block`), or None."""
+    f = chapter_dir / "chapter.json"
+    if not f.exists():
+        return None
+    return json.loads(f.read_text(encoding="utf-8")).get("blocked")
+
+
 def done(chapter_dir: Path) -> bool:
     f = chapter_dir / "chapter.json"
     if not f.exists():
         return True                       # nothing to analyse (failed download)
     state = json.loads(f.read_text(encoding="utf-8"))
+    if state.get("blocked"):
+        return True                       # skipped here; the queue goes on to the next chapter
     pages = [p for p in state.get("pages", []) if not p.get("excluded")]
     if not pages:
         return True
@@ -45,6 +55,10 @@ def main() -> None:
                 if not d.is_dir() or not d.name.startswith("Chapter_"):
                     continue
                 n = d.name.removeprefix("Chapter_")
+                why = blocked(d)
+                if why:
+                    out.write(f"== {series} {d.name}: blocked ({why}) -- skipped, queue continues\n")
+                    continue
                 if done(d):
                     out.write(f"== {series} {d.name}: skipped\n")
                     continue

@@ -40,5 +40,53 @@
     "target": "Kana Boon",
     "note": "chơi chữ ban nhạc Nhật (T/N có sẵn)",
     "category": "term"
+  },
+  {
+    "source": "omurice",
+    "target": "omurice",
+    "note": "cơm trứng cuộn kiểu Nhật",
+    "category": "term"
+  },
+  {
+    "source": "onigiri",
+    "target": "onigiri",
+    "note": "cơm nắm",
+    "category": "term"
+  },
+  {
+    "source": "rare piece",
+    "target": "viên hiếm",
+    "note": "kẹo hình dạng hiếm (ngôi sao)",
+    "category": "term"
+  },
+  {
+    "source": "chewy",
+    "target": "dai",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "Chiharu",
+    "target": "Chiharu",
+    "note": "vợ quá cố của Takaomi; Jin gọi 'Chiharu-san', mẹ Takaomi gọi 'Chiharu-chan'",
+    "category": "term"
+  },
+  {
+    "source": "Penu",
+    "target": "Penu",
+    "note": "tên chú chim cánh cụt ở thủy cung",
+    "category": "term"
+  },
+  {
+    "source": "Mochichi Aquarium",
+    "target": "Thủy cung Mochichi",
+    "note": "chỉ biển hiệu, giữ nguyên bản gốc",
+    "category": "term"
+  },
+  {
+    "source": "tuna mayo onigiri",
+    "target": "onigiri cá ngừ mayo",
+    "note": "món Jin biết Haruomi thích",
+    "category": "term"
   }
 ]

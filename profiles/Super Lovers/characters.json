@@ -3,8 +3,8 @@
     "name": "Kaidou Haru",
     "aliases": [],
     "role": null,
-    "personality": "Hiện tại 22 tuổi, làm host tên \"Natsu\" ở quán Blue Rose để lo học phí cho cặp sinh đôi; mất trí nhớ mùa hè năm 17 tuổi sau tai nạn xe khiến bố mẹ mất; từng ở cơ sở bảo trợ 3 tháng, bị đuổi vì ngủ với nhân viên.",
-    "speech_style": "Với khách: anh/em ngọt ngào; với Ren: anh/em, hay cáu.",
+    "personality": "23 tuổi; về Nhật tháng 10 năm trước; chuyển cả bốn anh em về một ngôi nhà có vườn (do Mikiko tìm); sắp bỏ nghề host cuối tháng để mở nhà hàng ở dãy nhà bên, Iku phụ.",
+    "speech_style": "Gọi Asakura là 'em', xưng 'anh'; lạnh lùng khi đuổi cô.",
     "addresses": {
       "Kaidou Ren": {
         "self_term": "anh",
@@ -59,6 +59,18 @@
         "other_term": "em",
         "formality": "polite",
         "note": "khách quen ở quán host"
+      },
+      "Kaidou Takashi": {
+        "self_term": "con",
+        "other_term": "bố",
+        "formality": "neutral",
+        "note": null
+      },
+      "Kiyoka": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "casual",
+        "note": null
       }
     },
     "notes": []
@@ -67,8 +79,8 @@
     "name": "Kaidou Ren",
     "aliases": [],
     "role": null,
-    "personality": "Giờ là học sinh năm hai cấp hai, được nhà Kaidou chính thức nhận nuôi ba tháng trước khi bố mẹ Haru mất; sang Nhật để giữ lời hứa với Haru. Sợ phòng tắm chật tối, chưa từng đọc truyện tranh; Quark và Lepton đã chết.",
-    "speech_style": "Với Haru: tôi/anh; với Aki: tôi/anh, thản nhiên.",
+    "personality": "Giỏi toán lý bậc đại học (được người ở CERN dạy từ nhỏ), học trường cấp ba có học bổng; đi tìm chủ cũ của Tanuki vì hiểu cảm giác không có nhà để về; nói với Haru sẽ chỉ làm em trai nếu anh muốn.",
+    "speech_style": "Với ông chủ nhà: tôi/ông.",
     "addresses": {
       "Kaidou Haru": {
         "self_term": "tôi",
@@ -85,6 +97,42 @@
       "Ikuyoshi": {
         "self_term": "tôi",
         "other_term": "anh",
+        "formality": "neutral",
+        "note": null
+      },
+      "Haruko": {
+        "self_term": "tôi",
+        "other_term": "Haruko",
+        "formality": "neutral",
+        "note": "gọi thẳng tên"
+      },
+      "Kaidou Shima": {
+        "self_term": "tôi",
+        "other_term": "anh",
+        "formality": "neutral",
+        "note": null
+      },
+      "Asakura": {
+        "self_term": "tôi",
+        "other_term": "chị",
+        "formality": "neutral",
+        "note": null
+      },
+      "Ông chủ nhà": {
+        "self_term": "tôi",
+        "other_term": "ông",
+        "formality": "neutral",
+        "note": null
+      },
+      "Fumie": {
+        "self_term": "cháu",
+        "other_term": "bà",
+        "formality": "polite",
+        "note": null
+      },
+      "Kiyoka": {
+        "self_term": "tôi",
+        "other_term": "chị",
         "formality": "neutral",
         "note": null
       }
@@ -105,6 +153,12 @@
         "other_term": "con",
         "formality": "neutral",
         "note": null
+      },
+      "Kaidou Ren": {
+        "self_term": "ta",
+        "other_term": "nhóc",
+        "formality": "casual",
+        "note": "mẹ nuôi, trêu chọc"
       }
     },
     "notes": []
@@ -113,8 +167,8 @@
     "name": "Kaidou Aki",
     "aliases": [],
     "role": null,
-    "personality": "Học sinh cuối cấp ba sắp thi đại học; từng trách Haru về tai nạn; ghen với Ren, tuyên bố không chấp nhận Ren.",
-    "speech_style": "Với Ren: tao/mày khi nổi nóng; gọi Haru \"anh cả\".",
+    "personality": "Ngoài miệng chê Ren phiền nhưng quan tâm; thần tượng anh cả từ nhỏ; đen đủi chuyện bạn gái.",
+    "speech_style": "Với Ren: tao/mày, thô nhưng tốt bụng.",
     "addresses": {
       "Kaidou Haru": {
         "self_term": "em",
@@ -127,6 +181,18 @@
         "other_term": "mày",
         "formality": "rude",
         "note": "Aki chưa chấp nhận Ren"
+      },
+      "Kaidou Shima": {
+        "self_term": "tao",
+        "other_term": "mày",
+        "formality": "casual",
+        "note": "anh em sinh đôi"
+      },
+      "Ikuyoshi": {
+        "self_term": "tôi",
+        "other_term": "anh",
+        "formality": "rude",
+        "note": null
       }
     },
     "notes": []
@@ -135,13 +201,31 @@
     "name": "Kaidou Shima",
     "aliases": [],
     "role": null,
-    "personality": "Đeo kính, điềm tĩnh, nắm tin tức (biết Haruko đi Thụy Sĩ, có bản sao sổ hộ tịch).",
+    "personality": "Đã đỗ đại học; mong một ngày anh em sống chung.",
     "speech_style": "Gọi Haru \"anh cả\"; thường dẫn truyện.",
     "addresses": {
       "Kaidou Haru": {
         "self_term": "em",
         "other_term": "anh",
         "formality": "neutral",
+        "note": null
+      },
+      "Kaidou Ren": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "neutral",
+        "note": null
+      },
+      "Kaidou Aki": {
+        "self_term": "em",
+        "other_term": "anh",
+        "formality": "casual",
+        "note": "Shima là em thứ ba"
+      },
+      "Kiyoka": {
+        "self_term": "em",
+        "other_term": "chị",
+        "formality": "polite",
         "note": null
       }
     },
@@ -165,6 +249,12 @@
         "other_term": "anh",
         "formality": "casual",
         "note": "gọi Haru là \"Natsu-san\""
+      },
+      "Kiyoka": {
+        "self_term": "em",
+        "other_term": "chị",
+        "formality": "casual",
+        "note": null
       }
     },
     "notes": []
@@ -213,6 +303,12 @@
         "other_term": "cháu",
         "formality": "neutral",
         "note": null
+      },
+      "Kaidou Ren": {
+        "self_term": "bà",
+        "other_term": "cháu",
+        "formality": "neutral",
+        "note": null
       }
     },
     "notes": []
@@ -237,14 +333,70 @@
     "name": "Asakura",
     "aliases": [],
     "role": null,
-    "personality": null,
-    "speech_style": null,
+    "personality": "Khách quen của Haru ở quán host; chị cả phải đi làm nuôi em gái học cấp hai, nghĩ mình giống Haru; bỏ việc ban ngày, ám ảnh Haru, xông vào căn hộ và đánh Ren; bị Haru đuổi đi.",
+    "speech_style": "Với Ren: chị/em.",
     "addresses": {
       "Kaidou Haru": {
         "self_term": "em",
         "other_term": "anh",
         "formality": "polite",
         "note": "gọi Haru là \"Natsu\""
+      },
+      "Kaidou Ren": {
+        "self_term": "chị",
+        "other_term": "em",
+        "formality": "neutral",
+        "note": null
+      }
+    },
+    "notes": []
+  },
+  "Ông chủ nhà": {
+    "name": "Ông chủ nhà",
+    "aliases": [],
+    "role": null,
+    "personality": "Ông lão chủ căn hộ cũ, cộc cằn tốt bụng, thích bánh đậu ba vị; con trai mất vì ung thư, con dâu là y tá trưởng muốn bán nhà; ngã gãy xương được Ren đưa đi viện; nuôi con 'tanuki' (chó phốc sóc).",
+    "speech_style": "Với Ren: ta/cháu.",
+    "addresses": {
+      "Kaidou Ren": {
+        "self_term": "ta",
+        "other_term": "cháu",
+        "formality": "casual",
+        "note": "ông lão chủ căn hộ cũ"
+      }
+    },
+    "notes": []
+  },
+  "Kiyoka": {
+    "name": "Kiyoka",
+    "aliases": [],
+    "role": null,
+    "personality": "Bạn cùng lớp cấp ba của Haru, từng tỏ tình bị từ chối; mở 3 quán, sẽ cùng Haru mở quán thứ tư; thẳng tính, khôn lỏi.",
+    "speech_style": "Với Haru: tôi/cậu; với Ren và cặp sinh đôi: chị/em.",
+    "addresses": {
+      "Kaidou Haru": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "casual",
+        "note": "bạn cùng lớp cấp ba"
+      },
+      "Kaidou Ren": {
+        "self_term": "chị",
+        "other_term": "em",
+        "formality": "casual",
+        "note": null
+      },
+      "Kaidou Shima": {
+        "self_term": "chị",
+        "other_term": "em",
+        "formality": "casual",
+        "note": null
+      },
+      "Ikuyoshi": {
+        "self_term": "chị",
+        "other_term": "mày",
+        "formality": "casual",
+        "note": null
       }
     },
     "notes": []

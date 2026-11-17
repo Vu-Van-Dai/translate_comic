@@ -23,6 +23,18 @@
         "other_term": "cô",
         "formality": "neutral",
         "note": null
+      },
+      "Mẹ Takaomi": {
+        "self_term": "con",
+        "other_term": "mẹ",
+        "formality": "warm",
+        "note": null
+      },
+      "Chiharu": {
+        "self_term": "anh",
+        "other_term": "em",
+        "formality": "warm",
+        "note": null
       }
     },
     "notes": []
@@ -31,8 +43,8 @@
     "name": "Orihara Haruomi",
     "aliases": [],
     "role": null,
-    "personality": "Con trai 5 tuổi của Takaomi, mê xe, quý Jin.",
-    "speech_style": "Với bố: con/bố; với Jin: con/chú, gọi 'chú Jin'.",
+    "personality": "Giờ đã xưng 'tớ' khi nói chuyện với Jin để tỏ ra lớn hơn; háo hức khi cả nhà thành gia đình.",
+    "speech_style": "Với bố: con/bố; với Jin: con/chú (đôi khi xưng 'tớ').",
     "addresses": {
       "Orihara Takaomi": {
         "self_term": "con",
@@ -45,6 +57,12 @@
         "other_term": "chú",
         "formality": "warm",
         "note": "gọi 'chú Jin'"
+      },
+      "Mẹ Takaomi": {
+        "self_term": "cháu",
+        "other_term": "bà",
+        "formality": "warm",
+        "note": null
       }
     },
     "notes": []
@@ -53,8 +71,8 @@
     "name": "Nomura Jin",
     "aliases": [],
     "role": null,
-    "personality": "Bị trật chân phải chống nạng, tạm làm việc văn phòng; Takaomi mời ở lại nhà tới khi lành; hiểu lời mời thành lời tỏ tình.",
-    "speech_style": "Với bạn mình: tôi/cậu; với Takaomi: tôi/anh.",
+    "personality": "Ở lại nhà Takaomi tới khi chân lành; tình cảm, hay trêu Takaomi; hòa giải chuyện của hai bố con.",
+    "speech_style": "Với Takaomi: tôi/anh; với Haruomi: chú/con.",
     "addresses": {
       "Orihara Takaomi": {
         "self_term": "tôi",
@@ -67,6 +85,12 @@
         "other_term": "con",
         "formality": "warm",
         "note": "gọi 'Haruomi-kun'"
+      },
+      "Mẹ Takaomi": {
+        "self_term": "cháu",
+        "other_term": "bác",
+        "formality": "polite",
+        "note": null
       }
     },
     "notes": []
@@ -83,6 +107,44 @@
         "other_term": "anh",
         "formality": "polite",
         "note": "gọi 'anh Orihara'"
+      }
+    },
+    "notes": []
+  },
+  "Mẹ Takaomi": {
+    "name": "Mẹ Takaomi",
+    "aliases": [],
+    "role": null,
+    "personality": "Mẹ của Takaomi, thẳng tính, phát hiện Jin tỏ tình và thúc con trai nói thật lòng; thương cháu Haruomi.",
+    "speech_style": "Với Takaomi: mẹ/con; với Jin: bác/cháu; với Haruomi: bà/cháu.",
+    "addresses": {
+      "Orihara Takaomi": {
+        "self_term": "mẹ",
+        "other_term": "con",
+        "formality": "warm",
+        "note": "gọi 'Taka'"
+      },
+      "Orihara Haruomi": {
+        "self_term": "bà",
+        "other_term": "cháu",
+        "formality": "warm",
+        "note": null
+      }
+    },
+    "notes": []
+  },
+  "Chiharu": {
+    "name": "Chiharu",
+    "aliases": [],
+    "role": null,
+    "personality": "Vợ quá cố của Takaomi; dịu dàng, nấu ăn đợi chồng, hay nhắc anh cẩn thận.",
+    "speech_style": "Với Takaomi: em/anh.",
+    "addresses": {
+      "Orihara Takaomi": {
+        "self_term": "em",
+        "other_term": "anh",
+        "formality": "warm",
+        "note": null
       }
     },
     "notes": []

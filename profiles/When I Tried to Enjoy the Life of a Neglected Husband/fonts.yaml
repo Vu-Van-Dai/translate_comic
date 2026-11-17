@@ -1,0 +1,6 @@
+# Lettering for "When I Tried to Enjoy the Life of a Neglected Husband": a
+# Japanese BL manga (omegaverse, royal court), black and white, paged, read
+# from an English scanlation (MangaDex). Manga preset, one face per kind.
+# See docs/lettering.md.
+preset: manga
+clean: auto

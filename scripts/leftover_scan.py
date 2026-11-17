@@ -24,9 +24,25 @@ from comic.cpu import throttle, total_threads  # noqa: E402
 
 TILE, STEP, SCALE = 320, 240, 2
 ENGLISH = re.compile(
-    r"[fjwz]|sfx|ing\b|ed\b|ck|sh|ee|oo|ea|ou|ow|ll|ss|tt|rr|pp|\b(the|you|and|of|to|it|is|my|me|no|oh|yeah|huh|what|good|grief|mine)\b",
+    r"[fjwz]|sfx|ing\b|ed\b|ck|sh|ee|oo|ea|ou|ow|ll|ss|tt|rr|pp|\b(you|and|of|it|is|my|yeah|huh|what|good|grief|mine)\b",
     re.I,
 )
+# The recogniser has almost no Vietnamese accents, so our own capitals come
+# back as ASCII ("THẾ" -> "THE", "MẸ" -> "ME", "NÓ" -> "NO"); those words were
+# dropped from the list above because they were false hits. English SFX
+# (THUD, SLAM, GASP, DRAG, GRAB, STOMP) match none of it, so they are caught by
+# an onset cluster or a final no Vietnamese syllable has. "cl" is left out:
+# the recogniser reads CỦA as CLA. Tried and dropped (2026-10-21): flagging
+# every word no Vietnamese syllable can spell -- on Kimigazer ch.1 p.3-8 it
+# went from 16 hits to 55, nearly all shop signs and misread Vietnamese.
+CLUSTERS = re.compile(
+    r"\b(bl|br|cr|dr|fl|fr|gl|gr|pl|pr|sc|sk|sl|sm|sn|sp|st|sw|thr)[a-z]|[a-z](sp|mp|st|nd|rd|ud|ag|ab)\b",
+    re.I,
+)
+
+
+def looks_english(txt: str) -> bool:
+    return bool(ENGLISH.search(txt) or CLUSTERS.search(txt))
 
 
 def main() -> None:
@@ -50,7 +66,7 @@ def main() -> None:
                 for box, txt, conf in out or []:
                     if conf < 0.7 or len(re.sub(r"\W", "", txt)) < 2:
                         continue
-                    if not ENGLISH.search(txt) or re.search(r"[À-ỹđĐ]", txt):
+                    if not looks_english(txt) or re.search(r"[À-ỹđĐ]", txt):
                         continue
                     xs = [x + int(p[0] / SCALE) for p in box]
                     ys = [y + int(p[1] / SCALE) for p in box]

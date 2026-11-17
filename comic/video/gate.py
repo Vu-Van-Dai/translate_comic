@@ -54,9 +54,18 @@ balloons where you can (a `crop` in page pixels; the sheets carry a 100 px
 grid). The hook belongs in the first 3 seconds; end on a natural beat or a
 cliffhanger. No branding. Background music only -- no narration.
 
-On-screen text is optional: a hook line, short captions, and occasionally a
-quoted line of the original dialogue (role "quote", in Vietnamese). Keep each
-line short; the renderer keeps text inside TikTok's safe area.
+Translated-series and review videos set `"structure": "retention"` (the
+operator, 2026-10-27; docs/video.md "Retention structure"): shot 1 is the
+hook -- the image that shows the situation at a glance, a "hook" line
+written for this series, a motion, <= 3 s; then 2-3 setup shots with short
+captions or quotes; then the highlight, quicker (shots <= 1.6 s, punch /
+shake, flash / zoom_blur / whip); the last shot holds the memorable moment
+with a closing line (the title or "next part" prompt). Every shot moves.
+
+In a "free" plan on-screen text is optional: a hook line, short captions, and
+occasionally a quoted line of the original dialogue (role "quote", in
+Vietnamese). Keep each line short; the renderer keeps text inside TikTok's
+safe area.
 
 Hard rules: never select nudity or sexualised framing of a character who is a
 minor in this chapter, and never pair a minor with a romantic hook, romantic
@@ -260,6 +269,7 @@ def load_plan(paths: ChapterPaths, name: str | None = None) -> tuple[VideoPlan, 
         plan.check_length()
     except ValueError as exc:
         problems.append(str(exc))
+    problems.extend(plan.check_structure())
     return plan, problems
 
 

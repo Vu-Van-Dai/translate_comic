@@ -73,6 +73,9 @@ class SfxItem(BaseModel):
     #: watermark or credit tag on a story page (the operator: remove it
     #: entirely; replace with "Raichi"/"Rồng nhỏ" only when asked).
     erase_only: bool = False
+    #: Already erased by LaMa at cleaning (an SFX boxed with Studio's key L,
+    #: 2026-11-14): set the text over the cleaned page, erase nothing more.
+    pre_erased: bool = False
     #: Set ``text`` as written instead of in capitals. Vietnamese groups set
     #: loud impacts in caps (RẦM, ĐÙNG) and soft or continuous sounds in
     #: lower or mixed case (Thình thịch, Hộc, bước) -- docs/lettering.md
@@ -236,6 +239,56 @@ class SfxLayer:
     #: up and down) is twice a letter's -- and fitting to it made the
     #: replacement twice the size of the original lettering.
     letter_height: float = 0.0
+    #: Set one letter per line (a vertical SFX), stepping sideways by
+    #: ``slant`` line heights per line -- done with tabs in Photoshop.
+    vertical: bool = False
+    slant: float = 0.0
+    #: The original's other effects (``sfx_style.effects``), in page pixels.
+    stroke2_colour: tuple[int, int, int] = (0, 0, 0)
+    stroke2_px: int = 0
+    glow_colour: tuple[int, int, int] = (0, 0, 0)
+    glow_px: int = 0
+    shadow_colour: tuple[int, int, int] = (0, 0, 0)
+    shadow_dx: int = 0
+    shadow_dy: int = 0
+    #: A gradient fill, top colour to bottom colour (both set, or neither).
+    gradient_top: tuple[int, int, int] | None = None
+    gradient_bottom: tuple[int, int, int] | None = None
+
+
+def _style_fields(image: np.ndarray, m: dict) -> dict:
+    """The original's second stroke, glow and drop shadow, as SfxLayer fields."""
+    from comic.photoshop.sfx_style import effects
+
+    fx = effects(image, m["glyphs"] > 0, m["ink"], m["edge"], m["outlined"])
+    out: dict = {}
+    if fx.stroke2_px:
+        out.update(stroke2_colour=fx.stroke2_colour, stroke2_px=fx.stroke2_px)
+    if fx.glow_px:
+        out.update(glow_colour=fx.glow_colour, glow_px=fx.glow_px)
+    if fx.shadow_colour is not None:
+        out.update(shadow_colour=fx.shadow_colour, shadow_dx=fx.shadow_dx, shadow_dy=fx.shadow_dy)
+    if fx.gradient_top is not None:
+        out.update(gradient_top=fx.gradient_top, gradient_bottom=fx.gradient_bottom)
+    if fx.textured:
+        out["_textured"] = True
+    return out
+
+
+def _footprint(mask: np.ndarray) -> tuple[float, float, float, float, float]:
+    """(cx, cy, long side, short side, angle) of a mask's minimum-area rectangle."""
+    import cv2
+
+    ys, xs = np.nonzero(mask)
+    (cx, cy), (w, h), angle = cv2.minAreaRect(np.column_stack([xs, ys]).astype(np.float32))
+    if w < h:
+        w, h = h, w
+        angle -= 90
+    while angle > 90:
+        angle -= 180
+    while angle < -90:
+        angle += 180
+    return float(cx), float(cy), float(w), float(h), float(angle)
 
 
 def plain_letters(text: str) -> str:
@@ -257,7 +310,10 @@ def response_path(paths: ChapterPaths) -> Path:
 
 
 def dropped_regions(paths: ChapterPaths, page: int, filename: str) -> list[SfxCandidate]:
-    """Regions the detector found on this page that review dropped."""
+    """Regions the detector found on this page that review dropped, plus the
+    ones kept but classified ``sfx`` -- the pipeline leaves those as drawn too,
+    and listing only drops meant they were never offered and an item naming
+    one was refused."""
     from comic.vision.analyze import load_mask
     from comic.vision.detector import load_page
     from comic.vision.regions import extract_regions, order_regions
@@ -267,7 +323,7 @@ def dropped_regions(paths: ChapterPaths, page: int, filename: str) -> list[SfxCa
     source = paths.source_pages / filename
     if analysis is None or not mask_path.exists() or not source.exists():
         return []
-    kept = {r.id for r in analysis.regions}
+    kept = {r.id for r in analysis.regions if r.erasable}
     right_to_left = analysis.reading_direction.value == "rtl"
     image, mask = load_page(source), load_mask(mask_path)
     if image.shape[:2] != mask.shape[:2]:
@@ -277,11 +333,18 @@ def dropped_regions(paths: ChapterPaths, page: int, filename: str) -> list[SfxCa
         extract_regions(image, mask),
         right_to_left=right_to_left,
     )
-    return [
+    # A kept region answers to its own id and box. Re-deriving ids from the
+    # mask reproduced the review's numbering in the old flow, but not after
+    # Studio edits or a re-detect: Itsuka ch.5 p.33's re-derived "r12" was
+    # another blob, and its HM~ was set 300 px away (2026-11-10).
+    own = {r.id: r for r in analysis.regions}
+    found = [
         SfxCandidate(region_id(page, i), page, c.bbox)
         for i, c in enumerate(candidates, start=1)
-        if region_id(page, i) not in kept
+        if region_id(page, i) not in own
     ]
+    found += [SfxCandidate(r.id, page, r.bbox) for r in analysis.regions if r.id not in kept]
+    return found
 
 
 def open_request(paths: ChapterPaths, pages: list[int] | None) -> tuple[Path, int]:
@@ -319,12 +382,66 @@ def open_request(paths: ChapterPaths, pages: list[int] | None) -> tuple[Path, in
     return request_path(paths), len(listed)
 
 
-def load_response(paths: ChapterPaths) -> dict[str, SfxItem]:
-    path = response_path(paths)
-    if not path.exists():
+def published_path(paths: ChapterPaths) -> Path:
+    """Items for an SFX pass over an already-published page (`--clean published`)."""
+    return paths.workspace / "photoshop" / "sfx_published.json"
+
+
+def load_response(paths: ChapterPaths, published: bool = False) -> dict[str, SfxItem]:
+    """SFX to replace: the chapter's translated SFX regions, plus hand-written items.
+
+    ``published``: only the items of ``sfx_published.json``. The published page
+    already carries everything ``sfx_response.json`` and the translation set;
+    applying those again would erase and re-set them on top of themselves.
+
+    Since the human-in-the-loop workflow (2026-11-08) SFX are ordinary regions
+    with a translation, so each translated SFX region becomes an item by itself
+    (its own box, letters found by colour, Content-Aware Fill). An SFX left
+    untranslated stays as drawn. A hand-written ``sfx_response.json`` item for
+    the same region wins, for the tricky cases (``parts``, ``poly``, ``fill:
+    lama``, notes ...).
+    """
+    items = {} if published else translated_sfx(paths)
+    # An SFX LaMa already erased at cleaning stays erased whatever replaces its item.
+    pre = {rid for rid, item in items.items() if item.pre_erased}
+    path = published_path(paths) if published else response_path(paths)
+    if path.exists():
+        answer = SfxResponse.model_validate_json(path.read_text(encoding="utf-8"))
+        items.update({item.region_id: item for item in answer.items
+                      if item.text.strip() or item.erase_only})
+    for rid in pre & items.keys():
+        items[rid] = items[rid].model_copy(update={"pre_erased": True})
+    return items
+
+
+def translated_sfx(paths: ChapterPaths) -> dict[str, SfxItem]:
+    """An item per SFX region that has a Vietnamese translation."""
+    from comic.schemas import ChapterTranslation, TextKind
+    from comic.stages import analysis_for
+    from comic.state.store import ChapterStore, StateError, read_json
+
+    if not paths.translation_file.exists():
         return {}
-    answer = SfxResponse.model_validate_json(path.read_text(encoding="utf-8"))
-    return {item.region_id: item for item in answer.items if item.text.strip() or item.erase_only}
+    try:
+        state = ChapterStore(paths).load()
+    except StateError:
+        return {}
+    text = {e.region_id: e.target_text for e in
+            read_json(paths.translation_file, ChapterTranslation).entries}  # type: ignore[union-attr]
+    items: dict[str, SfxItem] = {}
+    for record in state.pages:
+        if record.excluded:
+            continue
+        analysis = analysis_for(paths, record.page)
+        if analysis is None:
+            continue
+        for r in analysis.regions:
+            vi = text.get(r.id, "").strip()
+            if r.kind is TextKind.SFX and vi:
+                items[r.id] = SfxItem(region_id=r.id, text=vi, bbox=r.bbox,
+                                     angle=max(-90.0, min(90.0, r.angle)) if r.angle else None,
+                                     pre_erased=r.lama_sfx)
+    return items
 
 
 def _median_colour(image: np.ndarray, where: np.ndarray) -> tuple[int, int, int]:
@@ -468,6 +585,69 @@ def _touched_blobs(image: np.ndarray, own: np.ndarray, ink: tuple[int, int, int]
 
 #: Pixels this close (summed RGB distance) to the ink colour are ink.
 INK_TOLERANCE = 90
+#: A piece found by colour stays lettering when the detector marked this share
+#: of it (and at least 20 px). Measured on 10 SFX pages of NH ch.8: 0.25 lost
+#: whole outlined kana (ch.8 p21 コ, く); 0.08 kept every letter and still
+#: dropped the hair, hand and shelf dots a box-wide erase took.
+STROKE_SHARE = 0.08
+#: A straight horizontal/vertical run this long (px) is a line, not a stroke.
+LINE_RUN = 70
+#: ... and at least this share of the lettering's own width/height.
+LINE_SHARE = 0.8
+
+
+def keep_strokes(letters: np.ndarray, detected: np.ndarray) -> np.ndarray:
+    """The pieces of ``letters`` the detector also marked, each kept whole.
+
+    Colour finds everything in a box that is not background -- lettering and
+    any artwork drawn inside the rectangle alike. The detector marks only the
+    lettering, but as a rough blob. Together: a connected piece (a stroke with
+    its outline) is lettering when the blob covers enough of it, and then all
+    of it is erased, outline included; a piece it never touched is art and
+    stays. Without a usable detector mark the colour result stands.
+    """
+    import cv2
+
+    from comic.image_processing.mask import dilate
+
+    if detected.sum() < 30:
+        return letters
+    # Panel borders and speed lines are long straight runs no letter has; cut
+    # them out first, or a letter touching one joins it into a single piece
+    # (ch.8 p31: the top kana of きゃっ fused with the panel border).
+    # "Long" is relative to the lettering: a big kana's own stroke can run
+    # 100 px (ch.8 p21 コ); a border runs right across the box.
+    solid = (letters > 0).astype(np.uint8)
+    ys, xs = np.nonzero(solid)
+    if not len(xs):
+        return letters
+    across = max(LINE_RUN, int(LINE_SHARE * (xs.max() - xs.min() + 1)))
+    down = max(LINE_RUN, int(LINE_SHARE * (ys.max() - ys.min() + 1)))
+    runs = np.zeros_like(solid)
+    for kernel in (np.ones((1, across), np.uint8), np.ones((down, 1), np.uint8)):
+        runs |= cv2.morphologyEx(solid, cv2.MORPH_OPEN, kernel)
+    letters = solid & (1 - runs)
+    count, labels, stats, _c = cv2.connectedComponentsWithStats(letters, connectivity=8)
+    if count <= 1:
+        return letters
+    near = dilate(detected, 3) > 0
+    hits = np.bincount(labels[near].ravel(), minlength=count)
+    keep = np.zeros(count, dtype=bool)
+    for index in range(1, count):
+        keep[index] = hits[index] >= max(20, STROKE_SHARE * stats[index][4])
+    # A letter drawn touching art (ch.8 p31: a kana across the panel border)
+    # joins it into one huge piece the blob barely covers: keep the part of
+    # it the detector marked rather than losing the letter.
+    partial = (letters > 0) & ~keep[labels] & (dilate(detected, 2) > 0)
+    # A letter's fill in a third colour (ch.8 p6 THUD: grey inside a black
+    # outline) is neither the darkest nor the lightest colour; it is what the
+    # outline encloses.
+    from scipy.ndimage import binary_fill_holes
+
+    found = (keep[labels] | partial).astype(np.uint8)
+    # Close the small gaps of a rough brush outline before filling it.
+    closed = cv2.morphologyEx(found, cv2.MORPH_CLOSE, np.ones((5, 5), np.uint8))
+    return (binary_fill_holes(closed) | found).astype(np.uint8)
 
 
 def letter_height(
@@ -533,6 +713,10 @@ def measure(
         elif ink_only:
             letters = ((np.abs(image.astype(np.int32) - np.array(ink, dtype=np.int32)).sum(axis=-1)
                         < INK_TOLERANCE) & (box > 0)).astype(np.uint8)
+        else:
+            # Follow the strokes, not the box (the operator, 2026-11-10): art
+            # inside the rectangle -- hair, a hand, shelf dots -- is not lettering.
+            letters = keep_strokes(letters, ((page_mask > 0) & (box > 0)).astype(np.uint8))
         footprint, reach = letters, dilate(box, 2)
     else:
         own[box > 0] = page_mask[box > 0] > 0
@@ -553,6 +737,11 @@ def measure(
             footprint = footprint | blobs
             reach = reach | dilate(blobs, halo + 2)
 
+    if not footprint.any():
+        # No stroke found (Xiao Gou ch.9 p.24: a thin red 咻): measuring nothing
+        # gave a 0x0 footprint, Photoshop scaled the word to 0 px and the
+        # build hung. The box the SFX was given is its footprint then.
+        footprint = (box > 0).astype(np.uint8)
     ys, xs = np.nonzero(footprint)
     points = np.column_stack([xs, ys]).astype(np.float32)
     if angle is None:
@@ -665,26 +854,68 @@ def sfx_layers(
                     ink_only=item.letters == "ink", area=item.letters == "area")
         if item.outline is not None:
             m["outlined"] = item.outline
-        if item.angle is None and abs(m["angle"]) > MAX_ANGLE:
-            notes.append(f"{rid}: set near-vertically, skipped")
-            continue
         shown = item.text.strip() if item.keep_case else item.text.strip().upper()
-        if item.fill == "lama":
+        # A vertical SFX is set one letter per line now (the operator,
+        # 2026-11-09), no longer erased with LaMa and left to set by hand.
+        vertical = item.angle is None and abs(m["angle"]) > MAX_ANGLE
+        if item.pre_erased:
+            pass  # LaMa took it at cleaning; the base layer is already clean there
+        elif item.fill == "lama":
             erase_local |= m["glyphs"]
         else:
             erase |= m["glyphs"]
         if item.erase_only:
             continue
+        # The group's SFX standard (the operator, 2026-11-09): reproduce the
+        # original's look -- strokes, glow, shadow, orientation -- at 70-80%.
+        style = _style_fields(image, m)
+        if style.pop("_textured", False):
+            notes.append(f"{rid}: textured/patterned original -- '{shown}' set plain, finish its look by hand")
+        common = dict(font=fonts.get(item.font, font), colour=item.colour or m["ink"],
+                      stroke_colour=m["edge"] if m["outlined"] else (0, 0, 0),
+                      stroke_ratio=0.09 if m["outlined"] else 0.0, **style)
+        if vertical:
+            # One letter per line; tabs give the column its lean (in Photoshop).
+            from comic.photoshop.sfx_style import slant_of, vertical_text
+
+            text = vertical_text(shown)
+            layers.append(SfxLayer(
+                region_id=rid, text=text, plain=plain_letters(text), letter_height=0.0,
+                cx=m["cx"] + item.offset[0], cy=m["cy"] + item.offset[1],
+                # the footprint's long side is the column's height
+                width=m["height"] * item.scale, height=m["width"] * item.scale,
+                angle=0.0, vertical=True, slant=slant_of(m["angle"]), **common,
+            ))
+            continue
+        split = None
+        if not item.parts and not item.poly and tuple(item.offset) == (0.0, 0.0) and len(shown) > 1:
+            from comic.photoshop.sfx_style import pieces, split_text
+
+            gap = max(4, int(0.25 * (m["letter_height"] or m["height"] / 2)))
+            found = pieces(m["glyphs"] > 0, gap)
+            if found:
+                # In reading order along the word's own direction.
+                t = np.deg2rad(m["angle"])
+                axis = np.array([np.cos(t), np.sin(t)])
+                found.sort(key=lambda q: float(np.array(_footprint(q)[:2]) @ axis))
+                texts = split_text(shown, [_footprint(q)[2] for q in found])
+                if texts:
+                    split = list(zip(found, texts))
+        if split:
+            # One text layer per piece, as the original is drawn ("QU" + "ẪY").
+            for k, (piece, part) in enumerate(split, 1):
+                cx, cy, w, h, ang = _footprint(piece)
+                layers.append(SfxLayer(
+                    region_id=f"{rid}.{k}", text=part, plain=plain_letters(part), letter_height=0.0,
+                    cx=cx, cy=cy, width=w * item.scale, height=h * item.scale, angle=ang, **common,
+                ))
+            continue
         layers.append(SfxLayer(
-            region_id=rid, text=shown, font=fonts.get(item.font, font),
-            plain=plain_letters(shown),
+            region_id=rid, text=shown, plain=plain_letters(shown),
             letter_height=m["letter_height"] * item.scale if item.size_by == "letter" else 0.0,
-            colour=item.colour or m["ink"],
-            stroke_colour=m["edge"] if m["outlined"] else (0, 0, 0),
-            stroke_ratio=0.09 if m["outlined"] else 0.0,
             cx=m["cx"] + item.offset[0], cy=m["cy"] + item.offset[1],
             width=m["width"] * item.scale, height=m["height"] * item.scale,
-            angle=m["angle"],
+            angle=m["angle"], **common,
         ))
     return layers, erase, erase_local, notes
 

@@ -1,0 +1,6 @@
+# Lettering for "Dare mo Shiranai Kimi no Koto" (Hanotanoha): a Japanese
+# high-school BL manga, black and white, paged, read from an English
+# scanlation. Same setup as Kimigazer: manga preset, no voices (one face per
+# kind). See docs/lettering.md.
+preset: manga
+clean: auto

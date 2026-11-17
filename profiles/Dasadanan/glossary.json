@@ -1,1 +1,14 @@
-[]
+[
+  {
+    "source": "hyung",
+    "target": "anh",
+    "note": "Chan gọi Seyeon; 'Seyeon hyung' -> 'anh Seyeon'",
+    "category": "term"
+  },
+  {
+    "source": "golden boy",
+    "target": "cậu bé vàng",
+    "note": "biệt danh của Kang Chan",
+    "category": "term"
+  }
+]

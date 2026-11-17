@@ -142,8 +142,14 @@ class RawPlan:
         ]
 
 
-def scan(folder: Path, order_by: OrderBy = OrderBy.NAME) -> RawPlan:
-    """Inspect a raw folder and decide what each file would become."""
+def scan(folder: Path, order_by: OrderBy = OrderBy.NAME, strip: bool = False) -> RawPlan:
+    """Inspect a raw folder and decide what each file would become.
+
+    ``strip``: the chapter is one long strip cut into tiles, and a tile can be
+    any height -- a 1400x103 slice holding the bottom of a speech bubble was
+    being dropped, leaving a seam (Walking in the Rain, 2026-10-26). Only the
+    width has to be page-sized then.
+    """
     if not folder.exists():
         raise RawIngestError(f"no such folder: {folder}")
     if not folder.is_dir():
@@ -172,7 +178,7 @@ def scan(folder: Path, order_by: OrderBy = OrderBy.NAME) -> RawPlan:
             plan.rejected.append((path, "does not decode as an image"))
             continue
         extension, width, height = sniffed
-        if width < MIN_PAGE_DIMENSION or height < MIN_PAGE_DIMENSION:
+        if width < MIN_PAGE_DIMENSION or (height < MIN_PAGE_DIMENSION and not strip):
             plan.rejected.append((path, f"too small ({width}x{height})"))
             continue
         plan.candidates.append(
@@ -257,8 +263,9 @@ def ingest(plan: RawPlan, paths: ChapterPaths, normalize: bool = False) -> list[
             if fixed is not None:
                 data = fixed
         digest = hashlib.sha256(data).hexdigest()
-        if digest in seen:
-            # A duplicate save is common when sweeping a reader by hand.
+        if digest in seen and candidate.height >= MIN_PAGE_DIMENSION:
+            # A duplicate save is common when sweeping a reader by hand. A
+            # thin strip tile is not one: the same blank gutter can recur.
             continue
         page_number += 1
         seen[digest] = page_number

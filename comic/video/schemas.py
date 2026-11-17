@@ -16,6 +16,10 @@ WIDTH, HEIGHT, FPS = 1080, 1920, 30
 #: The operator's length (2026-10-14): 25-40 seconds.
 MIN_SECONDS, MAX_SECONDS = 25.0, 40.0
 MIN_SHOTS = 4
+# The retention structure (VideoPlan.check_structure).
+HOOK_MAX_SECONDS = 3.0
+SETUP_MIN_SUBTITLES = 2
+FAST_SHOT_SECONDS = 1.6
 
 
 class Base(BaseModel):
@@ -167,6 +171,10 @@ class VideoPlan(Base):
     effects: list[Effect] = Field(default_factory=list)
     #: A short note on the story the sequence tells (kept with the plan).
     story: str = ""
+    #: "retention" holds the plan to the hook / setup / highlight / teaser
+    #: shape (docs/video.md, the operator 2026-10-27); "free" is every plan
+    #: made before it, which still re-renders unchanged.
+    structure: str = Field(default="free", pattern="^(free|retention)$")
 
     @field_validator("hashtags")
     @classmethod
@@ -186,6 +194,40 @@ class VideoPlan(Base):
     def check_length(self, low: float = MIN_SECONDS, high: float = MAX_SECONDS) -> None:
         if not low <= self.seconds <= high:
             raise ValueError(f"the shots add up to {self.seconds:.1f}s; the target is {low:.0f}-{high:.0f}s")
+
+    def check_structure(self) -> list[str]:
+        """What a ``retention`` plan is missing; empty for a ``free`` plan.
+
+        The shape is the operator's (2026-10-27): a hook that states the
+        situation in the first seconds, two or three subtitled setup shots,
+        a faster highlight, and a closing line. Every shot moves -- a static
+        slideshow is what loses the viewer.
+        """
+        if self.structure != "retention":
+            return []
+        problems = []
+        first, last = self.shots[0], self.shots[-1]
+        if not first.text or first.text.role is not TextRole.HOOK:
+            problems.append("retention: shot 1 needs the hook line (text role 'hook')")
+        if first.seconds > HOOK_MAX_SECONDS:
+            problems.append(f"retention: the hook shot holds {first.seconds:.1f}s; "
+                            f"keep it to {HOOK_MAX_SECONDS:.0f}s or less")
+        middle = self.shots[1:-1]
+        subtitled = [s for s in middle if s.text and s.text.role in (TextRole.CAPTION, TextRole.QUOTE)]
+        if len(subtitled) < SETUP_MIN_SUBTITLES:
+            problems.append(f"retention: {len(subtitled)} subtitled shot(s) between the hook and "
+                            f"the ending; the setup needs at least {SETUP_MIN_SUBTITLES}")
+        fast = [s for s in middle if s.seconds <= FAST_SHOT_SECONDS]
+        if len(fast) < 2:
+            problems.append(f"retention: the highlight needs at least 2 quick shots "
+                            f"(<= {FAST_SHOT_SECONDS}s) to lift the pace")
+        if not last.text:
+            problems.append("retention: the last shot needs its closing line (the moment, "
+                            "the series title or a 'next part' prompt)")
+        still = [str(i) for i, s in enumerate(self.shots, 1) if s.motion is Motion.STATIC]
+        if still:
+            problems.append(f"retention: shot(s) {', '.join(still)} are static; give every shot a motion")
+        return problems
 
 
 class QaResponse(Base):

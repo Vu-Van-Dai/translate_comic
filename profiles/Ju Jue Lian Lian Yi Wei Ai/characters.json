@@ -1,0 +1,75 @@
+{
+  "Hayato": {
+    "name": "Hayato",
+    "aliases": [],
+    "role": null,
+    "personality": "Alpha, 19, straightforward and devoted; has loved Riichi all along; plans like a drama protagonist",
+    "speech_style": "Earnest, impulsive, calls Riichi 'anh Riichi'; narrates in 'tôi'",
+    "addresses": {
+      "Riichi": {
+        "self_term": "em",
+        "other_term": "anh",
+        "formality": "intimate",
+        "note": "calls him 'anh Riichi'"
+      },
+      "Fujita": {
+        "self_term": "em",
+        "other_term": "anh",
+        "formality": "neutral",
+        "note": null
+      }
+    },
+    "notes": [
+      "隼人, blond, earrings and necklace. Bit Riichi by accident at 10 while playing, making them mates. Wants Riichi to love him before he turns 20."
+    ]
+  },
+  "Riichi": {
+    "name": "Riichi",
+    "aliases": [],
+    "role": null,
+    "personality": "Omega, 6 years older, kind but strict about the rules; holds back to protect Hayato's freedom to choose",
+    "speech_style": "Gentle, teasing, older-brother tone ('anh' / 'em'); narrates in 'mình'",
+    "addresses": {
+      "Hayato": {
+        "self_term": "anh",
+        "other_term": "em",
+        "formality": "intimate",
+        "note": null
+      },
+      "Fujita": {
+        "self_term": "em",
+        "other_term": "anh",
+        "formality": "neutral",
+        "note": null
+      }
+    },
+    "notes": [
+      "利一, dark slicked hair, office worker. Mated to Hayato since Hayato was 10 (Riichi 16). Rules until Hayato turns 20: touch only shoulders-to-hands, only kissing, dates only at home or in public.",
+      "Lives alone in a rented flat Hayato has visited once. Runs a fever when exhausted. Has recurring dreams of that night and feels guilty; takes omega suppressants. Plans to say 'I love you' outright once Hayato turns 20."
+    ]
+  },
+  "Fujita": {
+    "name": "Fujita",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Riichi": {
+        "self_term": "anh",
+        "other_term": "em",
+        "formality": "neutral",
+        "note": null
+      },
+      "Hayato": {
+        "self_term": "anh",
+        "other_term": "em",
+        "formality": "neutral",
+        "note": null
+      }
+    },
+    "notes": [
+      "Riichi's older brother and his doctor (glasses, mole); calls Hayato 'nó', Riichi 'em'. Riichi calls him 'Bác sĩ Fujita' at the clinic. Riichi's own surname is also Fujita (藤田 利一 on the chart)."
+    ]
+  }
+}

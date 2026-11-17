@@ -149,6 +149,11 @@ ROLE_SIZE = {TextRole.HOOK: 84, TextRole.CAPTION: 62, TextRole.QUOTE: 60, TextRo
 ROLE_LINES = {TextRole.HOOK: 3, TextRole.CAPTION: 3, TextRole.QUOTE: 3, TextRole.NOTE: 4}
 
 
+#: Condensed faces read small at the role sizes; the operator's reference reels
+#: (2026-10-23) set narration large and heavy, with a thick outline.
+FACE_SCALE = {"Anton-Regular.ttf": 1.3}
+
+
 def text_layer(text: str, role: TextRole, font_name: str, reveal: int | None = None) -> Image.Image:
     """White lettering with a dark outline and soft shadow, transparent around.
 
@@ -159,7 +164,7 @@ def text_layer(text: str, role: TextRole, font_name: str, reveal: int | None = N
     if role is TextRole.QUOTE and not text.startswith(("“", '"')):
         text = f"“{text}”"
     width = WIDTH - 2 * SAFE_SIDE
-    size = ROLE_SIZE[role]
+    size = round(ROLE_SIZE[role] * FACE_SCALE.get(font_name, 1.0))
     while True:
         font = _font(font_name, size)
         lines = wrap(text, font, width)
@@ -167,8 +172,8 @@ def text_layer(text: str, role: TextRole, font_name: str, reveal: int | None = N
             break
         size -= 4
     lines = lines or [text]
-    lead = round(size * 1.28)
-    stroke = max(3, round(size * 0.09))
+    lead = round(size * (1.45 if font_name in FACE_SCALE else 1.28))
+    stroke = max(3, round(size * (0.11 if font_name in FACE_SCALE else 0.09)))
     pad = stroke + 18
     w = int(max(font.getlength(l) for l in lines)) + 2 * pad
     h = lead * len(lines) + 2 * pad

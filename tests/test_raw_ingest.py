@@ -65,6 +65,24 @@ def test_non_images_and_tiny_files_are_rejected(raw_folder: Path):
     assert "does not decode" in reasons["broken.jpg"]
 
 
+def test_a_long_strip_keeps_its_thin_tiles(raw_folder: Path):
+    # the last tile of a run can be ~100px tall and still hold artwork
+    write_image(raw_folder / "003a.png", w=800, h=90, fmt="PNG")
+    write_image(raw_folder / "icon.png", w=50, h=50, fmt="PNG")
+    assert "003a.png" in {p.name: w for p, w in scan(raw_folder).rejected}
+    plan = scan(raw_folder, strip=True)
+    assert plan.count == 6
+    assert {p.name for p, _ in plan.rejected} == {"icon.png"}
+
+
+def test_a_repeated_gutter_tile_is_not_a_duplicate(raw_folder: Path, chapter: ChapterPaths):
+    write_image(raw_folder / "page3.png", w=800, h=24, fmt="PNG")
+    write_image(raw_folder / "page5.png", w=800, h=24, fmt="PNG")
+    write_image(raw_folder / "page12.jpg", tint=11 * 20)  # a repeated full page
+    records = ingest(scan(raw_folder, strip=True), chapter)
+    assert len(records) == 7
+
+
 def test_ingest_renames_and_records(raw_folder: Path, chapter: ChapterPaths):
     records = ingest(scan(raw_folder), chapter)
     assert [r.filename for r in records] == [

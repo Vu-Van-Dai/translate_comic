@@ -59,9 +59,11 @@ def wait_text(page: Page, text: str, timeout: float = 180) -> None:
 # ----------------------------------------------------------------- TikTok
 def tiktok(page: Page, entry: dict) -> None:
     at = dt.datetime.fromisoformat(entry["tiktok"]["at"])
+    if tiktok_has(page, at):      # an earlier run got it through but lost track
+        return
     page.goto("https://www.tiktok.com/tiktokstudio/upload?from=webapp", wait_until="domcontentloaded", timeout=90000)
     page.locator("input[type=file]").first.wait_for(state="attached", timeout=60000)
-    page.locator("input[type=file]").first.set_input_files(entry["video"])
+    page.locator("input[type=file]").first.set_input_files(entry["video"], timeout=180000)
     wait_text(page, "Đã tải lên", 300)
     time.sleep(2)
     for dismiss in ("Đã hiểu", "Hủy bỏ thông báo"):
@@ -124,11 +126,44 @@ def tiktok(page: Page, entry: dict) -> None:
         raise RuntimeError(f"tiktok picker shows {got}, wanted {want}")
     wait_text(page, "Không phát hiện vấn đề nào", 120)   # music copyright check done
     page.get_by_role("button", name="Lên lịch", exact=True).last.click()
-    end = time.time() + 120
-    while time.time() < end and "tiktokstudio/upload" in page.url and "Bài đăng" not in page.locator("body").inner_text():
-        time.sleep(2)
-    if "Bài đăng" not in page.locator("body").inner_text() and "content" not in page.url:
-        raise RuntimeError("tiktok: no confirmation after submit")
+    # Neither the page text nor the URL is a reliable confirmation (2026-10-28:
+    # "Bài đăng" sits in the sidebar, so 7 failed posts were recorded as
+    # scheduled; a URL check then called 8 successful posts failed, and the
+    # re-run doubled 3 of them). The content list is the only truth.
+    time.sleep(20)
+    if not tiktok_has(page, at):
+        raise RuntimeError(f"tiktok: no post at {tiktok_stamp(at)} in the content list")
+
+
+def tiktok_stamp(at: dt.datetime) -> str:
+    """How Studio prints a scheduled time: '14 tháng 11, 8:15 CH'."""
+    return f"{at.day} tháng {at.month}, {at.hour % 12 or 12}:{at.minute:02d} {'CH' if at.hour >= 12 else 'SA'}"
+
+
+def tiktok_has(page: Page, at: dt.datetime) -> bool:
+    """Is a post scheduled at exactly ``at`` in TikTok Studio's content list?
+
+    The list is virtualised (about 7 rows exist at once), so it is walked in
+    small wheel steps until every row on screen is older than today (rows
+    are in creation order, and scheduled ones are created before their date).
+    """
+    stamp = tiktok_stamp(at)
+    today = dt.date.today()
+    page.goto("https://www.tiktok.com/tiktokstudio/content", wait_until="domcontentloaded", timeout=90000)
+    time.sleep(8)
+    for _ in range(150):
+        body = page.locator("body").inner_text()
+        if stamp in body:
+            return True
+        shown = [(int(m), int(d)) for d, m in re.findall(r"(\d{1,2}) tháng (\d{1,2}),? (?:\d{4}, )?\d", body)]
+        years = re.findall(r"\d{1,2} tháng \d{1,2} (\d{4}), ", body)
+        if shown and (all(y < str(today.year) for y in years) and years
+                      or max(shown) < (today.month, today.day)):
+            return False
+        page.mouse.move(700, 500)
+        page.mouse.wheel(0, 250)
+        time.sleep(0.8)
+    return False
 
 
 # --------------------------------------------------------------- Facebook
@@ -139,7 +174,8 @@ def facebook(page: Page, entry: dict) -> None:
     with page.expect_file_chooser(timeout=20000) as fc:
         page.get_by_text("Thêm video", exact=True).click()
     fc.value.set_files(entry["video"])
-    page.get_by_text("Mô tả", exact=False).first.wait_for(timeout=120000)
+    # The caption field's label was "Mô tả"; 2026-10-28 it became "Văn bản".
+    page.get_by_text(re.compile("Mô tả|Cho người xem biết thước phim")).first.wait_for(timeout=120000)
     time.sleep(8)
     box = page.locator("[contenteditable=true]").first
     box.click()
@@ -178,6 +214,8 @@ def facebook(page: Page, entry: dict) -> None:
 
 # ---------------------------------------------------------------- YouTube
 YT_STUDIO = "https://studio.youtube.com/channel/UC8doy0uehsgE57i1IE527Hw/videos/upload?d=ud"
+YT_DRAFTS = ("https://studio.youtube.com/channel/UC8doy0uehsgE57i1IE527Hw/videos/short?filter="
+             "%5B%7B%22name%22%3A%22VISIBILITY%22%2C%22value%22%3A%5B%22DRAFT%22%5D%7D%5D")
 
 
 def youtube(page: Page, entry: dict) -> None:
@@ -189,11 +227,36 @@ def youtube(page: Page, entry: dict) -> None:
     lịch cho video". The dialog opens on *Public*: never press done before the
     schedule is set."""
     at = dt.datetime.fromisoformat(entry["youtube"]["at"])
-    page.goto(YT_STUDIO, wait_until="domcontentloaded", timeout=90000)
-    page.locator("input[type=file]").first.wait_for(state="attached", timeout=60000)
-    page.locator("input[type=file]").first.set_input_files(entry["video"])
+
+    def dismiss_posted() -> None:
+        # Studio pops a leftover "Đã đăng video" notice for an earlier upload
+        # (2026-11-10), on load or mid-dialog; it swallows clicks until closed.
+        note = page.get_by_text("Đã đăng video", exact=True)
+        if note.count() and note.first.is_visible():
+            page.get_by_role("button", name="Đóng").last.click(); time.sleep(2)
+
+    draft = entry["youtube"].get("draft")
+    if draft:
+        # An earlier upload stuck as a draft: finish it, never upload again.
+        page.goto(YT_DRAFTS, wait_until="domcontentloaded", timeout=90000)
+        time.sleep(8)
+        dismiss_posted()
+        row = page.locator("ytcp-video-row").filter(has_text=draft).first
+        row.get_by_text("Chỉnh sửa bản nháp").click()
+    else:
+        page.goto(YT_STUDIO, wait_until="domcontentloaded", timeout=90000)
+        for _ in range(3):
+            try:
+                page.locator("input[type=file]").first.wait_for(state="attached", timeout=20000)
+                break
+            except Exception:  # noqa: BLE001 - close the notice and reopen the upload
+                dismiss_posted()
+                page.goto(YT_STUDIO, wait_until="domcontentloaded", timeout=90000)
+        page.locator("input[type=file]").first.wait_for(state="attached", timeout=30000)
+        page.locator("input[type=file]").first.set_input_files(entry["video"], timeout=180000)
     page.locator("#textbox").nth(1).wait_for(timeout=120000)
     time.sleep(4)
+    dismiss_posted()
     # The channel's daily upload limit (hit 2026-10-15 after ~110 uploads in a day):
     # the dialog greys out with "Đã đạt giới hạn tải video lên hằng ngày".
     if re.search(r"giới hạn tải|daily upload limit", page.locator("body").inner_text(), re.I):
@@ -205,14 +268,24 @@ def youtube(page: Page, entry: dict) -> None:
     time.sleep(1)
     if "#spoiler" not in tb.nth(1).inner_text():
         raise RuntimeError("youtube description did not take")
+    dismiss_posted()
     page.locator("tp-yt-paper-radio-button[name=VIDEO_MADE_FOR_KIDS_NOT_MFK]").click()
     for _ in range(3):
+        dismiss_posted()
         page.locator("#next-button").click(); time.sleep(2.5)
+    dismiss_posted()
     page.get_by_text("Lên lịch", exact=True).first.click(); time.sleep(1.5)
     want = f"{at.day} thg {at.month}, {at.year}"
     page.locator("#datepicker-trigger").click(); time.sleep(1.2)
     ins = page.locator("ytcp-date-picker input")
-    box = [ins.nth(i) for i in range(ins.count()) if ins.nth(i).is_visible() and "thg" in (ins.nth(i).input_value() or "")]
+    box = []
+    for _ in range(10):  # the picker's input can render late (2026-11-10)
+        box = [ins.nth(i) for i in range(ins.count()) if ins.nth(i).is_visible() and "thg" in (ins.nth(i).input_value() or "")]
+        if box:
+            break
+        time.sleep(1)
+    if not box:
+        raise RuntimeError("youtube date input not found")
     box[0].fill(want); box[0].press("Enter"); time.sleep(1.2)
     t = page.locator("#time-of-day-container input")
     t.click(); page.keyboard.press("Control+A"); page.keyboard.type(at.strftime("%H:%M")); page.keyboard.press("Enter")
@@ -293,7 +366,7 @@ def main() -> None:
                     if slot is None:          # older entries were planned before YouTube joined
                         continue
                     at = dt.datetime.fromisoformat(slot["at"])
-                    if slot["status"] == "scheduled" or at - now > WINDOW[plat]:
+                    if slot["status"] in ("scheduled", "hold") or at - now > WINDOW[plat]:
                         continue
                     if at - now < MIN_AHEAD:
                         slot["status"] = "missed"
@@ -310,8 +383,11 @@ def main() -> None:
                     except Exception as exc:  # noqa: BLE001 - record and carry on
                         slot["error"] = repr(exc)[:300]
                         print(f"{plat}: FAILED {slot['at']} {e['folder']}: {exc}", flush=True)
-                        page.screenshot(path=str(PLAN.with_name(f"channel_fail_{plat}.png")))
-                        body = page.locator("body").inner_text()
+                        try:
+                            page.screenshot(path=str(PLAN.with_name(f"channel_fail_{plat}.png")), timeout=10000)
+                            body = page.locator("body").inner_text(timeout=10000)
+                        except Exception:  # noqa: BLE001 - a hung page must not end the run
+                            body = ""
                         if plat == "youtube" and re.search(r"giới hạn tải|upload limit|daily upload", body, re.I):
                             print("youtube: daily upload limit reached -- stop; re-run tomorrow", flush=True)
                             save(plan)

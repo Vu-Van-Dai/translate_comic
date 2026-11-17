@@ -53,6 +53,9 @@ class Layout:
     fits: bool
     #: Leading for this face, in ems; see ``leading_em``.
     line_em: float = LINE_HEIGHT_EM
+    #: Horizontal scale the lines are drawn at (Photoshop's Character panel
+    #: "horizontally scale"); x and width are already in page pixels.
+    hscale: float = 1.0
 
     @property
     def line_height(self) -> int:
@@ -157,6 +160,26 @@ def widest_run(row: np.ndarray) -> tuple[int, int]:
     return int(starts[best]), int(lengths[best])
 
 
+#: The one-O margin is for a balloon sized to its text. A narrow vertical CJK
+#: balloon (50-90 px wide, Kawaii ch.2 p.11/13/14) lost a third of its width
+#: to it and set its line at 10-14 px; there a letterer keeps only a hairline.
+#: The margin never exceeds this share of the area's narrower side.
+PAD_MAX_SHARE = 0.08
+#: Only balloons narrower than this on their short side count as small; a
+#: wide caption box keeps its full margin however short it is.
+SMALL_BALLOON_PX = 90
+
+
+def _pad_ceiling(area: np.ndarray) -> int:
+    rows, cols = np.flatnonzero(area.any(axis=1)), np.flatnonzero(area.any(axis=0))
+    if not rows.size:
+        return 0
+    height, width = rows[-1] - rows[0] + 1, cols[-1] - cols[0] + 1
+    if width >= SMALL_BALLOON_PX:
+        return 1 << 30
+    return int(min(height, width) * PAD_MAX_SHARE)
+
+
 def _padded(area: np.ndarray, size: int, pad_em: float | None) -> tuple[np.ndarray, int]:
     """The area a block may occupy at ``size``, and the per-line side padding.
 
@@ -172,7 +195,7 @@ def _padded(area: np.ndarray, size: int, pad_em: float | None) -> tuple[np.ndarr
     """
     if pad_em is None:
         return area, int(round(size * PADDING_EM))
-    px = int(round(size * pad_em))
+    px = min(int(round(size * pad_em)), _pad_ceiling(area))
     if px < 1:
         return area, 0
     import cv2
@@ -378,14 +401,22 @@ def _try_size(
     if widest <= 0:
         return None
 
-    best: Layout | None = None
-    best_key: tuple[bool, float, int] | None = None
-    tried: set[tuple[str, ...]] = set()
+    candidates: list[list[str] | None] = []
     for fraction in WRAP_ATTEMPTS:
         width = int(widest * fraction) - 2 * padding
-        if width < 1:
-            continue
-        lines = wrap(text, font, width)
+        if width >= 1:
+            candidates.append(wrap(text, font, width))
+    # Stacks shaped like the balloon (the operator, 2026-11-15).
+    centre_y = _bubble_centre(solid, anchor)[1] if anchor else None
+    candidates += _contour_wraps(
+        measured, text, font, padding,
+        max(1, int(round(size * line_em(font_path, auto_leading)))), centre_y,
+    )
+
+    best: Layout | None = None
+    best_key: tuple[bool, float, float, int] | None = None
+    tried: set[tuple[str, ...]] = set()
+    for lines in candidates:
         if not lines or tuple(lines) in tried:
             continue
         tried.add(tuple(lines))
@@ -394,10 +425,116 @@ def _try_size(
             x, y, block_width, height = placed
             layout = Layout(tuple(lines), size, x, y, block_width, height, True,
                             line_em(font_path, auto_leading))
-            key = (not _widowed(lines), _evenness(measured, layout, font, padding), -len(lines))
+            key = (not _widowed(lines), _evenness(measured, layout, font, padding),
+                   _follows(measured, layout, font, padding), -len(lines))
             if best_key is None or key > best_key:
                 best, best_key = layout, key
     return best
+
+
+#: Most lines a contour wrap tries. See ``_contour_wraps``.
+CONTOUR_MAX_LINES = 10
+
+
+def _contour_wraps(
+    area: np.ndarray,
+    text: str,
+    font: ImageFont.FreeTypeFont,
+    padding: int,
+    line_height: int,
+    centre_y: float | None = None,
+) -> list[list[str]]:
+    """Wraps whose lines follow the balloon's outline, one per line count.
+
+    The operator, 2026-11-15: "shape the text blocks to follow the contours
+    of the speech bubbles". A single wrap width gives a rectangle with a stub
+    under it; a letterer stacks short lines where the balloon is narrow and
+    long ones where it is wide -- an oval in an oval, a diamond in a diamond,
+    a rectangle in a caption box (Piekos, ch. 4; editmanga: follow the
+    bubble's own shape).
+
+    For each line count the block is stood at the balloon's centre, each
+    line's room is read off the row band it would occupy, and the words are
+    split (in order, never inside a word) so every line fills about the same
+    share of its own row: least squares on ``1 - width / room``. ``area`` is
+    the already padded area, as ``_block_fits`` measures it.
+    """
+    # Same words as ``wrap``: a no-break space binds a word.
+    words = [w.replace(NBSP, " ") for w in text.replace("\n", " ").split(" ") if w.strip()]
+    rows = np.flatnonzero(area.any(axis=1))
+    if len(words) < 2 or rows.size == 0 or line_height < 1:
+        return []
+    top_limit, bottom_limit = int(rows[0]), int(rows[-1]) + 1
+    if centre_y is None:
+        centre_y = (top_limit + bottom_limit) / 2
+    count = len(words)
+    widths: dict[tuple[int, int], int] = {}
+
+    def width(i: int, j: int) -> int:  # words[i:j] as one line
+        if (i, j) not in widths:
+            widths[i, j] = _measure(font, " ".join(words[i:j]))[0]
+        return widths[i, j]
+
+    inf = float("inf")
+    found: list[list[str]] = []
+    for lines in range(2, min(count, CONTOUR_MAX_LINES) + 1):
+        height = lines * line_height
+        if height > bottom_limit - top_limit:
+            break
+        top = int(round(centre_y - height / 2))
+        top = min(max(top, top_limit), bottom_limit - height)
+        rooms = [
+            widest_run(area[top + k * line_height : top + (k + 1) * line_height].all(axis=0))[1]
+            - 2 * padding
+            for k in range(lines)
+        ]
+        if min(rooms) <= 0:
+            continue
+        # cost[k][j]: the best split of words[:j] into the first k lines.
+        cost = [[inf] * (count + 1) for _ in range(lines + 1)]
+        back = [[0] * (count + 1) for _ in range(lines + 1)]
+        cost[0][0] = 0.0
+        for k in range(1, lines + 1):
+            room = rooms[k - 1]
+            for j in range(k, count - (lines - k) + 1):
+                for i in range(j - 1, k - 2, -1):
+                    w = width(i, j)
+                    if w > room:
+                        break  # starting earlier only makes the line wider
+                    if cost[k - 1][i] == inf:
+                        continue
+                    c = cost[k - 1][i] + (1 - w / room) ** 2
+                    if c < cost[k][j]:
+                        cost[k][j], back[k][j] = c, i
+        if cost[lines][count] == inf:
+            continue
+        cuts, j = [], count
+        for k in range(lines, 0, -1):
+            i = back[k][j]
+            cuts.append(" ".join(words[i:j]))
+            j = i
+        found.append(cuts[::-1])
+    return found
+
+
+def _follows(area: np.ndarray, layout: Layout, font, padding: int) -> float:
+    """How closely a stack follows its balloon: minus the spread of fill shares.
+
+    Each line's width over its own row's room; a stack in the balloon's shape
+    fills every row by about the same share. Only a tiebreak after
+    ``_evenness``, so it never costs type size. Rounded so near-equal stacks
+    fall through to the fewer-lines key.
+    """
+    shares = []
+    for index, line in enumerate(layout.lines):
+        top = layout.y + index * layout.line_height
+        band = area[top : top + layout.line_height]
+        if band.shape[0] == 0:
+            continue
+        room = widest_run(band.all(axis=0))[1] - 2 * padding
+        if room > 0:
+            shares.append(_measure(font, line)[0] / room)
+    return -round(max(shares) - min(shares), 1) if len(shares) > 1 else 0.0
 
 
 def _evenness(area: np.ndarray, layout: Layout, font, padding: int) -> float:
@@ -508,8 +645,14 @@ def fit_text(
     inset: float = 0.0,
     pad_em: float | None = None,
     auto_leading: bool = False,
+    hscale: float = 1.0,
 ) -> Layout:
     """The largest font size at which ``text`` fits inside ``area``.
+
+    ``hscale`` below 1 sets the lines condensed, as an editor narrows
+    AnimeAce in a tall balloon: fitting text drawn at ``hscale`` into the
+    area is fitting plain text into the area stretched by ``1 / hscale``, so
+    that is what is searched, and the layout is mapped back to the page.
 
     Binary search is exact here because fitting is monotone in size. When
     nothing fits even at ``min_size`` the layout comes back with ``fits=False``
@@ -524,6 +667,11 @@ def fit_text(
     ch.3, a line set above its own bubble. The anchored layout is kept unless
     it costs more than ``ANCHOR_GIVE`` of the type size; then the free one is.
     """
+    if hscale != 1.0:
+        return _condensed(text, area, font_path, hscale, max_size=max_size,
+                          min_size=min_size, forced_lines=forced_lines,
+                          font_delta=font_delta, anchor=anchor, inset=inset,
+                          pad_em=pad_em, auto_leading=auto_leading)
     path = str(font_path)
     solid = _inset(_smoothed(area > 0), inset)
     if not solid.any() or not text.strip():
@@ -625,6 +773,21 @@ def _centred(
         if attempt_off < best_off:
             best, best_off = attempt, attempt_off
     return best if best_off < off * 0.6 else layout
+
+
+def _condensed(text, area, font_path, hscale, anchor=None, **kwargs) -> Layout:
+    import cv2
+    from dataclasses import replace
+
+    height, width = area.shape[:2]
+    stretched = cv2.resize(area.astype(np.uint8), (int(round(width / hscale)), height),
+                           interpolation=cv2.INTER_NEAREST)
+    if anchor:
+        x1, y1, x2, y2 = anchor
+        anchor = (int(x1 / hscale), y1, int(round(x2 / hscale)), y2)
+    found = fit_text(text, stretched, font_path, anchor=anchor, **kwargs)
+    return replace(found, x=int(round(found.x * hscale)),
+                   width=int(round(found.width * hscale)), hscale=hscale)
 
 
 def _largest(

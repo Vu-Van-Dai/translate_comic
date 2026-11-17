@@ -1,0 +1,268 @@
+{
+  "Yanagawa Masashi": {
+    "name": "Yanagawa Masashi",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Nam sinh đeo kính": {
+        "self_term": "tớ",
+        "other_term": "cậu",
+        "formality": "thân mật, bạn cùng lớp",
+        "note": null
+      },
+      "Satou Kaede": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "Tiền bối điềm đạm, hơi giữ khoảng cách với đàn em.",
+        "note": null
+      },
+      "K-san": {
+        "self_term": "em",
+        "other_term": "chị",
+        "formality": "Chị em ruột, thân mật",
+        "note": null
+      },
+      "Thầy dạy cung đạo": {
+        "self_term": "em",
+        "other_term": "thầy",
+        "formality": "Học trò lễ phép với thầy",
+        "note": null
+      }
+    },
+    "notes": []
+  },
+  "Nam sinh đeo kính": {
+    "name": "Nam sinh đeo kính",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Yanagawa Masashi": {
+        "self_term": "tớ",
+        "other_term": "cậu",
+        "formality": "thân mật, bạn cùng lớp",
+        "note": null
+      },
+      "Satou Kaede": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "Đàn anh với đàn em, lịch sự.",
+        "note": null
+      }
+    },
+    "notes": []
+  },
+  "Satou Kaede": {
+    "name": "Satou Kaede",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Yanagawa Masashi": {
+        "self_term": "em",
+        "other_term": "anh",
+        "formality": "Đàn em lễ phép với tiền bối.",
+        "note": null
+      },
+      "Đạo diễn": {
+        "self_term": "em",
+        "other_term": "anh",
+        "formality": "Lễ phép trong công việc",
+        "note": null
+      },
+      "Diễn viên tóc sáng": {
+        "self_term": "em",
+        "other_term": "anh",
+        "formality": "Lễ phép với đàn anh trong đoàn",
+        "note": null
+      },
+      "Hayase": {
+        "self_term": "em",
+        "other_term": "anh",
+        "formality": "Lễ phép với đàn anh trong đoàn",
+        "note": null
+      },
+      "K-san": {
+        "self_term": "em",
+        "other_term": "chị",
+        "formality": "Lễ phép với chị của tiền bối.",
+        "note": null
+      }
+    },
+    "notes": []
+  },
+  "Đạo diễn": {
+    "name": "Đạo diễn",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Satou Kaede": {
+        "self_term": "tôi",
+        "other_term": "em",
+        "formality": "Người hướng dẫn với diễn viên trẻ",
+        "note": null
+      },
+      "Diễn viên tóc sáng": {
+        "self_term": "tôi",
+        "other_term": "anh",
+        "formality": "Đồng nghiệp lịch sự",
+        "note": null
+      },
+      "Hayase": {
+        "self_term": "tôi",
+        "other_term": "anh",
+        "formality": "Đồng nghiệp thân mật",
+        "note": null
+      }
+    },
+    "notes": []
+  },
+  "Diễn viên tóc sáng": {
+    "name": "Diễn viên tóc sáng",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Satou Kaede": {
+        "self_term": "anh",
+        "other_term": "em",
+        "formality": "Thân thiện với đàn em",
+        "note": null
+      },
+      "Đạo diễn": {
+        "self_term": "tôi",
+        "other_term": "anh",
+        "formality": "Đồng nghiệp lịch sự",
+        "note": null
+      },
+      "Mochiyasu Takashi": {
+        "self_term": "tôi",
+        "other_term": "anh",
+        "formality": "Đồng nghiệp thân mật",
+        "note": null
+      },
+      "Hayase": {
+        "self_term": "tôi",
+        "other_term": "anh",
+        "formality": "Đồng nghiệp thân mật",
+        "note": null
+      }
+    },
+    "notes": []
+  },
+  "Mochiyasu Takashi": {
+    "name": "Mochiyasu Takashi",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Diễn viên tóc sáng": {
+        "self_term": "tôi",
+        "other_term": "anh",
+        "formality": "Đồng nghiệp lịch sự",
+        "note": null
+      }
+    },
+    "notes": []
+  },
+  "K-san": {
+    "name": "K-san",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Yanagawa Masashi": {
+        "self_term": "chị",
+        "other_term": "em",
+        "formality": "Chị em ruột, thân mật",
+        "note": null
+      },
+      "Satou Kaede": {
+        "self_term": "chị",
+        "other_term": "em",
+        "formality": "Thân thiện với bạn của em trai.",
+        "note": null
+      }
+    },
+    "notes": []
+  },
+  "Yachiyo Maru": {
+    "name": "Yachiyo Maru",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Oda Kagenaga": {
+        "self_term": "thần",
+        "other_term": "chúa công",
+        "formality": "Cung kính, lời thoại trong vở kịch",
+        "note": null
+      }
+    },
+    "notes": []
+  },
+  "Oda Kagenaga": {
+    "name": "Oda Kagenaga",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Yachiyo Maru": {
+        "self_term": "ta",
+        "other_term": "ngươi",
+        "formality": "Chúa công với người hầu, lời thoại cổ trang.",
+        "note": null
+      }
+    },
+    "notes": []
+  },
+  "Thầy dạy cung đạo": {
+    "name": "Thầy dạy cung đạo",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Yanagawa Masashi": {
+        "self_term": "thầy",
+        "other_term": "em",
+        "formality": "Thầy trò, thân thiện",
+        "note": null
+      }
+    },
+    "notes": []
+  },
+  "Hayase": {
+    "name": "Hayase",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Satou Kaede": {
+        "self_term": "anh",
+        "other_term": "em",
+        "formality": "Đàn anh thân thiện với đàn em trong đoàn",
+        "note": null
+      },
+      "Diễn viên tóc sáng": {
+        "self_term": "tôi",
+        "other_term": "anh",
+        "formality": "Đồng nghiệp thân mật",
+        "note": null
+      }
+    },
+    "notes": []
+  }
+}

@@ -1,0 +1,267 @@
+{
+  "Jaekyung": {
+    "name": "Jaekyung",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Demon": {
+        "self_term": "tôi",
+        "other_term": "ngài",
+        "formality": "formal",
+        "note": null
+      },
+      "Wonyoung": {
+        "self_term": "tôi",
+        "other_term": "anh",
+        "formality": "casual",
+        "note": null
+      },
+      "Mr. Hwang": {
+        "self_term": "em",
+        "other_term": "anh",
+        "formality": "casual",
+        "note": "regular customer haggling"
+      },
+      "Hyunseok": {
+        "self_term": "tớ",
+        "other_term": "cậu",
+        "formality": "casual",
+        "note": "childhood friends"
+      },
+      "Sahyun": {
+        "self_term": "em",
+        "other_term": "Sahyun (by name)",
+        "formality": "casual",
+        "note": "called him Dad until told to use his name"
+      },
+      "Seongha": {
+        "self_term": "ba",
+        "other_term": "con",
+        "formality": "casual",
+        "note": null
+      }
+    },
+    "notes": [
+      "Halfling fox demon, adult, works a part-time/service job; fox ears when aroused.",
+      "Runs the restaurant Slacker's alone as its cook; fox ears and tail come out when frightened.",
+      "Ch.3: abandoned as a halfling child in a forest, taken in by Sahyun; raised with help of an elderly demon neighbour; remembers only clinging to whoever abandoned him.",
+      "Ch.6: is 30 years old; has an erotic dream about the demon and is mortified when the demon notices.",
+      "Ch.7: his restaurant Slacker's opens at midnight; most customers are demons in their true forms. Haggles with Mr. Hwang, a frog-demon fishmonger.",
+      "Ch.9: frightened of the parasol-carrying broker demon; suspects he is the demon's lover ('gigolo'), gets flicked on the forehead for his 'filthy mind'.",
+      "Ch.14: dreams of fleeing overseas with Wonyoung, but Wonyoung's contract can only be nullified if the demon wishes it, and Jaekyung himself belongs to Sahyun.",
+      "Ch.22: never had family outings as a child because Sahyun refused crowded places; envied classmates' vacations.",
+      "Ch.23: halflings age more slowly than humans, so he cannot keep long-term human friendships; a college friend, now a middle-aged father, mistook him for his own son's age. Has never met another halfling besides the old lady next door; muses about a demon marriage agency.",
+      "Ch.24: has almost no demonic energy (not suppressed, simply lacking); survived only thanks to Sahyun. Yet Wonyoung insists Jaekyung awakened him; Jaekyung had no idea."
+    ]
+  },
+  "Demon": {
+    "name": "Demon",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Jaekyung": {
+        "self_term": "ta",
+        "other_term": "ngươi",
+        "formality": "cold",
+        "note": null
+      },
+      "Wonyoung": {
+        "self_term": "ta",
+        "other_term": "ngươi",
+        "formality": "cold",
+        "note": null
+      },
+      "Cafe owner": {
+        "self_term": "ta",
+        "other_term": "ngươi",
+        "formality": "cold",
+        "note": null
+      },
+      "Sahyun": {
+        "self_term": "ta",
+        "other_term": "ngươi",
+        "formality": "cold",
+        "note": null
+      },
+      "Seongha": {
+        "self_term": "ta",
+        "other_term": "con",
+        "formality": "casual",
+        "note": null
+      }
+    },
+    "notes": [
+      "Nameless superior demon who appears before Jaekyung, calls him 'my property' and takes over his home.",
+      "Ch.4: vain about his looks and fashion through every era; stung at being called tacky, goes shopping with Jaekyung's money and draws admirers.",
+      "Ch.5: refuses to give his name; Jaekyung dubs him 'Kim Anon' (Kim Vô Danh / Ông Vô Danh). Decides to stay in the house to rest, since Sahyun is away.",
+      "Ch.8: sells a precious red gem to a demon broker who runs a cafe; gets cash, a phone, and ID/passport arranged. Has been using Jaekyung's card. Notices he feels oddly content and uninterested in desire.",
+      "Ch.10: now wears modern clothes, owns a new smartphone bought with Jaekyung's card, opens a bank account for in-app purchases.",
+      "Ch.21: Demon Network calls him the great demon 'L' (photo taken in Myeong-dong); about 2,000 years old, says he did 'annihilate humanity' things ~1,000 years ago but mellowed; loves modern food, gadgets and TV.",
+      "Ch.25: getting a driver's license (aced written and skills tests), browsing Ferraris; asset managers in Hong Kong; can make money selling demonic energy crystals. Calls Wonyoung his weapon and says transforming him without permission is theft.",
+      "Ch.26: gained power over millennia by killing; his kills let 'something' possess Wonyoung, so he entrusted Wonyoung to Sahyun, who absorbed the murderous karma to keep his own illness at bay. Needs a demon of his caliber to fully recover; plans to impregnate Jaekyung and absorb the clone he bears."
+    ]
+  },
+  "Wonyoung": {
+    "name": "Wonyoung",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Jaekyung": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "casual",
+        "note": null
+      },
+      "Demon": {
+        "self_term": "tôi",
+        "other_term": "ngài",
+        "formality": "formal",
+        "note": null
+      },
+      "Cafe owner": {
+        "self_term": "tôi",
+        "other_term": "ngài",
+        "formality": "formal",
+        "note": null
+      },
+      "Sahyun": {
+        "self_term": "tôi",
+        "other_term": "ngài",
+        "formality": "formal",
+        "note": null
+      }
+    },
+    "notes": [
+      "House-protector demon of Jaekyung's home (white hair); the superior demon is his original master; wears the face of someone the demon knows.",
+      "Ch.3: originally a sword kept in the house's sheath; became a black cluster, then a cat, then his current human form. He is the 'thing' the demon came to reclaim.",
+      "Ch.11: a weapon sworn to his master, neither human nor demon; cannot refuse the demon's orders.",
+      "Ch.19: in Jaekyung's childhood he was first a floating spiky blob, then a cat, then took a human form copying Sahyun's face because he knew few faces; his true form is the sword kept in the storage room.",
+      "Ch.24: a conscious blade with a soul since his forging; took Sahyun's image from long years with him. Says it was Jaekyung, as a child, who awakened him and gave him human form, not Sahyun."
+    ]
+  },
+  "Sahyun": {
+    "name": "Sahyun",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Jaekyung": {
+        "self_term": "ta",
+        "other_term": "nhóc",
+        "formality": "casual",
+        "note": "guardian, aloof; flashback to Jaekyung's childhood"
+      },
+      "Demon": {
+        "self_term": "ta",
+        "other_term": "ngươi",
+        "formality": "casual",
+        "note": null
+      },
+      "Wonyoung": {
+        "self_term": "ta",
+        "other_term": "ngươi",
+        "formality": "casual",
+        "note": null
+      }
+    },
+    "notes": [
+      "Ancient demon, prickly and apathetic, currently slumbering elsewhere; kept something for the superior demon in Jaekyung's house.",
+      "Ch.18 (flashback): raised the child Jaekyung in a countryside village beside a horse-demon clan's territory; told him not to call him Dad, just Sahyun; aloof but stayed by his side. Wonyoung first appeared in their home when Jaekyung wished for a friend.",
+      "Ch.20 (flashback): though he loathed the city, moved there with Jaekyung when he got into college; painted a scroll as a barrier for his restaurant; never affectionate but quietly provided everything.",
+      "Ch.25: old demons slumber for long periods; Sahyun promised to wake early but will sleep at least another decade.",
+      "Ch.26: avoided killing; powerful demons who do not kill lose lifespan, so absorbing Wonyoung's karma and power kept him alive."
+    ]
+  },
+  "Mr. Hwang": {
+    "name": "Mr. Hwang",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Jaekyung": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "casual",
+        "note": null
+      }
+    },
+    "notes": []
+  },
+  "Cafe owner": {
+    "name": "Cafe owner",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Demon": {
+        "self_term": "tôi",
+        "other_term": "ngài",
+        "formality": "formal",
+        "note": "flirtatious broker"
+      },
+      "Wonyoung": {
+        "self_term": "ta",
+        "other_term": "ngươi",
+        "formality": "casual",
+        "note": null
+      },
+      "Jaekyung": {
+        "self_term": "ta",
+        "other_term": "nhóc",
+        "formality": "casual",
+        "note": null
+      }
+    },
+    "notes": []
+  },
+  "Hyunseok": {
+    "name": "Hyunseok",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Jaekyung": {
+        "self_term": "tớ",
+        "other_term": "cậu",
+        "formality": "casual",
+        "note": "childhood friends"
+      }
+    },
+    "notes": [
+      "Ch.17: horse demon, Jaekyung's childhood friend from his hometown; runs a farm there and delivers produce, sends Jaekyung strawberries. Big and cheerful, lifts Jaekyung up whenever they meet.",
+      "Ch.19: was the leader of the horse-demon kids at high school; Jaekyung cleared him of a theft accusation and the horse demons were friendly after that."
+    ]
+  },
+  "Seongha": {
+    "name": "Seongha",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Jaekyung": {
+        "self_term": "con",
+        "other_term": "ba",
+        "formality": "casual",
+        "note": null
+      },
+      "Demon": {
+        "self_term": "con",
+        "other_term": "bố",
+        "formality": "casual",
+        "note": null
+      }
+    },
+    "notes": []
+  }
+}

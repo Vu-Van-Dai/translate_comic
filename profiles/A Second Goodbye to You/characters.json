@@ -1,0 +1,436 @@
+{
+  "Otonashi Sora": {
+    "name": "Otonashi Sora",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Hinata": {
+        "self_term": "tớ",
+        "other_term": "cậu",
+        "formality": "Thân mật, bạn từ nhỏ.",
+        "note": null
+      }
+    },
+    "notes": []
+  },
+  "Hinata": {
+    "name": "Hinata",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Otonashi Sora": {
+        "self_term": "mình",
+        "other_term": "cậu",
+        "formality": "Thân mật, bạn từ nhỏ.",
+        "note": null
+      },
+      "Shinohara Yosuke": {
+        "self_term": "em",
+        "other_term": "anh",
+        "formality": "Thân mật, kính trọng đàn anh.",
+        "note": null
+      },
+      "Hase": {
+        "self_term": "em",
+        "other_term": "chị",
+        "formality": "Kính trọng đàn chị, gọi bằng chức danh khi nguồn dùng chức danh",
+        "note": null
+      },
+      "Tokiwa": {
+        "self_term": "em",
+        "other_term": "anh",
+        "formality": "Kính trọng đàn anh, gọi bằng chức danh khi nguồn dùng chức danh",
+        "note": null
+      },
+      "Shinohara": {
+        "self_term": "em",
+        "other_term": "anh",
+        "formality": "Lễ phép, đàn em nói với đàn anh",
+        "note": null
+      },
+      "Sora": {
+        "self_term": "tớ",
+        "other_term": "cậu",
+        "formality": "Thân mật, bạn bè đồng trang lứa",
+        "note": null
+      },
+      "Komugi": {
+        "self_term": "tớ",
+        "other_term": "cậu",
+        "formality": "Thân mật, trẻ nhỏ nói với thú cưng.",
+        "note": null
+      },
+      "Hakuraku": {
+        "self_term": "em",
+        "other_term": "thầy",
+        "formality": "Lễ phép, học sinh nói với thầy giáo.",
+        "note": null
+      },
+      "Hiroki": {
+        "self_term": "em",
+        "other_term": "anh",
+        "formality": "Kính trọng người lớn tuổi hơn.",
+        "note": null
+      },
+      "Kizuki Shun": {
+        "self_term": "em",
+        "other_term": "anh",
+        "formality": "Lễ phép, học sinh nói với phóng viên lớn tuổi hơn.",
+        "note": null
+      },
+      "Kizuki": {
+        "self_term": "em",
+        "other_term": "anh",
+        "formality": "Lễ phép, học sinh nói với phóng viên lớn tuổi hơn.",
+        "note": null
+      }
+    },
+    "notes": []
+  },
+  "Shinohara Yosuke": {
+    "name": "Shinohara Yosuke",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Hinata": {
+        "self_term": "anh",
+        "other_term": "em",
+        "formality": "Thân mật, đàn anh với đàn em.",
+        "note": null
+      },
+      "Tokiwa": {
+        "self_term": "tớ",
+        "other_term": "cậu",
+        "formality": "Bạn bè cùng lứa",
+        "note": null
+      },
+      "Hase": {
+        "self_term": "tớ",
+        "other_term": "cậu",
+        "formality": "Thân mật, bạn bè cùng lứa.",
+        "note": null
+      },
+      "Hakuraku": {
+        "self_term": "em",
+        "other_term": "thầy",
+        "formality": "Lễ phép, học trò nói với thầy giáo.",
+        "note": null
+      },
+      "Kizuki Shun": {
+        "self_term": "tôi",
+        "other_term": "anh",
+        "formality": "Lịch sự nhưng lạnh lùng, gay gắt.",
+        "note": null
+      }
+    },
+    "notes": []
+  },
+  "Hase": {
+    "name": "Hase",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Hinata": {
+        "self_term": "chị",
+        "other_term": "em",
+        "formality": "Thân thiết, đàn chị với đàn em",
+        "note": null
+      },
+      "Shinohara Yosuke": {
+        "self_term": "tớ",
+        "other_term": "cậu",
+        "formality": "Bạn bè cùng lứa",
+        "note": null
+      },
+      "Tokiwa": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "Bạn bè cùng vai vế.",
+        "note": null
+      },
+      "Sora": {
+        "self_term": "chị",
+        "other_term": "em",
+        "formality": "Thân thiết, đàn chị với đàn em.",
+        "note": null
+      },
+      "Hakuraku": {
+        "self_term": "em",
+        "other_term": "thầy",
+        "formality": "Thân mật nhưng kính trọng, học sinh nói với thầy giáo.",
+        "note": null
+      }
+    },
+    "notes": []
+  },
+  "Tokiwa": {
+    "name": "Tokiwa",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Hinata": {
+        "self_term": "anh",
+        "other_term": "em",
+        "formality": "Thân thiết, đàn anh với đàn em",
+        "note": null
+      },
+      "Shinohara Yosuke": {
+        "self_term": "tớ",
+        "other_term": "cậu",
+        "formality": "Bạn bè cùng lứa",
+        "note": null
+      },
+      "Hase": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "Bạn bè cùng vai vế.",
+        "note": null
+      },
+      "Sora": {
+        "self_term": "anh",
+        "other_term": "em",
+        "formality": "Thân thiết, đàn anh với đàn em.",
+        "note": null
+      },
+      "Hakuraku": {
+        "self_term": "em",
+        "other_term": "thầy",
+        "formality": "Học trò nói với thầy giáo, giọng cộc.",
+        "note": null
+      },
+      "Kizuki Shun": {
+        "self_term": "tôi",
+        "other_term": "anh",
+        "formality": "Lịch sự giữa người lớn.",
+        "note": null
+      }
+    },
+    "notes": []
+  },
+  "Sora": {
+    "name": "Sora",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Hinata": {
+        "self_term": "tớ",
+        "other_term": "cậu",
+        "formality": "Bạn bè thân thiết, ngang hàng.",
+        "note": null
+      },
+      "Tokiwa": {
+        "self_term": "em",
+        "other_term": "anh",
+        "formality": "Kính trọng đàn anh, gọi bằng chức danh khi nguồn dùng chức danh.",
+        "note": null
+      },
+      "Hase": {
+        "self_term": "em",
+        "other_term": "chị",
+        "formality": "Lễ phép, đàn em với đàn chị.",
+        "note": null
+      },
+      "Shinohara": {
+        "self_term": "em",
+        "other_term": "anh",
+        "formality": "Lễ phép, đàn em nói với đàn anh.",
+        "note": null
+      },
+      "Shinohara Yosuke": {
+        "self_term": "em",
+        "other_term": "anh",
+        "formality": "Lễ phép, đàn em nói với đàn anh.",
+        "note": null
+      },
+      "Hakuraku": {
+        "self_term": "em",
+        "other_term": "thầy",
+        "formality": "Lễ phép, học trò nói với thầy giáo.",
+        "note": null
+      }
+    },
+    "notes": []
+  },
+  "Shinohara": {
+    "name": "Shinohara",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Hinata": {
+        "self_term": "anh",
+        "other_term": "em",
+        "formality": "Đàn anh nói với đàn em, thân tình.",
+        "note": null
+      },
+      "Sora": {
+        "self_term": "anh",
+        "other_term": "em",
+        "formality": "Thân tình, đàn anh nói với đàn em.",
+        "note": null
+      },
+      "Hiyoshi": {
+        "self_term": "anh",
+        "other_term": "em",
+        "formality": "Thân tình, đàn anh nói với đàn em.",
+        "note": null
+      }
+    },
+    "notes": []
+  },
+  "Hiyoshi": {
+    "name": "Hiyoshi",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Shinohara": {
+        "self_term": "em",
+        "other_term": "anh",
+        "formality": "Lễ phép, đàn em nói với đàn anh.",
+        "note": null
+      },
+      "Shinohara Yosuke": {
+        "self_term": "em",
+        "other_term": "anh",
+        "formality": "Lễ phép, đàn em nói với đàn anh.",
+        "note": null
+      },
+      "Hakuraku": {
+        "self_term": "em",
+        "other_term": "thầy",
+        "formality": "Lễ phép, học sinh nói với thầy giáo.",
+        "note": null
+      }
+    },
+    "notes": []
+  },
+  "Hakuraku": {
+    "name": "Hakuraku",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Hinata": {
+        "self_term": "thầy",
+        "other_term": "em",
+        "formality": "Thân tình, thầy giáo nói với học sinh.",
+        "note": null
+      },
+      "Shinohara Yosuke": {
+        "self_term": "thầy",
+        "other_term": "em",
+        "formality": "Thân tình, thầy giáo nói với học trò.",
+        "note": null
+      },
+      "Sora": {
+        "self_term": "thầy",
+        "other_term": "em",
+        "formality": "Thân tình, thầy giáo nói với học trò.",
+        "note": null
+      },
+      "Tokiwa": {
+        "self_term": "thầy",
+        "other_term": "em",
+        "formality": "Thân tình, thầy giáo nói với học trò.",
+        "note": null
+      },
+      "Hiroki": {
+        "self_term": "thầy",
+        "other_term": "em",
+        "formality": "Thầy nói với học trò, thân mật.",
+        "note": null
+      },
+      "Kizuki Shun": {
+        "self_term": "tôi",
+        "other_term": "anh",
+        "formality": "Người lớn nói với nhau, lạnh lùng và gay gắt.",
+        "note": null
+      },
+      "Hase": {
+        "self_term": "thầy",
+        "other_term": "em",
+        "formality": "Thân tình, thầy giáo nói với học sinh.",
+        "note": null
+      }
+    },
+    "notes": []
+  },
+  "Hiroki": {
+    "name": "Hiroki",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Hakuraku": {
+        "self_term": "em",
+        "other_term": "thầy",
+        "formality": "Học trò nói với thầy, kính trọng nhưng phẫn nộ.",
+        "note": null
+      },
+      "Hinata": {
+        "self_term": "anh",
+        "other_term": "em",
+        "formality": "Người lớn hơn nói với trẻ nhỏ, lo lắng.",
+        "note": null
+      }
+    },
+    "notes": []
+  },
+  "Kizuki Shun": {
+    "name": "Kizuki Shun",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Hinata": {
+        "self_term": "anh",
+        "other_term": "em",
+        "formality": "Thân thiện, phóng viên nói với học sinh.",
+        "note": null
+      },
+      "Hakuraku": {
+        "self_term": "tôi",
+        "other_term": "thầy",
+        "formality": "Gọi theo chức danh, giọng bỡn cợt.",
+        "note": null
+      },
+      "Hase": {
+        "self_term": "tôi",
+        "other_term": "bạn",
+        "formality": "Lịch sự, phóng viên nói với khách.",
+        "note": null
+      },
+      "Tokiwa": {
+        "self_term": "tôi",
+        "other_term": "bạn",
+        "formality": "Lịch sự, phóng viên nói với khách.",
+        "note": null
+      },
+      "Shinohara Yosuke": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "Người lớn tuổi hơn nói với người trẻ hơn, giọng bỡn cợt.",
+        "note": null
+      }
+    },
+    "notes": []
+  }
+}

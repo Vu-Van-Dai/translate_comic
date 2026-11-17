@@ -1,0 +1,113 @@
+{
+  "Mikura": {
+    "name": "Mikura",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Futagami": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "polite",
+        "note": "Mikura is the older working adult; calls him 'anh bảo vệ' before learning his name"
+      },
+      "Misa": {
+        "self_term": "tôi",
+        "other_term": "cô",
+        "formality": "polite",
+        "note": null
+      },
+      "Sato": {
+        "self_term": "tôi",
+        "other_term": "cô",
+        "formality": "polite",
+        "note": null
+      }
+    },
+    "notes": [
+      "Mikura Makoto: brown-haired office worker, narrator ('tôi' in narration, 'mình' in thoughts). People-pleaser with social anxiety, takes on others' work; secretly loves shoujo manga (favourite: 蜂恋 'Hachikoi'); lurks online as a fan.",
+      "Around 30. Was mocked in middle school for liking shoujo manga and has hidden it since; avoids both romance and friendships out of fear of judgement.",
+      "Ch.5: now dating Toki; has learned to say what he feels."
+    ]
+  },
+  "Futagami": {
+    "name": "Futagami",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Mikura": {
+        "self_term": "tôi",
+        "other_term": "anh",
+        "formality": "polite",
+        "note": "calls him by first name 'Makoto' to tease"
+      },
+      "Sato": {
+        "self_term": "tôi",
+        "other_term": "chị",
+        "formality": "polite",
+        "note": null
+      }
+    },
+    "notes": [
+      "Futagami Toki: blond security guard at Mikura's office building, university student. Looks cool and intimidating but collects cute mascot plush (a rabbit keychain 'second only to my life'). Asks Mikura to be 'that kind of relationship' (fellow fans).",
+      "Lives alone. Works as a part-time security guard because the hourly pay funds his mascot hobby. Doesn't care what others think; says he's interested in whatever Mikura likes.",
+      "Ch.5: confesses back and asks Mikura out; they start dating. Series ends here (完结)."
+    ]
+  },
+  "Takada": {
+    "name": "Takada",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {},
+    "notes": [
+      "Mikura's coworker who dumps his work on him."
+    ]
+  },
+  "Misa": {
+    "name": "Misa",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Futagami": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "casual",
+        "note": null
+      }
+    },
+    "notes": [
+      "Toki's ex-girlfriend from his university club; one-off so far."
+    ]
+  },
+  "Sato": {
+    "name": "Sato",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Mikura": {
+        "self_term": "tôi",
+        "other_term": "anh",
+        "formality": "polite",
+        "note": "subordinate to boss"
+      },
+      "Futagami": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "casual",
+        "note": null
+      }
+    },
+    "notes": [
+      "Ch.4: Mikura's subordinate at work, BL fan, marrying Takada; encourages Mikura to talk to Toki."
+    ]
+  }
+}

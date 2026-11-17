@@ -38,6 +38,8 @@ include = ["comic*"]
 
 [tool.setuptools.package-data]
 "comic.downloader" = ["sites/*.yaml"]
+"comic.studio" = ["static/*"]
+"comic.agents" = ["prompts/*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

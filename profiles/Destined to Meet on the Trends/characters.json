@@ -1,0 +1,1170 @@
+{
+  "Người quản lý": {
+    "name": "Người quản lý",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Lục Tinh Văn": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "Thân quen, trao đổi công việc.",
+        "note": null
+      },
+      "Phí Khả": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "Trao đổi công việc, người lớn tuổi hơn dặn dò.",
+        "note": null
+      },
+      "Miêu Hân": {
+        "self_term": "tôi",
+        "other_term": "cô",
+        "formality": "Thân quen, trao đổi công việc.",
+        "note": null
+      },
+      "Lương Hoa": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "Thân quen giữa đồng nghiệp.",
+        "note": null
+      },
+      "Khổng Duy Tư": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "Thân quen trong công việc, khuyên nhủ nghệ sĩ.",
+        "note": null
+      }
+    },
+    "notes": []
+  },
+  "Lục Tinh Văn": {
+    "name": "Lục Tinh Văn",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Người quản lý": {
+        "self_term": "tôi",
+        "other_term": "anh",
+        "formality": "Thân quen, tôn trọng.",
+        "note": null
+      },
+      "Phí Khả": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "Điềm đạm, giữ khoảng cách",
+        "note": null
+      },
+      "Lương Hoa": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "Thân quen, trao đổi với trợ lý.",
+        "note": null
+      },
+      "Viên Bình Thần": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "Thân quen giữa bạn học cũ.",
+        "note": null
+      },
+      "Dư Vân": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "Lạnh nhạt, giữ khoảng cách khi tranh cãi.",
+        "note": null
+      },
+      "Mẹ Lục Tinh Văn": {
+        "self_term": "con",
+        "other_term": "mẹ",
+        "formality": "Thân mật giữa mẹ con.",
+        "note": null
+      },
+      "Ông Cao": {
+        "self_term": "tôi",
+        "other_term": "ông",
+        "formality": "Lịch sự, giữ khoảng cách.",
+        "note": null
+      },
+      "Hoàng Việt Thanh": {
+        "self_term": "con",
+        "other_term": "bố",
+        "formality": "Lễ phép, thân mật với bố của người sắp kết hôn.",
+        "note": null
+      },
+      "Mẹ Phí Khả": {
+        "self_term": "con",
+        "other_term": "mẹ",
+        "formality": "Lễ phép, thân mật với mẹ của người sắp kết hôn.",
+        "note": null
+      },
+      "Hoàng Hi Nam": {
+        "self_term": "anh",
+        "other_term": "em",
+        "formality": "Thân thiện với em gái của Phí Khả.",
+        "note": null
+      },
+      "Hoàng Hi Đông": {
+        "self_term": "anh",
+        "other_term": "em",
+        "formality": "Thân thiện với em trai của Phí Khả.",
+        "note": null
+      },
+      "Lâm Quyên Mẫn": {
+        "self_term": "tôi",
+        "other_term": "đạo diễn",
+        "formality": "Lịch sự, tôn trọng trong công việc.",
+        "note": null
+      },
+      "Anh cả": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "Thân thiện với bạn thân của Phí Khả.",
+        "note": null
+      },
+      "Anh ba": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "Thân thiện với bạn thân của Phí Khả.",
+        "note": null
+      },
+      "Chung Giang": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "Thân thiện với bạn thân của Phí Khả.",
+        "note": null
+      },
+      "Tiểu Đường": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "Lạnh nhạt, giữ khoảng cách.",
+        "note": null
+      },
+      "Feng Jie": {
+        "self_term": "tôi",
+        "other_term": "anh",
+        "formality": "Thân quen, trao đổi công việc.",
+        "note": null
+      },
+      "đạo diễn Kỳ": {
+        "self_term": "tôi",
+        "other_term": "đạo diễn",
+        "formality": "Lịch sự trong công việc.",
+        "note": null
+      },
+      "Bao Tiểu Thụy": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "Lịch sự, điềm đạm.",
+        "note": null
+      },
+      "Khổng Duy Tư": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "Tiền bối nghiêm khắc chỉ bảo hậu bối trong công việc.",
+        "note": null
+      },
+      "Trương Nguyệt Hoa": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "Lạnh nhạt, cứng rắn cảnh cáo.",
+        "note": null
+      },
+      "Lâm Viễn Sâm": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "Thân quen giữa bạn bè, trao đổi công việc.",
+        "note": null
+      },
+      "Chu Dịch": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "Điềm đạm, thân thiện giữa đồng nghiệp.",
+        "note": null
+      }
+    },
+    "notes": []
+  },
+  "Phí Khả": {
+    "name": "Phí Khả",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Lục Tinh Văn": {
+        "self_term": "em",
+        "other_term": "anh",
+        "formality": "Lễ phép với tiền bối",
+        "note": null
+      },
+      "Anh cả": {
+        "self_term": "em",
+        "other_term": "anh",
+        "formality": "Thân thiết, anh em cùng phòng.",
+        "note": null
+      },
+      "Anh ba": {
+        "self_term": "em",
+        "other_term": "anh",
+        "formality": "Thân thiết, anh em cùng phòng.",
+        "note": null
+      },
+      "Mẹ Phí Khả": {
+        "self_term": "con",
+        "other_term": "mẹ",
+        "formality": "Thân mật, lễ phép.",
+        "note": null
+      },
+      "Người quản lý": {
+        "self_term": "em",
+        "other_term": "anh",
+        "formality": "Lễ phép với người lớn tuổi hơn.",
+        "note": null
+      },
+      "Bao Tiểu Thụy": {
+        "self_term": "tôi",
+        "other_term": "anh",
+        "formality": "Lịch sự, trao đổi công việc.",
+        "note": null
+      },
+      "Chung Giang": {
+        "self_term": "em",
+        "other_term": "anh",
+        "formality": "Thân thiết, anh em cùng phòng.",
+        "note": null
+      },
+      "Ngụy Hành Triết": {
+        "self_term": "em",
+        "other_term": "anh",
+        "formality": "Lễ phép với bạn cùng phòng lớn tuổi hơn.",
+        "note": null
+      },
+      "Miêu Hân": {
+        "self_term": "em",
+        "other_term": "chị",
+        "formality": "Lễ phép, thân thiện trong công việc.",
+        "note": null
+      },
+      "Ngụy Hạ": {
+        "self_term": "em",
+        "other_term": "anh",
+        "formality": "Lịch sự với đồng nghiệp lớn tuổi hơn.",
+        "note": null
+      },
+      "Chu Dịch": {
+        "self_term": "em",
+        "other_term": "anh",
+        "formality": "Lễ phép với MC lớn tuổi hơn.",
+        "note": null
+      },
+      "Trương Thụy Thanh": {
+        "self_term": "em",
+        "other_term": "anh",
+        "formality": "Thân thiện, lễ phép với người lớn tuổi hơn.",
+        "note": null
+      },
+      "Giang Thần Hi": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "Thân thiện, đồng nghiệp cùng tham gia chương trình.",
+        "note": null
+      },
+      "Lương Hoa": {
+        "self_term": "em",
+        "other_term": "anh",
+        "formality": "Lễ phép với người lớn tuổi hơn.",
+        "note": null
+      },
+      "Viên Bình Thần": {
+        "self_term": "em",
+        "other_term": "thầy",
+        "formality": "Lễ phép với thầy dạy diễn xuất.",
+        "note": null
+      },
+      "Hoàng Hi Nam": {
+        "self_term": "anh",
+        "other_term": "em",
+        "formality": "Thân mật giữa anh em.",
+        "note": null
+      },
+      "Hoàng Việt Thanh": {
+        "self_term": "con",
+        "other_term": "bố",
+        "formality": "Thân mật, lễ phép.",
+        "note": null
+      },
+      "Mẹ Lục Tinh Văn": {
+        "self_term": "con",
+        "other_term": "mẹ",
+        "formality": "Lễ phép, ban đầu xưng cháu trước khi được bảo gọi mẹ.",
+        "note": null
+      },
+      "Ông Cao": {
+        "self_term": "cháu",
+        "other_term": "chú",
+        "formality": "Lễ phép với người lớn tuổi.",
+        "note": null
+      },
+      "Lâm Quyên Mẫn": {
+        "self_term": "em",
+        "other_term": "đạo diễn",
+        "formality": "Lễ phép với đạo diễn.",
+        "note": null
+      },
+      "Chị Tinh": {
+        "self_term": "em",
+        "other_term": "chị",
+        "formality": "Lễ phép, thân quen.",
+        "note": null
+      },
+      "Lý Hân": {
+        "self_term": "em",
+        "other_term": "chị",
+        "formality": "Lễ phép với người lớn tuổi hơn.",
+        "note": null
+      },
+      "Dư Vân": {
+        "self_term": "tôi",
+        "other_term": "anh",
+        "formality": "Lịch sự với đồng nghiệp lớn tuổi hơn.",
+        "note": null
+      },
+      "Feng Jie": {
+        "self_term": "em",
+        "other_term": "anh",
+        "formality": "Lễ phép, thân quen trong công việc.",
+        "note": null
+      },
+      "Trần Tư Vũ": {
+        "self_term": "em",
+        "other_term": "anh",
+        "formality": "Lịch sự với đồng nghiệp lớn tuổi hơn.",
+        "note": null
+      },
+      "Khổng Duy Tư": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "Lịch sự giữa đồng nghiệp.",
+        "note": null
+      },
+      "đạo diễn Kỳ": {
+        "self_term": "em",
+        "other_term": "đạo diễn",
+        "formality": "Lễ phép trong công việc.",
+        "note": null
+      },
+      "Mo Yao": {
+        "self_term": "em",
+        "other_term": "chị",
+        "formality": "Lễ phép với đồng nghiệp lớn tuổi hơn.",
+        "note": null
+      },
+      "Hoàng Hi Đông": {
+        "self_term": "anh",
+        "other_term": "em",
+        "formality": "Thân mật giữa anh em.",
+        "note": null
+      }
+    },
+    "notes": []
+  },
+  "Anh cả": {
+    "name": "Anh cả",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Phí Khả": {
+        "self_term": "anh",
+        "other_term": "em",
+        "formality": "Thân thiết, anh em cùng phòng.",
+        "note": null
+      }
+    },
+    "notes": []
+  },
+  "Anh ba": {
+    "name": "Anh ba",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Phí Khả": {
+        "self_term": "anh",
+        "other_term": "em",
+        "formality": "Thân thiết, anh em cùng phòng.",
+        "note": null
+      },
+      "Lục Tinh Văn": {
+        "self_term": "em",
+        "other_term": "anh",
+        "formality": "Thân thiện, lễ phép với người lớn tuổi hơn.",
+        "note": null
+      }
+    },
+    "notes": []
+  },
+  "Mẹ Phí Khả": {
+    "name": "Mẹ Phí Khả",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Phí Khả": {
+        "self_term": "mẹ",
+        "other_term": "con",
+        "formality": "Thân mật giữa mẹ con.",
+        "note": null
+      },
+      "Hoàng Hi Đông": {
+        "self_term": "mẹ",
+        "other_term": "con",
+        "formality": "Thân mật giữa mẹ con.",
+        "note": null
+      },
+      "Hoàng Hi Nam": {
+        "self_term": "mẹ",
+        "other_term": "con",
+        "formality": "Thân mật giữa mẹ con.",
+        "note": null
+      },
+      "Lục Tinh Văn": {
+        "self_term": "mẹ",
+        "other_term": "con",
+        "formality": "Thân mật, người lớn nói với con rể.",
+        "note": null
+      }
+    },
+    "notes": []
+  },
+  "Miêu Hân": {
+    "name": "Miêu Hân",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Phí Khả": {
+        "self_term": "chị",
+        "other_term": "em",
+        "formality": "Thân thiện trong công việc.",
+        "note": null
+      },
+      "Người quản lý": {
+        "self_term": "tôi",
+        "other_term": "anh",
+        "formality": "Thân quen, trao đổi công việc.",
+        "note": null
+      }
+    },
+    "notes": []
+  },
+  "Bao Tiểu Thụy": {
+    "name": "Bao Tiểu Thụy",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Phí Khả": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "Lịch sự, trao đổi công việc.",
+        "note": null
+      },
+      "Lục Tinh Văn": {
+        "self_term": "em",
+        "other_term": "anh",
+        "formality": "Lễ phép với tiền bối.",
+        "note": null
+      },
+      "Lương Hoa": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "Thân thiện, trao đổi công việc giữa các trợ lý.",
+        "note": null
+      }
+    },
+    "notes": []
+  },
+  "Chung Giang": {
+    "name": "Chung Giang",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Phí Khả": {
+        "self_term": "anh",
+        "other_term": "em",
+        "formality": "Thân thiết, anh em cùng phòng.",
+        "note": null
+      },
+      "Ngụy Hành Triết": {
+        "self_term": "tao",
+        "other_term": "mày",
+        "formality": "Thô lỗ, đối đầu khi cãi nhau.",
+        "note": null
+      },
+      "Lục Tinh Văn": {
+        "self_term": "em",
+        "other_term": "anh",
+        "formality": "Thân thiện, lễ phép với người lớn tuổi hơn.",
+        "note": null
+      }
+    },
+    "notes": []
+  },
+  "Ngụy Hành Triết": {
+    "name": "Ngụy Hành Triết",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Phí Khả": {
+        "self_term": "anh",
+        "other_term": "em",
+        "formality": "Bạn cùng phòng, giọng mỉa mai, trịch thượng.",
+        "note": null
+      },
+      "Chung Giang": {
+        "self_term": "tao",
+        "other_term": "mày",
+        "formality": "Suồng sã, đối đầu.",
+        "note": null
+      },
+      "Khổng Duy Tư": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "Thân quen, trò chuyện qua tin nhắn.",
+        "note": null
+      }
+    },
+    "notes": []
+  },
+  "Ngụy Hạ": {
+    "name": "Ngụy Hạ",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Phí Khả": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "Thân thiện, đồng nghiệp.",
+        "note": null
+      },
+      "Chu Dịch": {
+        "self_term": "tôi",
+        "other_term": "anh",
+        "formality": "Lịch sự với MC.",
+        "note": null
+      },
+      "Trương Thụy Thanh": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "Thân thiện giữa đồng nghiệp.",
+        "note": null
+      },
+      "Giang Thần Hi": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "Thân thiện, đồng nghiệp.",
+        "note": null
+      }
+    },
+    "notes": []
+  },
+  "Chu Dịch": {
+    "name": "Chu Dịch",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Phí Khả": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "MC thân thiện với khách mời nhỏ tuổi hơn.",
+        "note": null
+      },
+      "Ngụy Hạ": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "MC thân thiện với khách mời.",
+        "note": null
+      },
+      "Lục Tinh Văn": {
+        "self_term": "tôi",
+        "other_term": "anh",
+        "formality": "Thân thiện giữa đồng nghiệp cùng tham gia chương trình.",
+        "note": null
+      }
+    },
+    "notes": []
+  },
+  "Trương Thụy Thanh": {
+    "name": "Trương Thụy Thanh",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Phí Khả": {
+        "self_term": "anh",
+        "other_term": "em",
+        "formality": "Thân thiện, người lớn tuổi hơn.",
+        "note": null
+      },
+      "Ngụy Hạ": {
+        "self_term": "tôi",
+        "other_term": "anh",
+        "formality": "Lịch sự giữa đồng nghiệp.",
+        "note": null
+      }
+    },
+    "notes": []
+  },
+  "Giang Thần Hi": {
+    "name": "Giang Thần Hi",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Phí Khả": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "Thân thiện, đồng nghiệp cùng tham gia chương trình.",
+        "note": null
+      },
+      "Lục Tinh Văn": {
+        "self_term": "em",
+        "other_term": "anh",
+        "formality": "Lễ phép với tiền bối.",
+        "note": null
+      }
+    },
+    "notes": []
+  },
+  "Lương Hoa": {
+    "name": "Lương Hoa",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Lục Tinh Văn": {
+        "self_term": "em",
+        "other_term": "anh",
+        "formality": "Trợ lý lễ phép với người lớn tuổi hơn.",
+        "note": null
+      },
+      "Phí Khả": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "Thân thiện, trao đổi công việc.",
+        "note": null
+      },
+      "Người quản lý": {
+        "self_term": "tôi",
+        "other_term": "anh",
+        "formality": "Thân quen giữa đồng nghiệp.",
+        "note": null
+      },
+      "Feng Jie": {
+        "self_term": "tôi",
+        "other_term": "anh",
+        "formality": "Lịch sự, thân quen trong công việc.",
+        "note": null
+      },
+      "Bao Tiểu Thụy": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "Thân thiện, trao đổi công việc giữa các trợ lý.",
+        "note": null
+      }
+    },
+    "notes": []
+  },
+  "Viên Bình Thần": {
+    "name": "Viên Bình Thần",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Phí Khả": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "Thân thiện, tiền bối nói với hậu bối.",
+        "note": null
+      },
+      "Lục Tinh Văn": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "Thân quen giữa bạn học cũ.",
+        "note": null
+      }
+    },
+    "notes": []
+  },
+  "Dư Vân": {
+    "name": "Dư Vân",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Lục Tinh Văn": {
+        "self_term": "em",
+        "other_term": "anh",
+        "formality": "Thân mật giữa người yêu, giọng oán trách.",
+        "note": null
+      },
+      "Lý Tuấn Minh": {
+        "self_term": "tôi",
+        "other_term": "anh",
+        "formality": "Thân quen trong công việc, giọng kích động.",
+        "note": null
+      },
+      "Phí Khả": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "Lịch sự, giữ khoảng cách giữa đồng nghiệp.",
+        "note": null
+      }
+    },
+    "notes": []
+  },
+  "Lý Tuấn Minh": {
+    "name": "Lý Tuấn Minh",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Dư Vân": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "Người quản lý nói với nghệ sĩ, thân quen.",
+        "note": null
+      }
+    },
+    "notes": []
+  },
+  "Hoàng Hi Nam": {
+    "name": "Hoàng Hi Nam",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Phí Khả": {
+        "self_term": "em",
+        "other_term": "anh",
+        "formality": "Thân mật giữa em gái và anh trai.",
+        "note": null
+      },
+      "Mẹ Phí Khả": {
+        "self_term": "con",
+        "other_term": "mẹ",
+        "formality": "Thân mật giữa mẹ con.",
+        "note": null
+      },
+      "Lục Tinh Văn": {
+        "self_term": "em",
+        "other_term": "anh",
+        "formality": "Thân mật, lễ phép với anh rể.",
+        "note": null
+      }
+    },
+    "notes": []
+  },
+  "Hoàng Việt Thanh": {
+    "name": "Hoàng Việt Thanh",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Hoàng Hi Đông": {
+        "self_term": "bố",
+        "other_term": "con",
+        "formality": "Thân mật giữa bố con.",
+        "note": null
+      },
+      "Hoàng Hi Nam": {
+        "self_term": "bố",
+        "other_term": "con",
+        "formality": "Thân mật giữa bố con.",
+        "note": null
+      },
+      "Phí Khả": {
+        "self_term": "bố",
+        "other_term": "con",
+        "formality": "Thân mật giữa bố dượng và con.",
+        "note": null
+      },
+      "Lục Tinh Văn": {
+        "self_term": "bố",
+        "other_term": "con",
+        "formality": "Thân mật, coi như người trong gia đình.",
+        "note": null
+      }
+    },
+    "notes": []
+  },
+  "Hoàng Hi Đông": {
+    "name": "Hoàng Hi Đông",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Mẹ Phí Khả": {
+        "self_term": "con",
+        "other_term": "mẹ",
+        "formality": "Thân mật, lễ phép.",
+        "note": null
+      },
+      "Phí Khả": {
+        "self_term": "em",
+        "other_term": "anh",
+        "formality": "Thân mật giữa em trai và anh trai.",
+        "note": null
+      }
+    },
+    "notes": []
+  },
+  "Mẹ Lục Tinh Văn": {
+    "name": "Mẹ Lục Tinh Văn",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Phí Khả": {
+        "self_term": "bác",
+        "other_term": "cháu",
+        "formality": "Thân thiện, người lớn chào người nhỏ tuổi lần đầu gặp.",
+        "note": null
+      },
+      "Lục Tinh Văn": {
+        "self_term": "mẹ",
+        "other_term": "con",
+        "formality": "Thân mật giữa mẹ con.",
+        "note": null
+      }
+    },
+    "notes": []
+  },
+  "Ông Cao": {
+    "name": "Ông Cao",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Lục Tinh Văn": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "Lịch sự, giữ khoảng cách.",
+        "note": null
+      }
+    },
+    "notes": []
+  },
+  "Lâm Quyên Mẫn": {
+    "name": "Lâm Quyên Mẫn",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Lục Tinh Văn": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "Thân thiện giữa đạo diễn và diễn viên.",
+        "note": null
+      },
+      "Phí Khả": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "Tiền bối thân thiện, chỉ bảo hậu bối.",
+        "note": null
+      }
+    },
+    "notes": []
+  },
+  "Chị Tinh": {
+    "name": "Chị Tinh",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Phí Khả": {
+        "self_term": "chị",
+        "other_term": "em",
+        "formality": "Thân thiết, người chị dặn dò em.",
+        "note": null
+      },
+      "Feng Jie": {
+        "self_term": "tôi",
+        "other_term": "anh",
+        "formality": "Thân quen giữa đồng nghiệp.",
+        "note": null
+      }
+    },
+    "notes": []
+  },
+  "Lý Hân": {
+    "name": "Lý Hân",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Phí Khả": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "Thân thiện, lịch sự.",
+        "note": null
+      }
+    },
+    "notes": []
+  },
+  "Feng Jie": {
+    "name": "Feng Jie",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Phí Khả": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "Thân quen, trao đổi công việc.",
+        "note": null
+      },
+      "Lục Tinh Văn": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "Thân quen, trao đổi công việc.",
+        "note": null
+      },
+      "Lương Hoa": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "Trao đổi công việc, giao việc cho trợ lý.",
+        "note": null
+      },
+      "Chị Tinh": {
+        "self_term": "tôi",
+        "other_term": "chị",
+        "formality": "Thân quen giữa đồng nghiệp.",
+        "note": null
+      },
+      "Miêu Hân": {
+        "self_term": "tôi",
+        "other_term": "cô",
+        "formality": "Thân quen, trao đổi công việc.",
+        "note": null
+      }
+    },
+    "notes": []
+  },
+  "Khổng Duy Tư": {
+    "name": "Khổng Duy Tư",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "đạo diễn Kỳ": {
+        "self_term": "em",
+        "other_term": "đạo diễn",
+        "formality": "Lễ phép trong công việc.",
+        "note": null
+      },
+      "Phí Khả": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "Lịch sự giữa đồng nghiệp.",
+        "note": null
+      },
+      "Người quản lý": {
+        "self_term": "tôi",
+        "other_term": "anh",
+        "formality": "Thân quen trong công việc, giọng bực bội.",
+        "note": null
+      },
+      "Ngụy Hành Triết": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "Thân quen, trao đổi qua tin nhắn.",
+        "note": null
+      },
+      "Trương Nguyệt Hoa": {
+        "self_term": "em",
+        "other_term": "anh",
+        "formality": "Thân mật giữa người yêu, giọng ngọt ngào qua tin nhắn.",
+        "note": null
+      },
+      "Lục Tinh Văn": {
+        "self_term": "em",
+        "other_term": "anh",
+        "formality": "Lễ phép với tiền bối, cố nén bất mãn.",
+        "note": null
+      },
+      "Giang Hoàng": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "Nghệ sĩ sai bảo trợ lý, giọng nóng nảy.",
+        "note": null
+      }
+    },
+    "notes": []
+  },
+  "đạo diễn Kỳ": {
+    "name": "đạo diễn Kỳ",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Phí Khả": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "Đạo diễn thân thiện, trấn an diễn viên.",
+        "note": null
+      },
+      "Khổng Duy Tư": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "Đạo diễn nói với diễn viên, nghiêm khắc trong công việc.",
+        "note": null
+      },
+      "Lục Tinh Văn": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "Thân quen, trao đổi công việc.",
+        "note": null
+      }
+    },
+    "notes": []
+  },
+  "Tiểu Đường": {
+    "name": "Tiểu Đường",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Lục Tinh Văn": {
+        "self_term": "em",
+        "other_term": "anh",
+        "formality": "Lễ phép trong công việc.",
+        "note": null
+      }
+    },
+    "notes": []
+  },
+  "Trương Nguyệt Hoa": {
+    "name": "Trương Nguyệt Hoa",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Khổng Duy Tư": {
+        "self_term": "anh",
+        "other_term": "em",
+        "formality": "Thân mật giữa người yêu.",
+        "note": null
+      },
+      "Lục Tinh Văn": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "Ngang hàng, xã giao nhưng đầy khiêu khích.",
+        "note": null
+      }
+    },
+    "notes": []
+  },
+  "Lâm Viễn Sâm": {
+    "name": "Lâm Viễn Sâm",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Lục Tinh Văn": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "Thân quen giữa bạn bè, trao đổi công việc.",
+        "note": null
+      }
+    },
+    "notes": []
+  },
+  "Mo Yao": {
+    "name": "Mo Yao",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Phí Khả": {
+        "self_term": "chị",
+        "other_term": "em",
+        "formality": "Thân thiện, niềm nở với đồng nghiệp nhỏ tuổi hơn.",
+        "note": null
+      },
+      "Ren Zhiqi": {
+        "self_term": "em",
+        "other_term": "anh",
+        "formality": "Thân mật giữa người yêu.",
+        "note": null
+      }
+    },
+    "notes": []
+  },
+  "Ren Zhiqi": {
+    "name": "Ren Zhiqi",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Phí Khả": {
+        "self_term": "anh",
+        "other_term": "em",
+        "formality": "Thân thiện với đồng nghiệp nhỏ tuổi hơn.",
+        "note": null
+      },
+      "Mo Yao": {
+        "self_term": "anh",
+        "other_term": "em",
+        "formality": "Thân mật giữa người yêu.",
+        "note": null
+      },
+      "Lục Tinh Văn": {
+        "self_term": "tôi",
+        "other_term": "anh",
+        "formality": "Thân thiện giữa đồng nghiệp cùng tham gia chương trình.",
+        "note": null
+      }
+    },
+    "notes": []
+  }
+}

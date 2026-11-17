@@ -1,0 +1,346 @@
+{
+  "Chris": {
+    "name": "Chris",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Allen": {
+        "self_term": "thần",
+        "other_term": "Bệ hạ",
+        "formality": "formal",
+        "note": null
+      },
+      "Marquis Comerford": {
+        "self_term": "con",
+        "other_term": "cha",
+        "formality": "formal",
+        "note": null
+      },
+      "Nathaniel": {
+        "self_term": "tôi",
+        "other_term": "ngài",
+        "formality": "formal",
+        "note": null
+      },
+      "Colin": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "casual",
+        "note": null
+      },
+      "Ted": {
+        "self_term": "anh",
+        "other_term": "em",
+        "formality": "casual",
+        "note": null
+      },
+      "Chris's papa": {
+        "self_term": "con",
+        "other_term": "ba",
+        "formality": "formal",
+        "note": null
+      },
+      "Noah": {
+        "self_term": "tôi",
+        "other_term": "Điện hạ",
+        "formality": "formal",
+        "note": null
+      },
+      "Julian": {
+        "self_term": "tôi",
+        "other_term": "ngài",
+        "formality": "formal",
+        "note": null
+      }
+    },
+    "notes": [
+      "Chris Comerford, 20, omega, son of Marquis Comerford; past-life memories of Kaoru Kusakabe, 28, pharmacist. Married to King Allen as consort; fakes being a 'defective omega' with self-made inhibitors to avoid the novel's death route.",
+      "Ch.19: confesses he faked being a defective omega with inhibitors, tells Allen he loves him and wants his child."
+    ]
+  },
+  "Allen": {
+    "name": "Allen",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Chris": {
+        "self_term": "ta",
+        "other_term": "ngươi",
+        "formality": "cold",
+        "note": null
+      },
+      "Marquis Comerford": {
+        "self_term": "ta",
+        "other_term": "khanh",
+        "formality": "formal",
+        "note": null
+      },
+      "Julian": {
+        "self_term": "ta",
+        "other_term": "ngài",
+        "formality": "formal",
+        "note": null
+      },
+      "Marquis Mulligan": {
+        "self_term": "ta",
+        "other_term": "khanh",
+        "formality": "formal",
+        "note": null
+      },
+      "Noah": {
+        "self_term": "ta",
+        "other_term": "ngài",
+        "formality": "formal",
+        "note": null
+      },
+      "Calvin": {
+        "self_term": "ta",
+        "other_term": "ngươi",
+        "formality": "cold",
+        "note": null
+      },
+      "Nathaniel": {
+        "self_term": "ta",
+        "other_term": "ngươi",
+        "formality": "formal",
+        "note": null
+      }
+    },
+    "notes": [
+      "Allen Zilfonia, 22, alpha, King of Zilfonia. Cold to Chris; first husband Nathaniel.",
+      "Since ch.2 openly affectionate toward Chris; had a nightmare calling for his omega parent ('Dad, don't leave me') -- possibly abandoned as a child.",
+      "Ch.14: gave Chris a wedding band; refuses to take Noah or any other consort -- minister Calvin seems in league with Prince Julian to make Zilfonia Orvent's vassal.",
+      "Ch.15: Calvin reveals Allen is not the late king's son -- the real heir was stillborn and a newborn of the Mulligan house (Nate Mulligan) was swapped in on the late king's order. Allen flees to an old Comerford manor.",
+      "Ch.16: as a child his omega father rejected him as 'not my son, an impostor', was thought mad, and took his own life; Allen decides to retake the throne to protect the people.",
+      "Ch.19: wins the war, publicly reveals he is Nate Mulligan without royal blood, and the people acclaim him king again; makes Chris his official husband."
+    ]
+  },
+  "Marquis Comerford": {
+    "name": "Marquis Comerford",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Chris": {
+        "self_term": "cha",
+        "other_term": "con",
+        "formality": "formal",
+        "note": null
+      },
+      "Allen": {
+        "self_term": "thần",
+        "other_term": "Bệ hạ",
+        "formality": "formal",
+        "note": null
+      },
+      "Ted": {
+        "self_term": "cha",
+        "other_term": "con",
+        "formality": "formal",
+        "note": null
+      }
+    },
+    "notes": []
+  },
+  "Nathaniel": {
+    "name": "Nathaniel",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Chris": {
+        "self_term": "tôi",
+        "other_term": "Điện hạ",
+        "formality": "formal",
+        "note": null
+      },
+      "Noah": {
+        "self_term": "tôi",
+        "other_term": "Điện hạ",
+        "formality": "formal",
+        "note": null
+      },
+      "Allen": {
+        "self_term": "thần",
+        "other_term": "Bệ hạ",
+        "formality": "formal",
+        "note": null
+      }
+    },
+    "notes": [
+      "Allen's official spouse (chính phu), strikingly beautiful, long hair; lives in the Red Rose Palace; outwardly gracious, privately resentful of Chris.",
+      "Ch.17: his family (Marquis Abernathy) sides with Calvin; he stays with Allen's side, expects to be demoted and Chris made official husband; married Allen only for politics and is relieved."
+    ]
+  },
+  "Colin": {
+    "name": "Colin",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Chris": {
+        "self_term": "tôi",
+        "other_term": "Điện hạ",
+        "formality": "formal",
+        "note": null
+      }
+    },
+    "notes": [
+      "Colin Mulligan, eldest son of Marquis Mulligan (one of the three great marquis houses), Allen's classmate, recently found to be an omega; the only noble who treated the old Chris as an equal. Engaged to a son-in-law partner in ch.6."
+    ]
+  },
+  "Ted": {
+    "name": "Ted",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Chris": {
+        "self_term": "em",
+        "other_term": "anh hai",
+        "formality": "casual",
+        "note": null
+      },
+      "Allen": {
+        "self_term": "tôi",
+        "other_term": "ngài",
+        "formality": "formal",
+        "note": "stiff, borderline rude"
+      }
+    },
+    "notes": [
+      "Ted Comerford, Chris's younger brother (two years younger), just graduated from the Noble's Academy; calls Chris 'anh hai'; cool toward Allen because he only knew Allen's coldness to the old Chris."
+    ]
+  },
+  "Chris's papa": {
+    "name": "Chris's papa",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Chris": {
+        "self_term": "ba",
+        "other_term": "con",
+        "formality": "casual",
+        "note": null
+      }
+    },
+    "notes": [
+      "Chris's omega parent, Marquis Comerford's husband ('Marchioness'); Chris calls him 'ba' (the Marquis is 'cha')."
+    ]
+  },
+  "Noah": {
+    "name": "Noah",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Chris": {
+        "self_term": "tôi",
+        "other_term": "ngài",
+        "formality": "formal",
+        "note": null
+      },
+      "Nathaniel": {
+        "self_term": "tôi",
+        "other_term": "ngài",
+        "formality": "formal",
+        "note": null
+      },
+      "Allen": {
+        "self_term": "tôi",
+        "other_term": "ngài",
+        "formality": "formal",
+        "note": "Bệ hạ when calling him"
+      }
+    },
+    "notes": [
+      "Noah, Second Prince of Orvent, red-haired omega, cheerful and innocent; rumoured candidate to become Allen's second consort.",
+      "Ch.18: turns against his brother Julian's plot, arrives with troops and holds the Orvent army so Allen can reach the capital; believes all nations should be equal."
+    ]
+  },
+  "Julian": {
+    "name": "Julian",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Chris": {
+        "self_term": "tôi",
+        "other_term": "Điện hạ",
+        "formality": "formal",
+        "note": null
+      },
+      "Allen": {
+        "self_term": "tôi",
+        "other_term": "Bệ hạ",
+        "formality": "formal",
+        "note": null
+      },
+      "Calvin": {
+        "self_term": "ta",
+        "other_term": "ông",
+        "formality": "formal",
+        "note": "contemptuous in thought ('lão')"
+      }
+    },
+    "notes": [
+      "Julian, First Prince of Orvent, red hair, glasses, about Allen's age, soon to be crowned; courteous, protective.",
+      "Ch.17: Calvin reports to him in Orvent's capital; privately despises Calvin ('you pig')."
+    ]
+  },
+  "Calvin": {
+    "name": "Calvin",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Allen": {
+        "self_term": "thần",
+        "other_term": "Bệ hạ",
+        "formality": "formal",
+        "note": "mocking politeness"
+      },
+      "Julian": {
+        "self_term": "thần",
+        "other_term": "Điện hạ",
+        "formality": "formal",
+        "note": null
+      }
+    },
+    "notes": [
+      "Calvin, Zilfonia's Minister of Foreign Affairs, former Orvent merchant; proposed Noah as Allen's second consort.",
+      "Ch.15: stages a coup; plans to crown a beta descendant of the former King Jack, with Prince Noah as official husband."
+    ]
+  },
+  "Marquis Mulligan": {
+    "name": "Marquis Mulligan",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Allen": {
+        "self_term": "thần",
+        "other_term": "Bệ hạ",
+        "formality": "formal",
+        "note": null
+      }
+    },
+    "notes": [
+      "Allen's birth father (Allen was born Nate Mulligan and swapped in as the late king's heir); joins Allen's march; Allen asks to call him father once the war is won."
+    ]
+  }
+}

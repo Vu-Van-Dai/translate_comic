@@ -367,3 +367,21 @@ def test_a_note_without_a_box_goes_to_empty_space_not_onto_the_art():
     # Off the art: in the margin, or in the blank slot.
     on_art = page[spot.y1:spot.y2, spot.x1:spot.x2] < 200
     assert not on_art.any()
+
+
+def test_an_sfx_lama_erased_at_cleaning_is_set_but_not_erased_again():
+    """Studio key L (the operator, 2026-11-14): the SFX is still translated and
+    set, but LaMa took it at cleaning, so the PSD build plans no Content-Aware
+    Fill and no LaMa for it -- a plain SFX keeps both."""
+    from comic.photoshop.sfx import SfxCandidate, SfxItem, sfx_layers
+    from comic.schemas import BBox
+
+    image, mask = _sfx_page(background=60, ink=10, outline=250)
+    box = BBox(x1=50, y1=60, x2=250, y2=140)
+    cand = [SfxCandidate(region_id="p001_r01", page=1, bbox=box)]
+    for pre, erased in ((True, False), (False, True)):
+        item = SfxItem(region_id="p001_r01", text="RẦM", bbox=box, pre_erased=pre)
+        layers, erase, erase_local, _notes = sfx_layers(
+            image, mask, 1, cand, {"p001_r01": item}, "Font-Regular")
+        assert layers and layers[0].text
+        assert bool(erase.any() or erase_local.any()) is erased

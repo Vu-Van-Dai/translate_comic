@@ -67,14 +67,32 @@ def suggested_chars(width: int, height: int, source_chars: int = 0) -> int:
     return per_line * lines
 
 
+def wants_translation(region) -> bool:
+    """Whether the translate gate asks for this region (the operator, 2026-11-08).
+
+    Dialogue and every other translatable kind, plus SFX -- the new workflow
+    translates SFX too -- but never a region the transcription check left for
+    the operator (``hold_reason``): those go to ``untranslated.txt``.
+    """
+    from comic.schemas import TextKind
+
+    if not region.source_text.strip() or region.hold_reason:
+        return False
+    return region.translatable or region.kind is TextKind.SFX
+
+
 def open_translate_gate(
     paths: ChapterPaths,
     state: ChapterState,
     only: list[int] | None = None,
     previous_error: str | None = None,
     limits: dict[str, int] | None = None,
+    missing_only: bool = False,
 ) -> tuple[Path, int]:
     """Write everything the agent needs to translate the chapter.
+
+    ``missing_only`` asks only for regions that have no Vietnamese yet -- a
+    re-cut chapter whose unchanged lines were carried across keeps them.
 
     ``limits`` carries `retranslate_shorter` verdicts from `visual_qa`: region
     id -> the character count the line must come under. When it is given, the
@@ -93,6 +111,11 @@ def open_translate_gate(
 
     pages: list[TranslatePageContext] = []
     total = 0
+    have: set[str] = set()
+    if missing_only and paths.translation_file.exists():
+        from comic.state.store import read_json
+
+        have = set(read_json(paths.translation_file, ChapterTranslation).by_region())  # type: ignore[union-attr]
 
     for record in state.pages:
         # An uploader's insert is not the comic. Its lettering reads as real
@@ -106,11 +129,11 @@ def open_translate_gate(
         analysis = analysis_for(paths, record.page)
         if analysis is None:
             continue
-        translatable = [
-            r for r in analysis.regions if r.translatable and r.source_text.strip()
-        ]
+        translatable = [r for r in analysis.regions if wants_translation(r)]
         if limits:
             translatable = [r for r in translatable if r.id in limits]
+        if have:
+            translatable = [r for r in translatable if r.id not in have]
         if not translatable:
             continue
 
@@ -184,8 +207,17 @@ def open_translate_gate(
             "Read the context file first, then translate every region into "
             "Vietnamese. The overlay for each page shows the numbered regions "
             "in reading order; the per-region crops show the text itself. "
-            "Translate what each line is doing, not word for word. Write your "
-            "answer to the response file, then run `comic resume`."
+            "Translate what each line is doing, not word for word. SFX "
+            "(kind sfx) are included: translate every SFX that means something "
+            "and interjections too (HUH? -> HẢ?, AH! -> A!); groans and strain "
+            "sounds are always translated, by what the panel shows (UGH/UHG: "
+            "annoyed HỪ / TRỜI Ạ, pain or effort Ư… / HỰ, disgust Ọẹ; NGHH/NGH: "
+            "HỰ / Ư Ư / ƯM); crying written as a word is translated too (SOB -> "
+            "HỨC HỨC / NỨC NỞ, SNIFF -> SỤT SỊT, WAAH -> OA OA); leave out only bare "
+            "crying noises that read the same in Vietnamese (HIC, HUU, UUU), bare ?/! "
+            "and duplicates in the original script -- "
+            "an SFX left out stays as drawn and is listed in untranslated.txt. "
+            "Write your answer to the response file, then run `comic resume`."
         ),
     )
     request_path = paths.gate_request(Gate.TRANSLATE.value)
@@ -275,6 +307,18 @@ def apply_translation(
     from comic.typesetting.render import voice_uses
 
     voices = voice_uses(SeriesPaths(state.series).fonts_file)
+
+    # A retranslate round answers only the line; a field it leaves out keeps
+    # its earlier value instead of being wiped (a lost voice changes the face
+    # at render, a lost speaker the pronoun record). Naming a field, even as
+    # null, still clears it on purpose.
+    previous_by_region: dict[str, TranslationEntry] = {}
+    if paths.translation_file.exists():
+        from comic.state.store import read_json
+
+        earlier = read_json(paths.translation_file, ChapterTranslation)
+        previous_by_region = dict(earlier.by_region())  # type: ignore[union-attr]
+
     entries: list[TranslationEntry] = []
     for item in response.items:
         if item.region_id in unknown:
@@ -286,15 +330,22 @@ def apply_translation(
         if not item.target_text.strip():
             problems.append(f"{item.region_id}: empty translation")
             continue
+        before = previous_by_region.get(item.region_id)
+
+        def kept(field: str):
+            if before is not None and field not in item.model_fields_set:
+                return getattr(before, field)
+            return getattr(item, field)
+
         entries.append(
             TranslationEntry(
                 region_id=item.region_id,
                 source_text=sources.get(item.region_id, ""),
                 target_text=item.target_text.strip(),
-                speaker=item.speaker,
-                addressee=item.addressee,
-                note=item.note,
-                voice=item.voice,
+                speaker=kept("speaker"),
+                addressee=kept("addressee"),
+                note=kept("note"),
+                voice=kept("voice"),
             )
         )
 
@@ -389,7 +440,9 @@ def missing_translations(
         if analysis is None:
             continue
         for region in analysis.regions:
-            if region.translatable and region.source_text.strip():
+            # SFX may be left as drawn on purpose, so only the other kinds
+            # count as missing.
+            if wants_translation(region) and region.kind.value != "sfx":
                 if region.id not in done:
                     pending.append(region.id)
     return pending

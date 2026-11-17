@@ -1,0 +1,10 @@
+# Written automatically after a generic import of mangago.me.
+# images are page-shaped (0 of 2 tall); set reading_direction: rtl for Japanese manga
+# CHECK source_language by eye -- it cannot be measured from the
+# images, and a wrong value hands the chapter the wrong OCR engine.
+match: "mangago.me"
+name: mangago
+page_kind: paged
+reading_direction: ttb
+source_language: en
+min_image_width: 600

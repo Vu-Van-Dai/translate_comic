@@ -1,0 +1,16 @@
+# Mirror of comix.to. Added 2026-10-26 for My Insatiable Demon, an English
+# scanlation of a Korean webtoon: long strip, English lettering.
+match: comix.ws
+name: comix
+page_kind: longstrip
+reading_direction: ttb
+source_language: en
+container_selector: "#readerarea, .reader-area, main"
+min_image_width: 600
+url_blocklist:
+  - /logo
+  - /avatar
+  - /cover
+chapter_number_regex: 'chapter-(\d+(?:\.\d+)?)'
+series_slug_regex: '/title/([^/]+)'
+settle_ms: 700

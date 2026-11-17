@@ -1,0 +1,6 @@
+# Lettering for "Ju Jue Lian Lian Yi Wei Ai" (Shinai Shinai mo Ai no Uchi,
+# machica): a Japanese omegaverse BL manga, black and white, paged, read
+# from a Chinese scanlation (manwa.me). Manga preset, no voices (one face
+# per kind), like the other manga series. See docs/lettering.md.
+preset: manga
+clean: auto

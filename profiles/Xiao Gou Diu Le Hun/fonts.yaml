@@ -1,0 +1,6 @@
+# Lettering for "Xiao Gou Diu Le Hun" (小苟丢了魂): a Chinese BL manhua, full
+# colour, long strip, read from the original (bilibili, horizontal Chinese
+# lettering in wide balloons), so the manhwa preset, no voices.
+# Names in Han-Viet (Lục Hòe, Cẩu Tiểu Lăng, Tuyết Cầu). See docs/lettering.md.
+preset: manhwa
+clean: auto

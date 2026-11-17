@@ -1,0 +1,62 @@
+{
+  "Kozume": {
+    "name": "Kozume",
+    "aliases": [],
+    "role": null,
+    "personality": "Sunny, sociable, acts on feeling; nervous and flustered around Otori.",
+    "speech_style": "Cheerful, chatty, impulsive; calls Otori 'Otori' or 'Oto-kun'/'Otori-kun'. Friends call him Ryo. Inner monologue uses 'mình'.",
+    "addresses": {
+      "Otori": {
+        "self_term": "tớ",
+        "other_term": "cậu",
+        "formality": "casual",
+        "note": "classmates; thinks of him as 'cậu ấy'"
+      },
+      "Taiga": {
+        "self_term": "tớ",
+        "other_term": "cậu",
+        "formality": "casual",
+        "note": "friends"
+      }
+    },
+    "notes": [
+      "Kozume Ryo. Blond, fluffy hair, white sweater vest. 2nd-year high school, class 2-2. Narrator of ch.1. Poor grades (42 on a quiz)."
+    ]
+  },
+  "Otori": {
+    "name": "Otori",
+    "aliases": [],
+    "role": null,
+    "personality": "Tall and broad, looks intimidating, classmates fear him; actually kind and shy. Does kyudo (archery club). His room is full of plush toys and he is embarrassed by it.",
+    "speech_style": "Terse, few words, blunt; softens when embarrassed.",
+    "addresses": {
+      "Kozume": {
+        "self_term": "tớ",
+        "other_term": "cậu",
+        "formality": "casual",
+        "note": "classmates"
+      }
+    },
+    "notes": [
+      "Dark short hair, dark sweater. Class 2-2, sits near Kozume. Good grades (92). Lives in an apartment building on Kozume's way to school."
+    ]
+  },
+  "Taiga": {
+    "name": "Taiga",
+    "aliases": [],
+    "role": null,
+    "personality": "Kozume's friend from another class",
+    "speech_style": "Friendly, easygoing",
+    "addresses": {
+      "Kozume": {
+        "self_term": "tớ",
+        "other_term": "cậu",
+        "formality": "casual",
+        "note": "friends"
+      }
+    },
+    "notes": [
+      "Light hair, dark sweater vest; always with a dark-haired friend. Calls Kozume 'Ryo'."
+    ]
+  }
+}

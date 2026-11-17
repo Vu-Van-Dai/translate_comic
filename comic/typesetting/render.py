@@ -52,6 +52,10 @@ class Style:
     #: Leading from the face's own accent span (``fit.leading_em``) rather
     #: than the fixed 1.22 em. ``leading: auto`` in fonts.yaml.
     auto_leading: bool = False
+    #: Narrowest horizontal scale a line may be set at to fit a tall balloon
+    #: (``condense: 0.8`` in fonts.yaml). 1 never condenses. The operator,
+    #: 2026-10-31: scale AnimeAce to fit, never switch to another face.
+    condense: float = 1.0
 
 
 #: Falls back to `dialogue` for any kind not named here.
@@ -151,7 +155,7 @@ def load_styles(path: Path) -> dict[TextKind, Style]:
         shared["stroke_colour"] = tuple(raw["stroke"])
     if "auto_contrast" in raw:
         shared["auto_contrast"] = bool(raw["auto_contrast"])
-    for key in ("inset", "size_scale", "pad_em"):
+    for key in ("inset", "size_scale", "pad_em", "condense"):
         if key in raw:
             shared[key] = float(raw[key])
     if "sentence_font" in raw:
@@ -452,6 +456,12 @@ def cased_style(
     return style
 
 
+#: Horizontal scales tried, widest first, down to a style's ``condense``.
+CONDENSE_STEPS = (0.9, 0.8, 0.7)
+#: A narrower scale is kept only when it sets the line this much larger.
+CONDENSE_GAIN = 0.1
+
+
 def layout_region(
     region: TextRegion,
     text: str,
@@ -460,6 +470,7 @@ def layout_region(
     override: RegionOverride | None = None,
     styles: dict[TextKind, Style] | None = None,
     max_size: int = MAX_FONT_PX,
+    grow: bool = True,
 ) -> tuple[Layout, Style]:
     override = override or RegionOverride()
     table = styles or STYLES
@@ -501,6 +512,8 @@ def layout_region(
         # out of a box this tight it starved a shout set on screentone down to
         # a quarter of its size (Super Lovers ch.1 p.4).
         pad_em, inset = None, 0.0
+    hscale = 1.0
+
     def fit(limit: int) -> Layout:
         return fit_text(
             shown, area, path,
@@ -511,10 +524,24 @@ def layout_region(
             inset=inset,
             pad_em=pad_em,
             auto_leading=style.auto_leading,
+            hscale=hscale,
         )
 
     layout = fit(max_size)
-    if (layout.fits and max_size < MAX_FONT_PX and not _is_own_box(area, region)
+    # A tall, narrow balloon is width-bound: condense the line, as an editor
+    # does, but only where it buys real size -- a roomy balloon stays at 100%.
+    best = layout
+    for step in CONDENSE_STEPS:
+        if step < style.condense - 1e-6:
+            break
+        hscale = step
+        trial = fit(max_size)
+        if trial.fits and trial.font_size > best.font_size:
+            best = trial
+    if best.font_size >= layout.font_size * (1 + CONDENSE_GAIN):
+        layout = best
+    hscale = layout.hscale
+    if (grow and layout.fits and max_size < MAX_FONT_PX and not _is_own_box(area, region)
             and layout.width * layout.height < MIN_FILL * int(np.count_nonzero(area))):
         # Size follows the balloon, not only the source: a line that leaves
         # most of a roomy balloon empty reads as "too small for the speech
@@ -563,6 +590,9 @@ def draw_layout(
     """Draw one fitted block onto ``page`` in place."""
     if not layout.lines:
         return
+    if layout.hscale != 1.0:
+        _draw_condensed(page, layout, style, fonts_dir)
+        return
     path = str(font_file(fonts_dir, style.font))
     font = load_font(path, layout.font_size)
     draw = ImageDraw.Draw(page)
@@ -584,6 +614,23 @@ def draw_layout(
         )
 
 
+def _draw_condensed(page: Image.Image, layout: Layout, style: Style, fonts_dir: Path) -> None:
+    """Draw a block at its horizontal scale: set at full width on a
+    transparent strip, squeezed to the layout's width, laid onto the page."""
+    h = layout.hscale
+    pad = layout.font_size
+    wide = replace(layout, x=pad, y=pad, width=int(round(layout.width / h)), hscale=1.0)
+    strip = Image.new("RGBA", (wide.width + 2 * pad, layout.height + 2 * pad), (0, 0, 0, 0))
+    styled = replace(style, colour=tuple(style.colour), stroke_colour=tuple(style.stroke_colour))
+    draw_layout(strip, wide, styled, fonts_dir)
+    squeezed = strip.resize((max(1, int(round(strip.width * h))), strip.height), Image.LANCZOS)
+    at = (int(round(layout.x - pad * h)), layout.y - pad)
+    if page.mode == "RGBA":
+        page.alpha_composite(squeezed, dest=(max(0, at[0]), max(0, at[1])))
+    else:
+        page.paste(squeezed, at, squeezed)
+
+
 #: A text block covering less than this share of its balloon may grow...
 MIN_FILL = 0.3
 #: ...up to this multiple of the source-size ceiling,
@@ -598,6 +645,52 @@ BUBBLE_FLOOR = 0.85
 
 #: Kinds whose boxes read as one series of captions: set at one size a page.
 CAPTION_KINDS = (TextKind.CAPTION, TextKind.NARRATION)
+
+
+def _share_bubble_caps(regions: list[TextRegion], areas: dict[str, np.ndarray],
+                       caps: dict[str, int]) -> list[list[str]]:
+    """Lines that split one bubble share its larger size ceiling.
+
+    Kimi ga Tomoshite ch.1 p.8 (the operator, 2026-10-28): two lines in one
+    dashed bubble were lettered large and small in the source, so the line
+    with more room came out small beside a large one -- "large bubble, small
+    text; small bubble, large text". Areas that touch are one bubble split
+    between its lines, or two bubbles merged; either way they read as one
+    group and are set alike. The fitter still shrinks a line that cannot fit.
+    """
+    import cv2
+
+    ids = [r.id for r in regions if r.id in caps and r.kind in BUBBLE_KINDS
+           and not _is_own_box(areas[r.id], r)]
+    if len(ids) < 2:
+        return []
+    grown = {i: cv2.dilate(areas[i].astype(np.uint8), np.ones((3, 3), np.uint8),
+                           iterations=2) > 0 for i in ids}
+    parent = {i: i for i in ids}
+
+    def root(i: str) -> str:
+        while parent[i] != i:
+            parent[i] = parent[parent[i]]
+            i = parent[i]
+        return i
+
+    for n, a in enumerate(ids):
+        for b in ids[n + 1:]:
+            if (grown[a] & (areas[b] > 0)).any():
+                parent[root(a)] = root(b)
+    groups: dict[str, list[str]] = {}
+    for i in ids:
+        groups.setdefault(root(i), []).append(i)
+    shared = [members for members in groups.values() if len(members) > 1]
+    for members in shared:
+        top = max(caps[i] for i in members)
+        for i in members:
+            caps[i] = top
+    return shared
+
+
+#: Lines sharing a bubble are set within this ratio of the smallest of them.
+BUBBLE_SIZE_SPREAD = 1.15
 
 
 def layout_page(
@@ -623,9 +716,14 @@ def layout_page(
     # Lovers ch.0 p.15). No bubble's ceiling sits below BUBBLE_FLOOR of the
     # page's median bubble ceiling; the fitter still shrinks what cannot fit.
     caps: dict[str, int] = {}
+    # An erase region (a logo, a site line, or lettering folded into its
+    # neighbour's line) is cleaned only, even when a stale translation entry
+    # still names it -- Kawaii ch.1 p.33 set a folded line twice.
+    regions = [r for r in regions if r.kind is not TextKind.ERASE]
     for region in regions:
         if translations.get(region.id, "").strip() and region.id in areas:
             caps[region.id] = source_size_cap(page_mask, region)
+    shared = _share_bubble_caps(regions, areas, caps)
     bubbled = sorted(
         caps[r.id] for r in regions
         if r.id in caps and r.kind in BUBBLE_KINDS and not _is_own_box(areas[r.id], r)
@@ -647,6 +745,25 @@ def layout_page(
             region, text, area, fonts_dir, override, styles, max_size=cap,
         )
         out.append((region, layout, contrasting(style, cleaned, area)))
+
+    # One bubble, one size: a line with more room must not stand at half
+    # again the size of its neighbour in the same balloon (p.8: 29 px beside
+    # 19 px). Each is brought within BUBBLE_SIZE_SPREAD of the smallest.
+    index = {item[0].id: n for n, item in enumerate(out)}
+    for members in shared:
+        present = [i for i in members if i in index]
+        if len(present) < 2:
+            continue
+        smallest = min(out[index[i]][1].font_size for i in present)
+        limit = max(MIN_FONT_PX, int(round(smallest * BUBBLE_SIZE_SPREAD)))
+        for i in present:
+            region, layout, style = out[index[i]]
+            if layout.font_size > limit:
+                layout, style = layout_region(
+                    region, translations[region.id].strip(), areas[region.id], fonts_dir,
+                    (overrides or {}).get(region.id), styles, max_size=limit, grow=False,
+                )
+                out[index[i]] = (region, layout, contrasting(style, cleaned, areas[region.id]))
 
     def caption(item) -> bool:
         region, _layout, _style = item

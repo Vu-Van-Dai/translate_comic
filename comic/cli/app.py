@@ -31,6 +31,10 @@ from comic.video.cli import video_app  # noqa: E402 - separate video add-on
 
 app.add_typer(video_app, name="video")
 
+from comic.colab.cli import colab_app  # noqa: E402 - Colab GPU worker over Drive
+
+app.add_typer(colab_app, name="colab")
+
 _STYLE = {Level.OK: "ok", Level.WARN: "warn", Level.FAIL: "fail"}
 _GLYPH = {Level.OK: "+", Level.WARN: "!", Level.FAIL: "x"}
 
@@ -44,6 +48,19 @@ _STAGE_GLYPH = {
 
 #: Exit code the gate protocol uses to mean "stopped, waiting for the agent".
 GATE_EXIT_CODE = 10
+#: Exit code for a chapter blocked as a whole (`comic block`). Distinct from a
+#: failure (1), so a batch knows to skip this chapter and go on to the next.
+BLOCKED_EXIT_CODE = 3
+
+
+def refuse_if_blocked(state) -> None:
+    """Stop a command on a blocked chapter -- only this chapter, never the series."""
+    if state.blocked:
+        console.print(f"[warn]![/warn] {escape(state.series)} / {escape(state.chapter)} is blocked: "
+                      f"{escape(state.blocked)}")
+        console.print("  skipped; other chapters are unaffected "
+                      "(`comic block --release` lifts it)")
+        raise typer.Exit(BLOCKED_EXIT_CODE)
 
 
 @app.command()
@@ -515,7 +532,7 @@ def import_raw(
                   or raw_dir(series, paths.chapter))
 
     try:
-        plan = scan(folder, ordering)
+        plan = scan(folder, ordering, strip=(kind == "longstrip"))
     except RawIngestError as exc:
         console.print(f"[fail]x[/fail] {escape(str(exc))}")
         if not folder.exists():
@@ -660,6 +677,17 @@ def exclude(
     restore: bool = typer.Option(
         False, "--restore", help="Put the page back into the chapter."
     ),
+    held: bool = typer.Option(
+        False, "--held",
+        help="A page of the comic held back for its content: it keeps its number.",
+    ),
+    reason: str = typer.Option(
+        None, "--reason", help="With --held: what on the page is held, for the report.",
+    ),
+    cleanup: bool = typer.Option(
+        False, "--cleanup",
+        help="With --held: logos and site watermarks may still be erased on it.",
+    ),
 ) -> None:
     """Drop a page that is not part of the comic.
 
@@ -687,6 +715,10 @@ def exclude(
         console.print(f"[fail]x[/fail] {escape(str(exc))}")
         raise typer.Exit(1)
 
+    if held and not restore and not (reason or "").strip():
+        console.print("[fail]x[/fail] --held needs --reason: say what on the page is held")
+        raise typer.Exit(1)
+
     wanted = set(page)
     known = {record.page for record in state.pages}
     missing = sorted(wanted - known)
@@ -699,18 +731,24 @@ def exclude(
 
     console.rule(f"[stage]{escape(paths.series)} / {escape(paths.chapter)}[/stage]")
     changed = 0
+    new_reason = reason.strip() if held and not restore and reason else None
     for record in state.pages:
         if record.page not in wanted:
             continue
-        if record.excluded == (not restore):
+        new_cleanup = held and not restore and cleanup
+        if (record.excluded == (not restore) and record.held == (held and not restore)
+                and record.hold_reason == new_reason and record.hold_cleanup == new_cleanup):
             console.print(
                 f"[path]  page {record.page} ({escape(record.filename)}) "
                 f"already {'excluded' if record.excluded else 'included'}[/path]"
             )
             continue
         record.excluded = not restore
+        record.held = held and not restore
+        record.hold_reason = new_reason
+        record.hold_cleanup = new_cleanup
         changed += 1
-        verb = "restored" if restore else "excluded"
+        verb = "restored" if restore else ("held" if held else "excluded")
         console.print(f"[ok]+[/ok] page {record.page} ({escape(record.filename)}) {verb}")
 
     if changed:
@@ -723,6 +761,208 @@ def exclude(
         console.print(
             "[path]  still in original/; it will not be published or sent to a gate[/path]"
         )
+
+
+@app.command()
+def block(
+    series: str = typer.Option(..., "--series", help="Series name."),
+    chapter: str = typer.Option(..., "--chapter", "-c", help="Chapter number."),
+    reason: str = typer.Option(None, "--reason", help="Why the whole chapter cannot be processed."),
+    release: bool = typer.Option(False, "--release", help="Lift the block."),
+) -> None:
+    """Block one chapter as a whole, or lift the block.
+
+    Only this chapter stops: analyze, translate, render, resume and the
+    Photoshop commands refuse it with exit code 3, and batches skip it and go
+    on to the next chapter. When only some pages are the problem, hold those
+    pages instead (`comic exclude -p N --held --reason ...`) and the rest of
+    the chapter carries on.
+    """
+    setup_console()
+    paths = ChapterPaths(series, chapter)
+    store = ChapterStore(paths)
+    try:
+        state = store.load()
+    except StateError as exc:
+        console.print(f"[fail]x[/fail] {escape(str(exc))}")
+        raise typer.Exit(1)
+    if release:
+        if not state.blocked:
+            console.print("[path]  not blocked[/path]")
+            return
+        state.blocked = None
+        store.save(state)
+        console.print(f"[ok]+[/ok] {escape(state.chapter)} released")
+        return
+    if not (reason or "").strip():
+        console.print("[fail]x[/fail] --reason is required")
+        raise typer.Exit(1)
+    if state.blocked == reason.strip():
+        console.print("[path]  already blocked for that reason[/path]")
+        return
+    state.blocked = reason.strip()
+    store.save(state)
+    console.print(f"[ok]+[/ok] {escape(state.chapter)} blocked: {escape(state.blocked)}")
+    console.print("  other chapters are unaffected")
+
+
+@app.command()
+def studio(
+    series: str = typer.Option(None, "--series", help="Series to open (optional)."),
+    chapter: str = typer.Option(None, "--chapter", "-c", help="Chapter to open (optional)."),
+    port: int = typer.Option(8765, "--port", help="Local port; 0 picks a free one."),
+    no_browser: bool = typer.Option(False, "--no-browser", help="Do not open the browser."),
+) -> None:
+    """Open Studio: the operator's region review in a local browser page.
+
+    Move, resize, add and delete the detected boxes and say what each one is
+    (dialogue ... sfx, logo, watermark, credit, keep). Edits are written into
+    the chapter's analysis; the detector's version is kept in analysis/_detected/.
+    """
+    setup_console()
+    from comic.paths import chapter_label
+    from comic.studio.server import serve
+
+    serve(series, chapter_label(chapter) if chapter else None, port, not no_browser)
+
+
+@app.command()
+def check(
+    series: str = typer.Option(..., "--series", help="Series name."),
+    chapter: str = typer.Option(..., "--chapter", "-c", help="Chapter number."),
+    page: list[int] = typer.Option(None, "--page", "-p",
+                                   help="Only these pages (a re-cut chapter's changed pages)."),
+    unreviewed_ok: bool = typer.Option(False, "--unreviewed-ok",
+                                       help="Open it even if Studio review is not finished."),
+    agent: bool = typer.Option(False, "--agent",
+                               help="Have the AgentRouter model (via the Codex CLI) answer it, then apply it."),
+    model: str = typer.Option("gpt-6.1-sol", "--model", help="AgentRouter model for --agent."),
+) -> None:
+    """Open the transcription check: the agent verifies every box's source text.
+
+    Runs after the operator's Studio review. Answer in handoff/check_response.json,
+    then `comic resume`. Never deletes a box; `skip` leaves one for the operator.
+    """
+    setup_console()
+    from comic import check as transcription
+    from comic.state.store import open_gate
+
+    paths = ChapterPaths(series, chapter)
+    store = ChapterStore(paths)
+    try:
+        state = store.load()
+    except StateError as exc:
+        console.print(f"[fail]x[/fail] {escape(str(exc))}")
+        raise typer.Exit(1)
+    refuse_if_blocked(state)
+    only = list(page or []) or None
+    missing = transcription.unreviewed_pages(paths, state, only)
+    if missing and not unreviewed_ok:
+        shown = ", ".join(str(p) for p in missing[:12]) + (" ..." if len(missing) > 12 else "")
+        console.print(f"[warn]![/warn] Studio review not finished: {len(missing)} page(s) "
+                      f"not marked reviewed ({shown}).")
+        console.print(f"  comic studio --series \"{escape(series)}\" -c {escape(str(chapter))}")
+        raise typer.Exit(2)
+    request = transcription.open_check(paths, state, only=only)
+    open_gate(state, Stage.OCR, Gate.OCR_REVIEW)
+    store.save(state)
+    info = transcription.summary(paths)
+    console.print(f"[gate]check[/gate] {info['regions']} region(s) on {info['sheets']} sheet(s)")
+    console.print(f"[path]  request:  {escape(str(request))}[/path]")
+    console.print(f"[path]  response: {escape(str(paths.gate_response(transcription.GATE)))}[/path]")
+    if not agent:
+        raise typer.Exit(10)
+    from comic.agents.check_agent import answer_check
+    from comic.agents.codex import AgentError
+
+    try:
+        answer_check(paths, model, progress=lambda m: console.print(f"  {escape(m)}"))
+    except AgentError as exc:
+        console.print(f"[fail]x[/fail] {escape(str(exc))}")
+        raise typer.Exit(1)
+    console.print("[ok]+[/ok] answered by the agent; applying it")
+    resume(series=series, chapter=chapter)
+
+
+@app.command("clean")
+def clean_cmd(
+    series: str = typer.Option(..., "--series", help="Series name."),
+    chapter: str = typer.Option(..., "--chapter", "-c", help="Chapter number."),
+    page: list[int] = typer.Option(None, "--page", "-p", help="Limit to these pages."),
+    local: bool = typer.Option(False, "--local", help="LaMa on this PC even if the Colab worker is up."),
+) -> None:
+    """Erase the chapter's lettering (no preview render, no QA): plain colour on the
+    spot, artwork spots to LaMa on the Colab T4 in one job. Next: `comic ps build`."""
+    setup_console()
+    from comic.clean_stage import clean_chapter
+
+    paths = ChapterPaths(series, chapter)
+    try:
+        state = ChapterStore(paths).load()
+    except StateError as exc:
+        console.print(f"[fail]x[/fail] {escape(str(exc))}")
+        raise typer.Exit(1)
+    refuse_if_blocked(state)
+    out = clean_chapter(paths, list(page) if page else None, use_colab=not local,
+                        progress=lambda m: console.print(f"  {escape(m)}"))
+    for note in out.notes:
+        console.print(f"  [warn]![/warn] {escape(note)}")
+    where = f" (LaMa on {out.where})" if out.where else ""
+    console.print(f"[ok]+[/ok] {out.pages} page(s): {out.flat} flat fill(s), "
+                  f"{out.inpainted} inpainted{where} -> [path]{escape(str(paths.cleaned))}[/path]")
+    console.print(f"  next: comic ps build --series \"{escape(series)}\" -c {escape(str(chapter))}")
+
+
+@app.command()
+def untranslated(
+    series: str = typer.Option(..., "--series", help="Series name."),
+    chapter: str = typer.Option(None, "--chapter", "-c", help="One chapter; omit for the series file only."),
+) -> None:
+    """Rebuild untranslated.txt: every line not translated, with page, box and source text."""
+    setup_console()
+    from comic.translation.untranslated import write_chapter, write_series
+
+    if chapter:
+        f, n = write_chapter(ChapterPaths(series, chapter))
+        console.print(f"[ok]+[/ok] {n} line(s): {escape(str(f))}")
+    f, n = write_series(series)
+    console.print(f"[ok]+[/ok] series: {n} line(s): {escape(str(f))}")
+
+
+@app.command()
+def holds(
+    series: str = typer.Option(..., "--series", help="Series name."),
+) -> None:
+    """Report, per chapter: blocked or partial, which pages are held and why,
+    and what each eligible chapter still needs."""
+    setup_console()
+    sp = SeriesPaths(series)
+    rows = 0
+    for label in sorted(sp.chapters(), key=chapter_sort_key):
+        try:
+            state = ChapterStore(ChapterPaths(series, label)).load()
+        except StateError:
+            continue
+        rows += 1
+        if state.blocked:
+            console.print(f"[fail]blocked[/fail]  {escape(label)}: {escape(state.blocked)}")
+            continue
+        if state.pending_gate is not None:
+            need = f"waiting at {state.pending_gate.value}"
+        elif state.stage(Stage.PUBLISH).status is StageStatus.DONE:
+            need = "published"
+        else:
+            upcoming = next_stage(state)
+            need = f"next: {upcoming.value}" if upcoming else state.status.value
+        tag = "[warn]partial[/warn]" if state.held_pages else "[ok]ok[/ok]     "
+        console.print(f"{tag}  {escape(label)}: {need}")
+        for record in state.held_pages:
+            extra = " (logo/watermark cleanup only)" if record.hold_cleanup else ""
+            console.print(f"           page {record.page}: {escape(record.hold_reason or 'held')}{extra}")
+    if not rows:
+        console.print(f"[warn]no chapters found for {escape(sp.series)}[/warn]")
+        raise typer.Exit(1)
+
 
 
 @app.command()
@@ -751,6 +991,7 @@ def analyze(
     except StateError as exc:
         console.print(f"[fail]x[/fail] {escape(str(exc))}")
         raise typer.Exit(1)
+    refuse_if_blocked(state)
 
     if language:
         state.source_language = language
@@ -998,6 +1239,7 @@ def render(
     except StateError as exc:
         console.print(f"[fail]x[/fail] {escape(str(exc))}")
         raise typer.Exit(1)
+    refuse_if_blocked(state)
 
     console.rule(f"[stage]{escape(paths.series)} / {escape(paths.chapter)}[/stage]")
     plan = load_plan(paths, state)
@@ -1147,6 +1389,12 @@ def _resume_visual_qa(paths, store, state, series, chapter) -> None:
         console.print(f"  [path]{escape(answer.note)}[/path]")
 
     if answer.passed:
+        # The pages this answer passed are approved like any other answer's:
+        # without this, a pass that had to render pending pages first forgot
+        # the ones it had just passed, and the next pass re-showed them --
+        # two sets of pages alternating forever (Kimi ch.2, 2026-10-28).
+        record_approvals(paths, state, plan, answer)
+        save_plan(paths, plan)
         pending = pending_pages(paths, state, plan, shown_now)
         if pending:
             # A fix never rendered (after a -p preview, say) or a page that
@@ -1179,7 +1427,8 @@ def _resume_visual_qa(paths, store, state, series, chapter) -> None:
         if count:
             state.stage(Stage.PUBLISH).status = StageStatus.DONE
             state.status = (
-                ChapterStatus.PARTIAL if problems else ChapterStatus.COMPLETED
+                ChapterStatus.PARTIAL if problems or state.held_pages
+                else ChapterStatus.COMPLETED
             )
         store.save(state)
         console.print(f"[ok]+[/ok] {count} page(s) published.")
@@ -1272,6 +1521,11 @@ def translate(
     series: str = typer.Option(..., "--series", help="Series name."),
     chapter: str = typer.Option(..., "--chapter", "-c", help="Chapter number."),
     page: list[int] = typer.Option(None, "--page", "-p", help="Limit to these pages."),
+    agent: bool = typer.Option(False, "--agent",
+                               help="Have the AgentRouter model (via the Codex CLI) translate, then apply it."),
+    model: str = typer.Option("gpt-6.1-sol", "--model", help="AgentRouter model for --agent."),
+    missing: bool = typer.Option(False, "--missing",
+                                 help="Only regions with no Vietnamese yet (keeps every line already done)."),
 ) -> None:
     """Open the translate gate for a chapter that has been read."""
     setup_console()
@@ -1286,12 +1540,14 @@ def translate(
     except StateError as exc:
         console.print(f"[fail]x[/fail] {escape(str(exc))}")
         raise typer.Exit(1)
+    refuse_if_blocked(state)
 
     # A series is a long-lived workspace; create its memory on first use.
     SeriesMemory(series).ensure_initialised()
 
     console.rule(f"[stage]{escape(paths.series)} / {escape(paths.chapter)}[/stage]")
-    request, count = open_translate_gate(paths, state, only=list(page or []) or None)
+    request, count = open_translate_gate(paths, state, only=list(page or []) or None,
+                                         missing_only=missing)
     if count == 0:
         console.print("[warn]![/warn] Nothing to translate. Run `comic analyze` first.")
         raise typer.Exit(1)
@@ -1306,7 +1562,18 @@ def translate(
     console.print(f"  write    [path]{escape(str(paths.gate_response('translate')))}[/path]")
     console.print(f"  then     [bold]comic resume --series \"{escape(series)}\" "
                   f"--chapter {escape(str(chapter))}[/bold]")
-    raise typer.Exit(GATE_EXIT_CODE)
+    if not agent:
+        raise typer.Exit(GATE_EXIT_CODE)
+    from comic.agents.codex import AgentError
+    from comic.agents.translate_agent import answer_translate
+
+    try:
+        answer_translate(paths, model, progress=lambda m: console.print(f"  {escape(m)}"))
+    except AgentError as exc:
+        console.print(f"[fail]x[/fail] {escape(str(exc))}")
+        raise typer.Exit(1)
+    console.print("[ok]+[/ok] translated by the agent; applying it")
+    resume(series=series, chapter=chapter)
 
 
 @app.command()
@@ -1326,6 +1593,7 @@ def resume(
     except StateError as exc:
         console.print(f"[fail]x[/fail] {escape(str(exc))}")
         raise typer.Exit(1)
+    refuse_if_blocked(state)
 
     if state.pending_gate is None:
         console.print("[warn]![/warn] This chapter is not waiting at a gate.")
@@ -1360,14 +1628,21 @@ def resume(
                 f"[warn]![/warn] {len(pending)} region(s) still untranslated "
                 f"(e.g. {', '.join(pending[:3])})"
             )
-        console.print("  Next: [bold]comic render --series "
-                      f"\"{escape(series)}\" --chapter {escape(str(chapter))}[/bold]")
+        from comic.translation.untranslated import write_chapter, write_series
+
+        listed, count = write_chapter(paths)
+        _, total = write_series(series)
+        console.print(f"[path]  untranslated.txt: {count} line(s) in this chapter, "
+                      f"{total} in the series ({escape(str(listed))})[/path]")
+        console.print("  Next: [bold]comic clean --series "
+                      f"\"{escape(series)}\" -c {escape(str(chapter))}[/bold], then "
+                      "[bold]comic ps build[/bold] (docs/workflow.md)")
         from comic.qa.visual import load_plan
 
         if load_plan(paths, state).approved:
             console.print(
-                "  [path]mid-QA: it renders only the pages not already approved; "
-                "--all renders every page[/path]"
+                "  [path]old render route, mid-QA: `comic render` renders only the pages "
+                "not already approved; --all renders every page[/path]"
             )
         return
 
@@ -1378,6 +1653,28 @@ def resume(
     if state.pending_gate is not Gate.OCR_REVIEW:
         console.print(f"[warn]![/warn] {state.pending_gate.value} is not implemented yet.")
         raise typer.Exit(1)
+
+    from comic import check as transcription
+
+    if transcription.pending(paths):
+        corrected, held, problems = transcription.apply_check(paths, state)
+        if problems:
+            # Nothing is written on a problem; the request stays for a fixed answer.
+            state.gate_error = "; ".join(problems)
+            store.save(state)
+            for problem in problems:
+                console.print(f"[fail]x[/fail] {escape(problem)}")
+            console.print("\n  Fix check_response.json and run resume again.")
+            raise typer.Exit(1)
+        paths.gate_request(transcription.GATE).replace(
+            paths.gate_request(transcription.GATE).with_suffix(".done.json"))
+        close_gate(state)
+        state.stage(Stage.OCR).status = StageStatus.DONE
+        store.save(state)
+        console.print(f"[ok]+[/ok] transcription checked: {corrected} corrected, "
+                      f"{held} left for the operator (untranslated.txt).")
+        console.print("  Next: translation, per series.")
+        return
 
     corrected, dropped, problems = apply_ocr_review(paths, state)
     if problems:
@@ -1427,7 +1724,9 @@ def status(
             style, glyph = _STAGE_GLYPH[state.stage(stage).status]
             cells.append(f"[{style}]{glyph}[/{style}]")
 
-        if state.status is ChapterStatus.AWAITING_AGENT:
+        if state.blocked:
+            note = f"[fail]blocked: {escape(state.blocked)}[/fail]"
+        elif state.status is ChapterStatus.AWAITING_AGENT:
             note = f"[gate]awaiting agent: {state.pending_gate.value}[/gate]"
         elif state.status is ChapterStatus.COMPLETED:
             note = "[ok]completed[/ok]"
@@ -1436,6 +1735,8 @@ def status(
         else:
             upcoming = next_stage(state)
             note = f"next: {upcoming.value}" if upcoming else state.status.value
+        if state.held_pages and not state.blocked:
+            note += f"  [warn]held p.{','.join(str(p.page) for p in state.held_pages)}[/warn]"
         table.add_row(label, str(state.page_count), *cells, note)
 
     console.print(table)

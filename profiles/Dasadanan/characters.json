@@ -1,1 +1,34 @@
-{}
+{
+  "Park Seyeon": {
+    "name": "Park Seyeon",
+    "aliases": [],
+    "role": null,
+    "personality": "Lớn hơn Chan, tóc nâu, chậm hiểu, học kém, hay bị coi là ngốc; ngại ngùng, dễ đỏ mặt, hay chối; người kể chuyện.",
+    "speech_style": "Với Chan: anh/em; lời dẫn xưng 'tôi', suy nghĩ xưng 'mình', gọi Chan là 'nó'.",
+    "addresses": {
+      "Kang Chan": {
+        "self_term": "anh",
+        "other_term": "em",
+        "formality": "casual",
+        "note": "trong suy nghĩ gọi Chan là 'nó'"
+      }
+    },
+    "notes": []
+  },
+  "Kang Chan": {
+    "name": "Kang Chan",
+    "aliases": [],
+    "role": null,
+    "personality": "Tóc vàng, 'cậu bé vàng' điển trai, học giỏi, được mọi người yêu mến; bạn từ nhỏ của Seyeon (bố mẹ hai nhà thân nhau); công khai thích Seyeon, hay trêu, hơi bám đuôi.",
+    "speech_style": "Với Seyeon: em/anh (hyung -> anh); với người lạ: tôi/bạn.",
+    "addresses": {
+      "Park Seyeon": {
+        "self_term": "em",
+        "other_term": "anh",
+        "formality": "warm",
+        "note": "hyung -> anh"
+      }
+    },
+    "notes": []
+  }
+}

@@ -1,0 +1,644 @@
+[
+  {
+    "source": "陆槐",
+    "target": "Lục Hòe",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "苟小凌",
+    "target": "Cẩu Tiểu Lăng",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "雪球",
+    "target": "Tuyết Cầu",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "阴阳眼",
+    "target": "âm dương nhãn",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "阵眼",
+    "target": "mắt trận",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "玄猫",
+    "target": "huyền miêu",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "回魂夜",
+    "target": "đêm hồi hồn",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "死气",
+    "target": "tử khí",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "阿槐",
+    "target": "A Hòe",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "陆奶奶",
+    "target": "bà Lục",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "异瞳",
+    "target": "dị đồng",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "活死人",
+    "target": "xác sống",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "执念",
+    "target": "chấp niệm",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "神棍",
+    "target": "thầy bà",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "引雷术",
+    "target": "dẫn lôi thuật",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "雷来",
+    "target": "Lôi lai",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "天火",
+    "target": "thiên hỏa",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "魂魄",
+    "target": "hồn phách",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "护身符",
+    "target": "bùa hộ mệnh",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "渡气",
+    "target": "thổi khí",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "精气",
+    "target": "tinh khí",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "小狗",
+    "target": "cún con",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "苟大师",
+    "target": "Cẩu đại sư",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "王总",
+    "target": "sếp Vương",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "S市",
+    "target": "thành phố S",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "草花头",
+    "target": "bộ thảo",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "天马护身符",
+    "target": "bùa hộ mệnh thiên mã",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "魔●小马",
+    "target": "Ngựa con ma●thuật",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "阿柔",
+    "target": "A Nhu",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "小树",
+    "target": "Thụ",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "驱鬼蚊香",
+    "target": "nhang muỗi xua ma",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "小何",
+    "target": "Tiểu Hà",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "障眼法",
+    "target": "chướng nhãn pháp",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "结界",
+    "target": "kết giới",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "桃枝",
+    "target": "cành đào",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "净化的术式",
+    "target": "thuật thanh tẩy",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "衰鬼",
+    "target": "quỷ xui",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "李春阳",
+    "target": "Lý Xuân Dương",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "幸运锦囊",
+    "target": "túi gấm may mắn",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "李女士",
+    "target": "chị Lý",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "灵力",
+    "target": "linh lực",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "本体",
+    "target": "bản thể",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "郑总",
+    "target": "sếp Trịnh",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "小青",
+    "target": "Tiểu Thanh",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "春澜",
+    "target": "Xuân Lan",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "小巴",
+    "target": "Tiểu Ba",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "珊珊",
+    "target": "San San",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "桑榆镇",
+    "target": "trấn Tang Du",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "落霞",
+    "target": "Lạc Hà",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "引路人",
+    "target": "người dẫn lối",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "牛大叔",
+    "target": "chú Ngưu",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "灵气",
+    "target": "linh khí",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "牛郎",
+    "target": "Ngưu Lang",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "大牛",
+    "target": "Đại Ngưu",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "气息",
+    "target": "khí tức",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "异兽",
+    "target": "dị thú",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "讹",
+    "target": "Ngoa",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "鵺余",
+    "target": "Dạ Dư",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "使魔",
+    "target": "sử ma",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "哀鬼",
+    "target": "quỷ ai oán",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "宿主",
+    "target": "vật chủ",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "附身",
+    "target": "nhập xác",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "生魂",
+    "target": "sinh hồn",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "引路",
+    "target": "dẫn lối",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "狮●王",
+    "target": "Vua sư●tử",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "谎言之家",
+    "target": "Nhà dối trá",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "年猪",
+    "target": "heo Tết",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "栎溪",
+    "target": "Lịch Khê",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "巫安明",
+    "target": "Vu An Minh",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "小维",
+    "target": "Tiểu Duy",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "地方县志",
+    "target": "địa chí",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "诅咒",
+    "target": "lời nguyền",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "收藏室",
+    "target": "phòng sưu tập",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "民俗学",
+    "target": "dân tục học",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "木木",
+    "target": "Mộc Mộc",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "木雕",
+    "target": "tượng gỗ",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "怨气",
+    "target": "oán khí",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "纸鹤",
+    "target": "hạc giấy",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "水池",
+    "target": "hồ nước",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "小水泡",
+    "target": "Bọt Nước",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "媒介",
+    "target": "vật dẫn",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "扭曲空间",
+    "target": "không gian méo mó",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "舒冬青",
+    "target": "Thư Đông Thanh",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "四角游戏",
+    "target": "trò bốn góc",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "不吉之物",
+    "target": "vật chẳng lành",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "海小姐",
+    "target": "cô Hải",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "追踪符纸",
+    "target": "bùa truy tìm",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "小胡",
+    "target": "Tiểu Hồ",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "加雷斯",
+    "target": "Gareth",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "何兔",
+    "target": "Hà Thố",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "污秽之气",
+    "target": "uế khí",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "人鱼",
+    "target": "tiên cá",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "凌凌发",
+    "target": "LLF",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "凌大师",
+    "target": "Lăng đại sư",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "小伍",
+    "target": "Tiểu Ngũ",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "水族馆",
+    "target": "thủy cung",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "海杨",
+    "target": "Hải Dương",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "五里街",
+    "target": "phố Ngũ Lý",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "探灵设备",
+    "target": "thiết bị dò ma",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "面瘫混蛋",
+    "target": "Đồ mặt đơ",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "企划部",
+    "target": "phòng kế hoạch",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "老李",
+    "target": "bác Lý",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "陈经理",
+    "target": "quản lý Trần",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "小凌",
+    "target": "Tiểu Lăng",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "邋遢狗",
+    "target": "Cún bẩn",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "静静",
+    "target": "Tĩnh Tĩnh",
+    "note": null,
+    "category": "term"
+  },
+  {
+    "source": "水鬼",
+    "target": "ma nước",
+    "note": null,
+    "category": "term"
+  }
+]

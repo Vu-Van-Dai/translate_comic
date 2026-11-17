@@ -47,6 +47,21 @@ BUBBLE_FLATNESS = 60
 #: on that page, while mask noise over artwork measured 0.03-0.06.
 MIN_DENSITY = 0.12
 
+# Splitting a region that holds two balloons (``text_blocks``), in units of
+# the lettering's own letter height ("cap"): letters closer than WORD_GAP
+# are one line; lines within LINE_GAP that overlap by OVERLAP of the
+# narrower and share a centre (within CENTRE of the wider) or an edge are
+# one balloon. A block needs BLOCK_MIN_SHARE of the ink to count. Measured
+# on Dare mo ch.1-3, Kimigazer, Super Lovers and Ju Jue (vertical).
+BLOCK_MIN_CAP = 8
+BLOCK_WORD_GAP = 0.8
+BLOCK_ACCENT_GAP = 0.3
+BLOCK_LINE_GAP = 0.9
+BLOCK_OVERLAP = 0.25
+BLOCK_CENTRE = 0.35
+BLOCK_MIN_SHARE = 0.15
+BLOCK_PAD = 4
+
 
 @dataclass
 class RegionCandidate:
@@ -144,12 +159,121 @@ def classify(
     return TextKind.CAPTION, False
 
 
+def text_blocks(mask_crop: np.ndarray, vertical: bool = False) -> list[BBox]:
+    """The separate blocks of lettering inside one region, in crop coordinates.
+
+    Two balloons that touch -- a joined double balloon, or a bubble butted
+    against another -- are one component after ``group_mask``, so a single
+    region held both, and the typesetter set both translations as one block
+    in one lobe (the operator, Dare mo ch.1 p.11/20/23, 2026-10-27; 5 of 5
+    such regions in that chapter, ~18 in Kimigazer ch.1-3). The lettering
+    still shows the seam: cut the mask into lines, and lines of one balloon
+    stack -- vertically close, overlapping, sharing a centre or a left or
+    right edge. Lines that do not chain that way are another balloon.
+
+    Returns the blocks big enough to be lettering of their own (a lone "!"
+    or "..." beside a balloon is not one); one block means nothing to split.
+    ``vertical`` reads CJK columns as the lines.
+    """
+    import cv2
+
+    m = (mask_crop > 0).astype(np.uint8)
+    if vertical:
+        m = np.ascontiguousarray(m.T)
+    count, _, stats, _ = cv2.connectedComponentsWithStats(m, connectivity=8)
+    heights = [stats[i, 3] for i in range(1, count) if stats[i, 4] >= 6]
+    if len(heights) < 4:
+        return []
+    cap = float(np.median(heights))
+    if cap < BLOCK_MIN_CAP:            # a speckled mask, not letters
+        return []
+
+    lines = cv2.dilate(m, cv2.getStructuringElement(
+        cv2.MORPH_RECT,
+        (max(3, round(BLOCK_WORD_GAP * cap)), max(1, round(BLOCK_ACCENT_GAP * cap))),
+    ))
+    count, _, stats, _ = cv2.connectedComponentsWithStats(lines, connectivity=8)
+    segs = [tuple(int(v) for v in stats[i, :4]) for i in range(1, count)]
+    parent = list(range(len(segs)))
+
+    def find(i: int) -> int:
+        while parent[i] != i:
+            parent[i] = parent[parent[i]]
+            i = parent[i]
+        return i
+
+    for i, (x, y, w, h) in enumerate(segs):
+        for j in range(i + 1, len(segs)):
+            X, Y, W, H = segs[j]
+            vgap = max(Y - (y + h), y - (Y + H))
+            overlap = min(x + w, X + W) - max(x, X)
+            if vgap > BLOCK_LINE_GAP * cap or overlap < BLOCK_OVERLAP * min(w, W):
+                continue
+            aligned = (abs((x + w / 2) - (X + W / 2)) <= BLOCK_CENTRE * max(w, W)
+                       or abs(x - X) <= cap or abs((x + w) - (X + W)) <= cap)
+            if aligned or vgap <= 0:
+                parent[find(i)] = find(j)
+
+    groups: dict[int, list[tuple[int, int, int, int]]] = {}
+    for i, seg in enumerate(segs):
+        groups.setdefault(find(i), []).append(seg)
+    blocks = []
+    for members in groups.values():
+        x1 = min(s[0] for s in members)
+        y1 = min(s[1] for s in members)
+        x2 = max(s[0] + s[2] for s in members)
+        y2 = max(s[1] + s[3] for s in members)
+        blocks.append((x1, y1, x2, y2, int(m[y1:y2, x1:x2].sum())))
+    total = sum(b[4] for b in blocks) or 1
+    big = [b for b in blocks
+           if b[2] - b[0] >= 2 * cap and b[3] - b[1] >= 0.8 * cap
+           and b[4] >= BLOCK_MIN_SHARE * total]
+    if vertical:
+        big = [(y1, x1, y2, x2, ink) for (x1, y1, x2, y2, ink) in big]
+    return [BBox(x1=b[0], y1=b[1], x2=b[2], y2=b[3]) for b in big]
+
+
+def split_merged(
+    image: np.ndarray,
+    mask: np.ndarray,
+    candidate: RegionCandidate,
+    vertical: bool = False,
+) -> list[RegionCandidate]:
+    """One candidate per balloon: the candidate itself, or its blocks."""
+    box = candidate.bbox
+    if candidate.kind is TextKind.SFX:
+        return [candidate]
+    blocks = text_blocks(mask[box.y1:box.y2, box.x1:box.x2], vertical)
+    if len(blocks) < 2:
+        return [candidate]
+    out = []
+    for b in blocks:
+        sub = BBox(
+            x1=max(box.x1, box.x1 + b.x1 - BLOCK_PAD), y1=max(box.y1, box.y1 + b.y1 - BLOCK_PAD),
+            x2=min(box.x2, box.x1 + b.x2 + BLOCK_PAD), y2=min(box.y2, box.y1 + b.y2 + BLOCK_PAD),
+        )
+        crop = mask[sub.y1:sub.y2, sub.x1:sub.x2]
+        kind, in_bubble = classify(image, mask, sub, crop)
+        out.append(RegionCandidate(
+            bbox=sub, kind=kind,
+            density=float((crop > 0).mean()) if crop.size else 0.0,
+            is_vertical=(sub.y2 - sub.y1) > (sub.x2 - sub.x1) * 1.6,
+            in_bubble=in_bubble,
+        ))
+    return out
+
+
 def extract_regions(
     image: np.ndarray,
     mask: np.ndarray,
     detections: list | None = None,
+    vertical_text: bool = False,
 ) -> list[RegionCandidate]:
-    """Find every text region on a page from its mask."""
+    """Find every text region on a page from its mask.
+
+    A region holding two balloons' lettering is split into one per balloon
+    (``split_merged``); ``vertical_text`` says the lettering runs in columns.
+    """
     import cv2
 
     height, width = mask.shape[:2]
@@ -174,17 +298,16 @@ def extract_regions(
             continue
 
         kind, in_bubble = classify(image, mask, bbox, crop)
-        candidates.append(
-            RegionCandidate(
-                bbox=bbox,
-                kind=kind,
-                density=density,
-                # Japanese manga sets dialogue vertically; tall narrow blocks
-                # need a different OCR path and a different typesetting box.
-                is_vertical=h > w * 1.6,
-                in_bubble=in_bubble,
-            )
+        candidate = RegionCandidate(
+            bbox=bbox,
+            kind=kind,
+            density=density,
+            # Japanese manga sets dialogue vertically; tall narrow blocks
+            # need a different OCR path and a different typesetting box.
+            is_vertical=h > w * 1.6,
+            in_bubble=in_bubble,
         )
+        candidates.extend(split_merged(image, mask, candidate, vertical_text))
     return candidates
 
 

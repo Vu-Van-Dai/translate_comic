@@ -1,0 +1,146 @@
+{
+  "Mao": {
+    "name": "Mao",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Chita": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "Bạn bè thân thiết",
+        "note": null
+      },
+      "Ryo": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "Bạn bè thân thiết",
+        "note": null
+      },
+      "Mugi": {
+        "self_term": "anh",
+        "other_term": "em",
+        "formality": "Thân thiết, lớn hơn bốn tuổi",
+        "note": null
+      },
+      "Daichi": {
+        "self_term": "em",
+        "other_term": "anh",
+        "formality": "Thân thiết, người quen lớn tuổi hơn",
+        "note": null
+      },
+      "Miu": {
+        "self_term": "tôi",
+        "other_term": "cậu",
+        "formality": "Bạn học cũ",
+        "note": null
+      }
+    },
+    "notes": []
+  },
+  "Chita": {
+    "name": "Chita",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Mao": {
+        "self_term": "tớ",
+        "other_term": "cậu",
+        "formality": "Bạn bè thân thiết",
+        "note": null
+      },
+      "Ryo": {
+        "self_term": "tớ",
+        "other_term": "cậu",
+        "formality": "Bạn bè thân thiết",
+        "note": null
+      }
+    },
+    "notes": []
+  },
+  "Ryo": {
+    "name": "Ryo",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Mao": {
+        "self_term": "tớ",
+        "other_term": "cậu",
+        "formality": "Bạn bè thân thiết",
+        "note": null
+      },
+      "Chita": {
+        "self_term": "tớ",
+        "other_term": "cậu",
+        "formality": "Bạn bè thân thiết",
+        "note": null
+      }
+    },
+    "notes": []
+  },
+  "Mugi": {
+    "name": "Mugi",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Mao": {
+        "self_term": "em",
+        "other_term": "anh",
+        "formality": "Thân thiết, nhỏ hơn bốn tuổi",
+        "note": null
+      },
+      "Daichi": {
+        "self_term": "em",
+        "other_term": "anh",
+        "formality": "Anh em thân thiết",
+        "note": null
+      }
+    },
+    "notes": []
+  },
+  "Daichi": {
+    "name": "Daichi",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Mugi": {
+        "self_term": "anh",
+        "other_term": "em",
+        "formality": "Anh em thân thiết",
+        "note": null
+      },
+      "Mao": {
+        "self_term": "anh",
+        "other_term": "em",
+        "formality": "Thân thiết, người quen nhỏ tuổi hơn",
+        "note": null
+      }
+    },
+    "notes": []
+  },
+  "Miu": {
+    "name": "Miu",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": null,
+    "addresses": {
+      "Mao": {
+        "self_term": "tớ",
+        "other_term": "cậu",
+        "formality": "Bạn học cũ",
+        "note": null
+      }
+    },
+    "notes": []
+  }
+}

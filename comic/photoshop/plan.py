@@ -30,7 +30,7 @@ from pathlib import Path
 import numpy as np
 
 from comic.image_processing.clean import erase_mask, plain_behind
-from comic.image_processing.mask import GLYPH_DILATION, fit_areas, region_glyphs
+from comic.image_processing.mask import GLYPH_DILATION, fit_areas, refine_page_mask, region_glyphs, with_erase_boxes
 from comic.paths import ChapterPaths, SeriesPaths, project_root
 from comic.photoshop.fonts import font_info
 from comic.photoshop.sfx import (
@@ -81,6 +81,10 @@ class TextLayer:
     colour: tuple[int, int, int]
     stroke_px: int = 0
     stroke_colour: tuple[int, int, int] = (255, 255, 255)
+    #: Horizontal scale in percent, as the PNG renderer condensed the lines.
+    hscale: float = 100.0
+    #: Degrees clockwise: the tilt the operator gave the box in Studio.
+    angle: float = 0.0
 
 
 @dataclass
@@ -150,6 +154,8 @@ def text_layer(region: TextRegion, layout: Layout, style: Style, fonts_dir: Path
         colour=tuple(style.colour),
         stroke_px=int(round(layout.font_size * style.stroke_em)),
         stroke_colour=tuple(style.stroke_colour),
+        hscale=round(layout.hscale * 100, 1),
+        angle=float(region.angle or 0.0),
     )
 
 
@@ -192,7 +198,9 @@ def inpainted_glyphs(
     """
     out = np.zeros(image.shape[:2], dtype=np.uint8)
     for region in regions:
-        if not region.translatable or not region.source_text.strip():
+        # Logos and watermarks over art are the hard spots LaMa is the
+        # fallback for (the operator, 2026-11-12): they keep LaMa's repair.
+        if not region.cleanable or region.erased_whole:
             continue
         area = areas.get(region.id)
         if area is None or not area.any():
@@ -266,7 +274,7 @@ def plan_chapter(
         series=state.series, chapter=state.chapter
     )).with_voices(translation)
     styles = load_styles(SeriesPaths(paths.series).fonts_file)
-    sfx_answers = load_response(paths)
+    sfx_answers = load_response(paths, published=clean == "published")
     ink_rule = series_ink_rule(SeriesPaths(paths.series).fonts_file)
     sfx_font = font_info(font_file(fonts_dir, SFX_FONT)).postscript
     # Notes on difficult SFX read like the series' caption boxes.
@@ -278,30 +286,54 @@ def plan_chapter(
 
     plans: list[PagePlan] = []
     notes: list[str] = []
+    deferred: list = []
     for record in state.pages:
-        if record.excluded or (pages and record.page not in pages):
+        # A page held with --cleanup gets its PSD too (cleaned, no text): the
+        # operator letters it by hand (2026-11-13).
+        worked = record.excluded and record.held and record.hold_cleanup
+        if (record.excluded and not worked) or (pages and record.page not in pages):
             continue
         analysis = analysis_for(paths, record.page)
         if analysis is None:
             continue
         has_text = any(text.get(r.id, "").strip() for r in analysis.regions)
         has_sfx = any(rid.startswith(f"p{record.page:03d}_") for rid in sfx_answers)
-        if not has_text and not has_sfx:
+        # A page whose only lettering is another group's logo, watermark or
+        # credit still needs its PSD: without one, `ps publish` falls back to
+        # the original and the mark reaches the library (the operator,
+        # 2026-11-12: jmcomic / mw123.cc left on otherwise wordless pages).
+        has_marks = clean != "published" and any(r.erased_whole for r in analysis.regions)
+        if not has_text and not has_sfx and not has_marks and not worked:
             continue
+        published = None
+        if clean == "published":
+            # SFX pass over an old-route chapter (the operator, 2026-11-10):
+            # the published page already carries its dialogue; only SFX change.
+            from comic.photoshop.publish import library_page
+
+            if not has_sfx:
+                continue
+            published = library_page(paths, state, record.page)
+            if published is None:
+                notes.append(f"page {record.page}: not in library/ -- nothing to add SFX to")
+                continue
         source = paths.source_pages / record.filename
         mask_path = paths.mask_file(record.page)
         cleaned_path = paths.cleaned / record.filename
         if not source.exists() or not mask_path.exists():
             notes.append(f"page {record.page}: missing original or mask")
             continue
-        if has_text and clean != "content-aware" and not cleaned_path.exists():
+        if published is None and (has_text or has_marks or worked) and clean != "content-aware" and not cleaned_path.exists():
             notes.append(f"page {record.page}: not rendered yet -- run `comic render` first")
             continue
         # A page whose only change is an SFX was never cleaned by the pipeline.
-        use_source = clean == "content-aware" or not cleaned_path.exists()
+        use_source = published is None and (clean == "content-aware" or not cleaned_path.exists())
+        if published is not None:
+            cleaned_path = published
 
         image = load_page(source)
-        page_mask = load_mask(mask_path)
+        page_mask = with_erase_boxes(
+            refine_page_mask(image, load_mask(mask_path), analysis.regions), analysis.regions)
         stem = f"{record.page:03d}"
         prefix = f"p{record.page:03d}_"
         candidates = dropped_regions(paths, record.page, record.filename) if sfx_answers else []
@@ -317,18 +349,38 @@ def plan_chapter(
         areas = fit_areas(image, page_mask, analysis.regions)
         base = image if use_source else load_page(cleaned_path)
         cleaned_file = str(source if use_source else cleaned_path)
-        if not use_source:
+        if published is not None and base.shape[:2] != image.shape[:2]:
+            notes.append(f"page {record.page}: library page is {base.shape[1]}x{base.shape[0]}, "
+                         f"original {image.shape[1]}x{image.shape[0]} -- SFX boxes would not line up")
+            continue
+        # A published page is already lettered: refilling the bubbles would
+        # paint over its Vietnamese.
+        if not use_source and published is None:
             fixed = refill_flat(image, base, page_mask, analysis.regions, areas, plan.overrides)
             if fixed is not base:
                 base = fixed
                 cleaned_file = str(out_dir / f"{stem}_base.png")
                 write_crop(base, Path(cleaned_file))
-        page_text = dict(text)
+        # A region held for the operator (``hold_reason``) is cleaned like any
+        # other but never lettered by the pipeline, even when an outside answer
+        # filled its Vietnamese: that text stays in translation.json for the
+        # operator to set by hand (the operator, 2026-11-12).
+        held_ids = {r.id for r in analysis.regions if r.hold_reason}
+        page_text = {k: v for k, v in text.items() if k not in held_ids}
         # A superseded region's pipeline erase may reach art the items that
         # replace it do not cover -- ch.2 p.36: a bubble merged with a shop
         # sign took "YAKINIKU" with it; p.10: a phone screen re-set line by
         # line lost the lines no item named. Put the original back first;
         # whatever replaces it erases its own letters afterwards.
+        # On a published page the dialogue is already lettered: set only the
+        # lines this pass adds (``kind: dialogue`` items naming a kept region
+        # the old route left in English), nothing the page already carries.
+        to_set = regions
+        if published is not None:
+            replaced = set()
+            new_ids = {i.region_id for i in missed}
+            regions = [r for r in regions if r.id not in new_ids]
+            to_set = []
         if replaced and not use_source:
             base = base.copy()
             for region in analysis.regions:
@@ -355,8 +407,22 @@ def plan_chapter(
             # mask to erase or fit by. With a bbox, find the letters by colour
             # as an SFX item would, and treat them as mask from here on.
             by_id = {i.region_id: i for i in missed}
+            kept = {r.id: r for r in analysis.regions}
             for region in extra:
                 item = by_id[region.id]
+                old = kept.get(region.id)
+                if item.bbox is not None and old is not None:
+                    # A kept region re-set with a tighter box: the detector's
+                    # mask for it can take in art beside the letters (a
+                    # bubble's tail, a child's hair -- Kimigazer ch.1 p.10),
+                    # which would be erased with them. Keep only what is
+                    # inside the box the item names.
+                    o, b = old.bbox, item.bbox
+                    inside = np.zeros(page_mask.shape, bool)
+                    inside[b.y1:b.y2, b.x1:b.x2] = True
+                    stray = np.zeros(page_mask.shape, bool)
+                    stray[o.y1:o.y2, o.x1:o.x2] = True
+                    page_mask = np.where(stray & ~inside, 0, page_mask).astype(page_mask.dtype)
                 if item.bbox is not None and item.letters in ("colour", "ink", "area"):
                     found = measure(
                         image, page_mask, item.bbox, by_colour=True,
@@ -379,6 +445,7 @@ def plan_chapter(
             base = base.copy()
             base[touched > 0] = redone[touched > 0]
             regions = regions + extra
+            to_set = extra if published is not None else regions
             cleaned_file = str(out_dir / f"{stem}_base.png")
             write_crop(base, Path(cleaned_file))
 
@@ -390,8 +457,9 @@ def plan_chapter(
             cleaned=cleaned_file,
             psd=str(out_dir / f"{stem}.psd"),
             png=str(out_dir / f"{stem}.png"),
-            layers=page_layers(base, page_mask, regions, page_text, areas,
-                               fonts_dir, plan.overrides, styles),
+            layers=page_layers(
+                base, page_mask, to_set, page_text, areas, fonts_dir, plan.overrides, styles)
+            if to_set else [],
         )
 
         fill = np.zeros(image.shape[:2], dtype=np.uint8)
@@ -399,7 +467,7 @@ def plan_chapter(
             fill |= inpainted_glyphs(image, page_mask, analysis.regions, areas, plan.overrides)
         elif clean == "content-aware":
             for region in analysis.regions:
-                if region.translatable and text.get(region.id, "").strip():
+                if (region.translatable and text.get(region.id, "").strip()) or region.erased_whole:
                     override = plan.overrides.get(region.id) or RegionOverride()
                     fill |= region_glyphs(page_mask, region, max(0, GLYPH_DILATION + override.mask_grow))
 
@@ -422,25 +490,20 @@ def plan_chapter(
             page_plan.sfx = to_script(layers)
             fill |= erase
             if erase_local.any():
-                # Erase these here with LaMa and hand Photoshop the result as
-                # its "Cleaned" layer.
-                from comic.image_processing.clean import _inpaint
-
+                # Erased with LaMa and handed to Photoshop as its "Cleaned"
+                # layer -- collected here and run for the whole chapter at the
+                # end, on the Colab T4 in one job when the worker is up.
                 local = load_page(Path(page_plan.cleaned))
-                model = project_root() / "models" / "inpainting_lama.onnx"
                 count, labels, stats, _ = cv2.connectedComponentsWithStats(erase_local)
+                holes = []
                 for i in range(1, count):
                     # One crop per hole, with context -- as clean_page does.
                     x, y, w, h, _a = stats[i]
                     y0, x0 = max(0, y - 100), max(0, x - 100)
                     y1, x1 = min(local.shape[0], y + h + 100), min(local.shape[1], x + w + 100)
                     hole = (labels[y0:y1, x0:x1] == i).astype(np.uint8)
-                    patch = local[y0:y1, x0:x1]
-                    repaired = _inpaint(patch, hole, model)
-                    patch[hole > 0] = repaired[hole > 0]
-                base_file = out_dir / f"{stem}_base.png"
-                write_crop(local, base_file)
-                page_plan.cleaned = str(base_file)
+                    holes.append((y0, x0, hole, local[y0:y1, x0:x1].copy()))
+                deferred.append((page_plan, stem, local, holes))
             notes.extend(f"page {record.page}: {n}" for n in sfx_notes)
 
         if fill.any():
@@ -449,4 +512,38 @@ def plan_chapter(
             buf.tofile(str(mask_file))
             page_plan.fill_mask = str(mask_file)
         plans.append(page_plan)
+    if deferred:
+        notes.extend(_lama_deferred(deferred, out_dir))
     return plans, notes
+
+
+def _lama_deferred(deferred: list, out_dir: Path) -> list[str]:
+    """LaMa for every page's SFX holes at once: Colab T4 if alive, else locally."""
+    import cv2
+
+    from comic.clean_stage import _worker_alive
+    from comic.image_processing.clean import _inpaint, _is_grey
+
+    flat = [(pp, st, img, h) for pp, st, img, holes in deferred for h in holes]
+    model = project_root() / "models" / "inpainting_lama.onnx"
+    if _worker_alive():
+        from comic.colab.tasks import inpaint
+
+        result = inpaint([(f"h{i:04d}", h[3], h[2]) for i, (_pp, _st, _img, h) in enumerate(flat)],
+                         progress=lambda _m: None)
+        repaired = [result[f"h{i:04d}"] for i in range(len(flat))]
+        where = "Colab T4"
+    else:
+        repaired = [_inpaint(h[3], h[2], model) for _pp, _st, _img, h in flat]
+        where = "this PC"
+    for (pp, st, img, (y0, x0, hole, patch)), fixed in zip(flat, repaired):
+        if fixed.ndim == 3 and _is_grey(patch, hole):
+            fixed = cv2.cvtColor(cv2.cvtColor(fixed, cv2.COLOR_RGB2GRAY), cv2.COLOR_GRAY2RGB)
+        h, w = hole.shape
+        window = img[y0:y0 + h, x0:x0 + w]
+        window[hole > 0] = fixed[hole > 0]
+    for pp, st, img, _holes in deferred:
+        base_file = out_dir / f"{st}_base.png"
+        write_crop(img, base_file)
+        pp.cleaned = str(base_file)
+    return [f"{len(flat)} SFX hole(s) erased with LaMa on {where}"]

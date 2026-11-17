@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Comic Studio</title>
+<link rel="stylesheet" href="/static/studio.css">
+</head>
+<body>
+<!-- Giao diện tiếng Việt; dữ liệu lưu (loại khung, id) vẫn bằng tiếng Anh. -->
+<header id="bar">
+  <strong class="brand">Studio</strong>
+  <select id="series" title="Bộ truyện"></select>
+  <select id="chapter" title="Chương"></select>
+  <span class="sep"></span>
+  <button id="prev" title="Trang trước (PageUp / A)">&#9664;</button>
+  <span id="pageLabel">–</span>
+  <button id="next" title="Trang sau (PageDown / D)">&#9654;</button>
+  <span class="sep"></span>
+  <button id="zoomOut" title="Thu nhỏ (-)">−</button>
+  <span id="zoomLabel">100%</span>
+  <button id="zoomIn" title="Phóng to (+)">+</button>
+  <button id="zoomFit" title="Vừa chiều ngang (F)">Vừa khung</button>
+  <label class="chk"><input type="checkbox" id="showText" checked> nhãn</label>
+  <label class="chk">độ đậm khung <input type="range" id="boxAlpha" min="0" max="100" value="22"></label>
+  <span class="grow"></span>
+  <span id="status" class="status">–</span>
+  <button id="reviewAll" title="Đánh dấu đã duyệt mọi trang của chương">Duyệt cả chương</button>
+  <button id="reviewed" class="primary" title="Đánh dấu đã duyệt trang này và sang trang sau (R)">Đã duyệt ✓ trang sau</button>
+  <button id="help" title="Phím tắt (?)">?</button>
+</header>
+
+<main>
+  <nav id="pages"></nav>
+  <section id="stage">
+    <div id="canvas">
+      <img id="img" alt="" draggable="false">
+      <svg id="ov"></svg>
+    </div>
+  </section>
+  <aside id="side">
+    <div id="sel" class="card">
+      <div class="muted">Chọn một khung, hoặc kéo chuột trên trang để vẽ khung mới.</div>
+    </div>
+    <div class="card">
+      <div class="cardhead">Các khung trên trang <span id="count" class="muted"></span></div>
+      <ol id="list"></ol>
+    </div>
+  </aside>
+</main>
+
+<div id="helpbox" hidden>
+  <div class="card">
+    <div class="cardhead">Phím tắt</div>
+    <table>
+      <tr><td>kéo chuột ở chỗ trống</td><td>vẽ khung mới (loại = loại dùng gần nhất)</td></tr>
+      <tr><td>kéo khung / kéo các nút góc</td><td>di chuyển / đổi kích thước</td></tr>
+      <tr><td>kéo nút tròn vàng phía trên khung (+Shift)</td><td>xoay khung (Shift: bước 15°)</td></tr>
+      <tr><td>[ / ] (+Shift)</td><td>xoay khung đang chọn 1° (5°)</td></tr>
+      <tr><td>\</td><td>trả khung về thẳng (0°)</td></tr>
+      <tr><td>1 … 9, 0</td><td>đặt loại cho các khung đang chọn</td></tr>
+      <tr><td>L</td><td>SFX xóa bằng LaMa (vẫn dịch và chèn chữ như SFX thường)</td></tr>
+      <tr><td>Ctrl+click / Shift+click</td><td>thêm / bỏ một khung khỏi vùng chọn</td></tr>
+      <tr><td>Shift + kéo ở chỗ trống</td><td>chọn mọi khung chạm vào khung kéo</td></tr>
+      <tr><td>Ctrl+A</td><td>chọn mọi khung trên trang</td></tr>
+      <tr><td>Delete / Backspace</td><td>xóa các khung đang chọn</td></tr>
+      <tr><td>Mũi tên (+Shift)</td><td>dịch khung 1 px (10 px)</td></tr>
+      <tr><td>Tab / Shift+Tab</td><td>khung tiếp theo / trước đó</td></tr>
+      <tr><td>Ctrl+Z / Ctrl+Y</td><td>hoàn tác / làm lại</td></tr>
+      <tr><td>Ctrl+D</td><td>nhân đôi khung đang chọn</td></tr>
+      <tr><td>A / D, PageUp / PageDown</td><td>trang trước / trang sau</td></tr>
+      <tr><td>R</td><td>đánh dấu đã duyệt, sang trang sau</td></tr>
+      <tr><td>+ / − / F</td><td>phóng to / thu nhỏ / vừa chiều ngang</td></tr>
+      <tr><td>Esc</td><td>bỏ chọn / đóng</td></tr>
+    </table>
+    <p class="muted">Mọi thay đổi tự động lưu. <b>Giữ nguyên</b> = biển hiệu, chữ trong tranh để nguyên
+      (không xóa, không dịch). <b>Logo / Watermark / Credit nhóm</b> sẽ bị xóa, không dịch.
+      <b>SFX xóa (LaMa)</b> = SFX khó: được xóa và vẽ lại bằng LaMa ngay khi làm sạch (thay cho
+      Content-Aware Fill của Photoshop), rồi vẫn được dịch và chèn chữ như SFX thường.</p>
+    <button id="helpClose">Đóng</button>
+  </div>
+</div>
+
+<script src="/static/studio.js"></script>
+</body>
+</html>

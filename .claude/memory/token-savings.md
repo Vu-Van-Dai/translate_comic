@@ -19,7 +19,21 @@ The operator (2026-10-16..20) asked to cut Claude's token cost per chapter **wit
 2. Then **stop and ask the operator to switch to Opus Medium**; do not continue until they confirm. (Claude cannot change its own model/effort.)
 3. At Medium, **finish the whole series**: translate every remaining chapter, then the SFX pass and the Photoshop route (`comic ps sfx` -> `comic ps build` -> `scripts/leftover_scan.py` -> `comic ps publish`) for **every** chapter, including the first 2-3 -- the entire project finished.
 
+**Never switch model or effort in the middle of a conversation** (operator, 2026-10-21) -- the switch happens between conversations, at the step-2 stop.
+
 Also: Opus High for code changes to `comic/`. When the operator drives the gates by hand, one gate per conversation (`/clear` after each `comic resume`).
+
+## Report bugs checked in practice (2026-10-21)
+
+Operator: fix them if real, my call, skip only what costs more than it saves. Token-saving ideas: **not to be implemented** (operator, 2026-10-21) unless I argue otherwise.
+- #5 overlay numbers: real -> labels now use the region id's number (`vision/analyze.py`).
+- #11 retranslate wipes speaker/addressee/note/voice: real -> fields left out of an answer keep their earlier value (`translation/gate.py`, `model_fields_set`).
+- #14 `analyze --force` wipes review: real -> `stages._keep_review` keeps reviewed readings and drops when the new mask is identical.
+- #7(c) `kind=sfx` regions never offered at the SFX gate: real (e.g. Itsuka ch.4 "DASH") -> `dropped_regions` lists them.
+- #6 leftover_scan misses English SFX: real -> onset/final cluster rule catches THUD/SLAM/GASP/DRAG/GRAB/STOMP; dropped the/me/no/to/oh (accent-stripped Vietnamese). A "not a Vietnamese syllable" rule was tried and dropped: 16 -> 55 hits on Kimigazer ch.1, all signs/misreads.
+- #17 LaMa: BGR feed real (tiny effect, <1/255 on a Dasadanan page) -> fixed; window now covers every glyph pixel. Found while testing: overlapping balloons had the model copy a neighbour's letters into the hole (Itsuka ch.6 p.12, 16% residue) -> `clean_page` hides all lettering from the model and paints from the cleaned page; residue 0.
+- #21 >2000 px pages downscaled in long conversations: not acted on (manga pages are ~1400 px; revisit for webtoons).
+- Claude Cloud's QA-round and in-render checks tested on Itsuka ch.6: round 2 rendered only the fixed page, checks match the scripts. Kept.
 
 ## Planned, not built yet
 

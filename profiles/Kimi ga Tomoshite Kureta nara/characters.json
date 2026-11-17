@@ -1,0 +1,148 @@
+{
+  "Akari": {
+    "name": "Akari",
+    "aliases": [],
+    "role": null,
+    "personality": "Anxious people-pleaser, can't say no, tries hard to fit in at university",
+    "speech_style": "Polite, flustered, self-deprecating; narrates in 'mình'",
+    "addresses": {
+      "Touma": {
+        "self_term": "tớ",
+        "other_term": "cậu",
+        "formality": "casual",
+        "note": "same-year university friends; calls him Touma"
+      },
+      "Anzu": {
+        "self_term": "tớ",
+        "other_term": "cậu",
+        "formality": "casual",
+        "note": null
+      },
+      "Mamesuke": {
+        "self_term": "tớ",
+        "other_term": "cậu",
+        "formality": "casual",
+        "note": null
+      },
+      "You": {
+        "self_term": "anh",
+        "other_term": "em",
+        "formality": "casual",
+        "note": "older brother to younger brother; calls him You"
+      },
+      "Kuranosuke": {
+        "self_term": "anh",
+        "other_term": "em",
+        "formality": "casual",
+        "note": null
+      }
+    },
+    "notes": [
+      "Yamabuki Akari (山吹灯), 18, 1st-year university student in Kyoto, Literature faculty. Brown wavy hair. Good at housework. Narrator."
+    ]
+  },
+  "Touma": {
+    "name": "Touma",
+    "aliases": [],
+    "role": null,
+    "personality": "Looks cool and mature but is easygoing and a bit odd (orders the weird dishes); fluent English; messy home",
+    "speech_style": "Calm, direct, warm; says kind things plainly",
+    "addresses": {
+      "Akari": {
+        "self_term": "tớ",
+        "other_term": "cậu",
+        "formality": "casual",
+        "note": "calls him Akari"
+      },
+      "Mamesuke": {
+        "self_term": "tớ",
+        "other_term": "cậu",
+        "formality": "casual",
+        "note": null
+      }
+    },
+    "notes": [
+      "Aihara Touma (蓝原藤真), 18, 1st year, Literature faculty, from Tokyo, lives alone in Kyoto. Dark straight hair, mole under the eye.",
+      "Birthday 6 December (doesn't care about birthdays). Loves omurice. Has dimples when he smiles.",
+      "Backstory (ch.3): only child of busy parents in Tokyo, often home alone; blunt as a child, called scary for not smiling; studied hard only to please his parents; popular later but unchanged inside; chose a Kyoto university on a whim to go somewhere far and new. Noticed Akari helping a lost student at the entrance ceremony and decided to befriend him -- the first time he ever spoke to someone first. Wants Akari to call him by name. Avoids crowds/festivals (turned down all Gion invitations)."
+    ]
+  },
+  "Anzu": {
+    "name": "Anzu",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": "Bubbly, teasing",
+    "addresses": {
+      "Akari": {
+        "self_term": "tớ",
+        "other_term": "cậu",
+        "formality": "casual",
+        "note": null
+      }
+    },
+    "notes": [
+      "Akari's high-school friend; has a boyfriend"
+    ]
+  },
+  "Mamesuke": {
+    "name": "Mamesuke",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": "Playful, teasing",
+    "addresses": {
+      "Akari": {
+        "self_term": "tớ",
+        "other_term": "cậu",
+        "formality": "casual",
+        "note": null
+      },
+      "Touma": {
+        "self_term": "tớ",
+        "other_term": "cậu",
+        "formality": "casual",
+        "note": null
+      }
+    },
+    "notes": [
+      "Akari's high-school friend; nickname, real name Einosuke (卫之助), hates being called by it"
+    ]
+  },
+  "You": {
+    "name": "You",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": "Cheerful, sporty; calls Akari 'anh'",
+    "addresses": {
+      "Akari": {
+        "self_term": "em",
+        "other_term": "anh",
+        "formality": "casual",
+        "note": null
+      }
+    },
+    "notes": [
+      "Yamabuki You (耀), Akari's younger brother, high-school athlete (likely to start this year), friends with Kuranosuke"
+    ]
+  },
+  "Kuranosuke": {
+    "name": "Kuranosuke",
+    "aliases": [],
+    "role": null,
+    "personality": null,
+    "speech_style": "Curt with his own brother, polite to Akari ('anh Akari')",
+    "addresses": {
+      "Akari": {
+        "self_term": "em",
+        "other_term": "anh",
+        "formality": "polite",
+        "note": "'anh Akari'"
+      }
+    },
+    "notes": [
+      "藏之助, Mamesuke's younger brother, high school, You's teammate/friend"
+    ]
+  }
+}

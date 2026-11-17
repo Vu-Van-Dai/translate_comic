@@ -1,0 +1,9 @@
+# Lettering for "My Insatiable Demon": a Korean BL webtoon, full colour,
+# long strip, read from an English scanlation (comix). Wide horizontal
+# balloons, so the manhwa preset, no voices (one face per kind).
+# See docs/lettering.md.
+preset: manhwa
+clean: auto
+# Narration often sits in black bars between panels (ch.0 p.11): dark type
+# there is unreadable, so flip to light ink on dark fields.
+auto_contrast: true

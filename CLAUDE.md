@@ -8,6 +8,10 @@ The everyday rules are in this file. Longer, task-specific rules live in
 `docs/` and are as binding as this file -- read the one that matches the task
 **before** starting it:
 
+- **working a chapter at all** (Studio box review, `comic check`, `comic translate
+  --agent`, `comic clean`, Colab, PSD review, re-cutting a strip) -> `docs/workflow.md`.
+  This human-in-the-loop flow (2026-11-08) replaced `comic render` + `visual_qa`
+  for new chapters; the render/QA sections below describe the older route.
 - `comic ps ...` (Photoshop route, SFX, notes, watermarks, WebP publishing) ->
   `docs/photoshop.md`
 - `comic video ...` or channel videos -> `docs/video.md`
@@ -83,7 +87,8 @@ otherwise persist forever.
 ## Front matter is not story content
 
 **Do not translate the cover, the table of contents, credits or logos.** The
-operator handles those. They are designed artwork, not lettering in bubbles:
+operator handles those. (Not translating is not keeping: another group's
+credits and logos are still *erased*, see "Other groups' marks" below.) They are designed artwork, not lettering in bubbles:
 the title is a drawn logo, the contents page is a typeset layout, and setting
 Vietnamese into either destroys it while costing gate time.
 
@@ -99,10 +104,18 @@ reporting a page that *should* have rendered and did not.
 Check before dropping: page 4 of this chapter holds two regions and looks like
 front matter, but one of them is the splash line `她丈夫，也就是你！！`.
 
-**What stays in English:** logos, the scanlator's notes, and in-world
-signage (shop signs, a wreath's ribbons, a book cover). Phone messages, notes
-shown to the reader and floating spoken lines carry the plot and are
-translated, with the series' pinned pronouns.
+**What stays as drawn:** the series' own title logo, bilibili's logo and
+"BILIBILI COMICS EXCLUSIVE" notice, in-world signage (shop signs, a wreath's
+ribbons, a book cover), and credit or warning pages at the very end of a
+chapter. Phone messages, notes shown to the reader and floating spoken lines
+carry the plot and are translated, with the series' pinned pronouns.
+
+**Other groups' marks are erased, never kept** (the operator, 2026-11-12):
+every logo, watermark, credit, scanlator's note and inserted site link of a
+CN/EN/KR/JP scanlation group or aggregator site on a story page is boxed
+logo / watermark / credit (Studio keys 7/8/9) -- they did not make the
+Vietnamese version. Cleaning erases those boxes with LaMa, never a flat fill
+(`docs/workflow.md`, section 6).
 
 ## Agent memory lives in the project
 
@@ -129,7 +142,9 @@ profiles/<series>/                     durable knowledge new chapters inherit
 
 Nothing but finished pages ever lands in `library/`. Source filenames are always
 discarded and replaced with zero-padded `001.png`, `002.png`, … in true reading
-order (`comic/paths.py: page_filename`).
+order (`comic/paths.py: page_filename`). Both publishers also write `000` -- the
+group's QR poster, `Ap_phich_Rong_Nho_QR_Facebook.png` at the project root
+(`comic/poster.py`; the operator, 2026-10-26) -- so every chapter opens with it.
 
 ## Invariants worth not breaking
 
@@ -162,6 +177,9 @@ comic translate --series NAME -c N   # open the translate gate
 comic render --series NAME -c N      # clean + typeset + centre/spill checks, stops at visual_qa
                                      # (mid-QA: only pages not already approved; --all = every page)
 comic resume --series NAME --chapter N   # apply a gate response, carry on
+comic exclude --series NAME -c N -p P --held --reason "..."   # hold one page (keeps its number)
+comic block --series NAME -c N --reason "..."   # block one chapter; --release lifts it
+comic holds --series NAME            # blocked/partial chapters, held pages + reasons, what's next
 pytest                               # unit + fixture tests, no network
 python scripts/ocr_bench.py --series NAME --chapter N   # score OCR vs verified text
 ```
@@ -412,5 +430,13 @@ the pages that are not approved (the retranslated ones included, since their
 Vietnamese changed); `comic render --all` renders every page regardless.
 
 Only rendered pages are published, and a chapter published incomplete is marked
-`partial` -- a half chapter in `library/` would otherwise look finished.
+`partial` -- a half chapter in `library/` would otherwise look finished. A held
+page also makes it `partial`.
+
+**A block is the chapter's alone** (the operator, 2026-10-28). `comic block`
+makes analyze/translate/render/resume and every `comic ps` command refuse that
+chapter with exit 3, and `scripts/analyze_all.py` logs it and goes on to the
+next chapter; nothing else in the series stops. Held pages are excluded page by
+page, so SFX crops, PSD builds and publishing carry on for the rest of the
+chapter, and a held page's number (and any file the operator put there) is kept.
 

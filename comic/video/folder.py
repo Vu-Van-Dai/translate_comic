@@ -90,6 +90,16 @@ RECIPES: dict[str, Recipe] = {r.name: r for r in [
     Recipe("caption", "full frame, a joking narration line on every shot, blur and glitch switches", 4, F.COVER,
            [M.ZOOM_IN, M.DRIFT, M.ZOOM_OUT, M.PUNCH], [T.ZOOM_BLUR, T.GLITCH, T.DIP_BLACK, T.FLASH], 0.3,
            strength=0.3, moods=["trending", "remix", "vpop", "cpop", "chinese", "halloween"], captioned=True),
+    # The same narration-per-shot format in two fixed moods (the operator, 2026-10-23:
+    # each video should carry one clear vibe -- sad, cute, ... -- and the music is
+    # chosen to match it). Sad: slow push-ins, dips through black, a vignette.
+    # Cute: punchy zooms with flash and slide switches.
+    Recipe("caption_sad", "narration per shot, slow drift, dips through black", 4, F.COVER,
+           [M.ZOOM_IN, M.DRIFT, M.ZOOM_OUT], [T.DIP_BLACK, T.FADE], 0.6, effects=[E.VIGNETTE],
+           background="black", strength=0.2, moods=["melancholic", "emotional", "sad"], captioned=True),
+    Recipe("caption_cute", "narration per shot, punchy zooms, flash and slide switches", 4, F.COVER,
+           [M.PUNCH, M.ZOOM_IN, M.SHAKE, M.DRIFT], [T.FLASH, T.SLIDE_LEFT, T.WHIP], 0.3,
+           strength=0.35, moods=["cute", "comedy", "upbeat"], captioned=True),
 ]}
 
 #: Reading time for a caption: seconds = clamp(base + chars / rate).
@@ -271,6 +281,7 @@ def render_folder(folder: Path, recipe_name: str, track_id: str, seed: int = 0, 
     info = music_lib.analyse(track)
     durations = music_lib.snap_cuts([s.seconds for s, _, _ in shots], info["beats"], start)
     beats_video = [round(b - start, 3) for b in info["beats"] if start <= b <= start + sum(durations) + 1]
+    face = "Anton-Regular.ttf" if recipe.captioned else "BeVietnamPro-Bold.ttf"
     prepared, t = [], 0.0
     for i, ((shot, img, img2), secs) in enumerate(zip(shots, durations)):
         shot = shot.model_copy(update={"seconds": secs})
@@ -286,7 +297,7 @@ def render_folder(folder: Path, recipe_name: str, track_id: str, seed: int = 0, 
                                   recipe.background, half)
             prepared.append(top)
         else:
-            prepared.append(prepare(shot, img, box, t, secs, [], "BeVietnamPro-Bold.ttf", i + seed, recipe.background))
+            prepared.append(prepare(shot, img, box, t, secs, [], face, i + seed, recipe.background))
         t += secs
     timeline = Timeline(prepared, beats_video)
     total = timeline.seconds

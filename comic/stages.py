@@ -178,7 +178,8 @@ def run_slice(
 
 
 def detect_one(
-    paths: ChapterPaths, page: int, filename: str, direction: ReadingDirection
+    paths: ChapterPaths, page: int, filename: str, direction: ReadingDirection,
+    vertical_text: bool = False,
 ) -> dict:
     """Detect one page and write its analysis and mask. Returns a summary.
 
@@ -191,7 +192,8 @@ def detect_one(
     if not source.exists():
         return {"page": page, "ok": False,
                 "note": f"page {page}: {filename} is missing"}
-    analysis, mask = analyze_page(source, page, direction)
+    analysis, mask = analyze_page(source, page, direction, vertical_text=vertical_text)
+    analysis = _keep_review(paths, page, analysis, mask)
     write_json(paths.analysis_file(page), analysis)
     save_mask(mask, paths.mask_file(page))
     return {"page": page, "ok": True, "note": None,
@@ -199,11 +201,54 @@ def detect_one(
             "regions": len(analysis.regions)}
 
 
+def _keep_review(paths: ChapterPaths, page: int, analysis, mask):
+    """Carry the agent's ocr_review work across a forced re-detect.
+
+    Re-detecting a reviewed page used to write a fresh analysis: every
+    transcription was lost and every dropped region came back, so the whole
+    chapter went back to ocr_review. When the new mask is identical to the old
+    one the regions are the same lettering under the same ids, so a region
+    with an identical box keeps its reviewed reading, and an id the reviewed
+    analysis no longer holds was dropped and stays dropped. A changed mask
+    changes nothing here -- those pages are reviewed again.
+    """
+    import numpy as np
+
+    old_file, mask_file = paths.analysis_file(page), paths.mask_file(page)
+    if not (old_file.exists() and mask_file.exists()):
+        return analysis
+    old = read_json(old_file, PageAnalysis)
+    if not any(r.ocr_reviewed for r in old.regions):  # type: ignore[union-attr]
+        return analysis
+    previous = load_mask(mask_file)
+    if previous.shape != mask.shape or not np.array_equal(previous > 0, mask > 0):
+        return analysis
+    before = {r.id: r for r in old.regions}  # type: ignore[union-attr]
+    kept = []
+    for region in analysis.regions:
+        earlier = before.get(region.id)
+        if earlier is None:
+            continue                       # dropped at review
+        kept.append(earlier if earlier.bbox == region.bbox else region)
+    return analysis.model_copy(update={"regions": kept})
+
+
+def vertical_lettering(state: ChapterState) -> bool:
+    """Japanese and Chinese manga letter their balloons in columns.
+
+    Webtoons in those languages are lettered horizontally, like Korean ones.
+    """
+    from comic.schemas import PageKind
+
+    return (state.source_language or "") in ("ja", "zh") and state.page_kind is PageKind.PAGED
+
+
 def _detect_job(payload: tuple) -> dict:
     """Pool entry point. Takes only picklable values and rebuilds the paths."""
-    series, chapter, page, filename, direction = payload
+    series, chapter, page, filename, direction, vertical = payload
     return detect_one(
-        ChapterPaths(series, chapter), page, filename, ReadingDirection(direction)
+        ChapterPaths(series, chapter), page, filename, ReadingDirection(direction),
+        vertical,
     )
 
 
@@ -247,15 +292,16 @@ def run_detect(
         return outcome
 
     count = detect_workers(len(todo), workers)
+    vertical = vertical_lettering(state)
     if count <= 1 or len(todo) == 1:
         results = [
-            detect_one(paths, r.page, r.filename, state.reading_direction)
+            detect_one(paths, r.page, r.filename, state.reading_direction, vertical)
             for r in todo
         ]
     else:
         payloads = [
             (paths.series, paths.chapter, r.page, r.filename,
-             state.reading_direction.value)
+             state.reading_direction.value, vertical)
             for r in todo
         ]
         with ProcessPoolExecutor(max_workers=count) as pool:
